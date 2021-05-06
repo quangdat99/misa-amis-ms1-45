@@ -2,7 +2,9 @@
   <div class="header">
     <div class="header-left">
       <div class="header-left-icon fas fa-bars"></div>
-      <div class="header-left-text">CÔNG TY CỔ PHẦN MISA</div>
+      <div class="header-left-text">
+        CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC
+      </div>
       <div class="header-left-icon fas fa-chevron-down"></div>
     </div>
     <div class="header-right">
@@ -20,7 +22,7 @@
   left: 226px;
   top: 0;
   right: 0;
-  height: 64px;
+  height: 50px;
   padding-right: 16px;
   padding-left: 16px;
   display: flex;
@@ -37,7 +39,7 @@
 
 .header .header-left-text {
   font-family: Google-Sans-Bold;
-  font-size: 18px;
+  font-size: 16px;
   color: #333333;
   margin-left: 30px;
   font-weight: 400;
@@ -46,7 +48,7 @@
 .header .header-left-icon {
   margin-left: 10px;
   color: #333333;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .header .fa-bars {

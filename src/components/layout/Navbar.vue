@@ -7,10 +7,14 @@
     </div>
 
     <div class="navbar-content">
-      <div class="navbar-item">
+      <router-link
+        to="/"
+        class="navbar-item"
+        :class="{ active: $route.name == 'overview' }"
+      >
         <div class="navbar-item-icon fas fa-chart-pie"></div>
         <div class="navbar-item-text">Tổng quan</div>
-      </div>
+      </router-link>
       <router-link
         to="/employee"
         class="navbar-item"
@@ -38,6 +42,10 @@
       <div class="navbar-item">
         <div class="navbar-item-icon fas fa-cog"></div>
         <div class="navbar-item-text">Quản lý đơn hàng</div>
+      </div>
+      <div class="navbar-item">
+        <div class="navbar-item-icon fas fa-cog"></div>
+        <div class="navbar-item-text">Kho</div>
       </div>
       <div class="navbar-item">
         <div class="navbar-item-icon fas fa-cog"></div>
@@ -97,7 +105,7 @@ export default {
 /* Css cho logo */
 
 .navbar .logo-box {
-  height: 64px;
+  height: 50px;
   display: flex;
   align-items: center;
   padding-left: 16px;
@@ -136,7 +144,7 @@ export default {
 }
 
 .navbar .navbar-content .navbar-item {
-  height: 52px;
+  height: 45px;
   padding-left: 20px;
   /* padding-top: 15px;
   padding-bottom: 15px; */
