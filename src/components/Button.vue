@@ -123,9 +123,10 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
+  color: #b8bcc3;
 }
 
 .btn-only-icon:hover {
-  background-color: #e5e5e5;
+  color: #868686;
 }
 </style>

@@ -1,0 +1,157 @@
+<template>
+  <tr
+    :class="{ selected: selectedId == employee.employeeId }"
+    @dblclick="$emit('dblclick', employee.employeeId)"
+    @click="$emit('click', employee.employeeId)"
+  >
+    <td><Checkbox /></td>
+    <td>{{ employee.employeeCode }}</td>
+    <td>{{ employee.employeeName }}</td>
+    <td>{{ genderName }}</td>
+    <td>{{ employee.dateOfBirth | formatDateOfBirth }}</td>
+    <td>{{ employee.identityNumber }}</td>
+    <td>{{ employee.employeePosition }}</td>
+    <td>{{ departmentName }}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="center">
+      <button class="btn-update">Sửa</button>
+      <button class="btn-option fas fa-caret-down"></button>
+    </td>
+  </tr>
+</template>
+
+<script>
+import Checkbox from "../../components/Checkbox";
+
+export default {
+  components: {
+    Checkbox,
+  },
+  name: "EmployeeItem",
+  props: {
+    /**
+     * Thông tin nhân viên.
+     */
+    employee: Object,
+
+    /**
+     * Id của nhân viên đang được chọn.
+     */
+    selectedId: {
+      type: String,
+      default: null,
+    },
+  },
+  computed: {
+    /**
+     * Computed binđ giới tính. Mặc định là Không xác định.
+     */
+    genderName: function () {
+      if (this.employee.gender == 0) {
+        return "Nam";
+      } else if (this.employee.gender == 1) {
+        return "Nữ";
+      } else {
+        return "Không xác định";
+      }
+    },
+
+    /**
+     * Computed bind email nhân viên. Mặc định là không rõ.
+     */
+    email: function () {
+      return this.employee.Email || "Không rõ";
+    },
+
+    /**
+     * Computed bind đơn vị của nhân viên. Mặc định là không rõ.
+     */
+    // departmentName: function () {
+    //   let url =
+    //     "https://localhost:44365/api/v1/EmployeeDepartments/" +
+    //     this.employee.employeeDepartmentId;
+
+    //   axios
+    //     .get(url)
+    //     .then((res) => {
+    //       if (res.status == 200) {
+    //         return res.data;
+    //       }
+    //       return Promise.reject("Không có dữ liệu.");
+    //     })
+    //     .then((data) => {
+    //       return data.employeeDepartmentName;
+    //     })
+    //     .catch((err) => console.log(err));
+    // },
+
+    /**
+     * Computed bind phòng ban của nhân viên. Mặc định là không rõ.
+     */
+    departmentName: function () {
+      return this.employee.employeeDepartmentId || "Không rõ";
+    },
+  },
+  filters: {
+    /**
+     * Filter giúp chuyển date String về dạng DD-MM-YYYY. Mặc định là null.
+     */
+    formatDateOfBirth(dateOfBirth) {
+      if (dateOfBirth) {
+        let date = new Date(dateOfBirth);
+        let dateString =
+          date.getDate() < 10
+            ? "0" + date.getDate().toString()
+            : date.getDate().toString();
+        let monthString =
+          date.getMonth() < 9
+            ? "0" + (date.getMonth() + 1).toString()
+            : (date.getMonth() + 1).toString();
+        let yearString = date.getFullYear();
+        return `${dateString}/${monthString}/${yearString}`;
+      }
+      return "Không xác định";
+    },
+
+    /**
+     * Filter chuyển định dạng tiền tệ. xxx.xxx.xxx
+     */
+    formatSalary(salary) {
+      if (salary) {
+        return new Intl.NumberFormat("vi-VN").format(salary);
+      }
+      return "Không rõ";
+    },
+  },
+};
+</script>
+
+<style scoped>
+tr td {
+  padding-left: 10px;
+  padding-right: 8px;
+  height: 40px;
+  border-bottom: 1px solid #c7c7c7;
+  border-right: 1px dotted #c7c7c7;
+}
+
+tr td:first-child {
+  padding-left: 16px;
+}
+
+tr td:last-child {
+  padding-left: 25px;
+  border-right: none;
+}
+
+.btn-update,
+.btn-option {
+  color: #0075c0;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+</style>

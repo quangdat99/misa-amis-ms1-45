@@ -1,37 +1,25 @@
 <template>
-  <div class="field-input" :class="{ 'has-icon': icon }">
+  <div class="field-input">
     <label v-if="label" class="label-input">
       {{ label }}
       <template v-if="important">(<span class="important">*</span>)</template>
     </label>
-    <span v-if="icon" class="input-icon-right fas" :class="'fa-' + icon"></span>
-    <input
-      :type="typeInput"
-      class="input"
-      :class="{ 'has-error': errorMsg }"
-      :style="styleInput"
-      :placeholder="placeholder"
-      v-model="valueInput"
-      @blur="$emit('blur')"
-    />
-    <p v-if="errorMsg" class="text-error">{{ errorMsg }}</p>
+    <select class="input" :style="styleCombobox" v-model="valueCombobox">
+      <option v-for="(o, i) in option" :key="i" :value="o.value">
+        {{ o.text }}
+      </option>
+    </select>
   </div>
 </template>
 
 <script>
 export default {
-  name: "FieldInput",
+  name: "Combobox",
   model: {
     prop: "value",
     event: "change",
   },
   props: {
-    // icon bên trái của input. Mặc định là không có.
-    icon: {
-      type: String,
-      default: null,
-    },
-
     // Tên label của input.
     label: {
       type: String,
@@ -48,48 +36,24 @@ export default {
       default: false,
     },
 
-    // Từ hint text trong input.
-    placeholder: {
+    // style cho combobox
+    styleCombobox: {
       type: String,
       default: null,
     },
 
-    // xác định input có tự động focus hay không.
-    autoFocusInput: {
-      type: Boolean,
-      default: false,
-    },
-
-    // Style cho input.
-    styleInput: {
-      type: String,
-      default: null,
-    },
-
-    // type của input. Mặc định là text. Không hỗ trợ cho radio và checkbox.
-    typeInput: {
-      type: String,
-      default: "text",
-    },
+    // Các option của combobox.
+    option: Array,
 
     /**
-     * Giá trị khởi tạo của input.
+     * Giá trị khởi tạo của combobox.
      */
     value: {
       default: null,
     },
-
-    /**
-     * Hiển thị lỗi input khi valid.
-     */
-    errorMsg: {
-      type: String,
-      default: null,
-    },
   },
-
   computed: {
-    valueInput: {
+    valueCombobox: {
       get() {
         return this.value;
       },
@@ -122,7 +86,7 @@ export default {
 }
 
 .field-input .input::placeholder {
-  color: #888888;
+  color: #bbbbbb;
   font-size: 12px;
 }
 
@@ -130,25 +94,20 @@ export default {
   position: relative;
 }
 
-.field-input.has-icon .input-icon-right {
+.field-input.has-icon .input-icon-left {
   position: absolute;
-  right: 16px;
+  left: 16px;
   top: 12px;
   font-size: 16px;
   color: #bbbbbb;
 }
 
 .field-input.has-icon .input {
-  padding-left: 15px;
-  font-style: italic;
-}
-
-.field-input .input:hover {
-  border-color: #888b8f;
+  padding-left: 40px;
 }
 
 .field-input .input:focus {
-  border-color: #2ca01c;
+  border-color: #019160;
 }
 
 .field-input .input.has-error {
