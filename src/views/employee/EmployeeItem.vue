@@ -16,8 +16,13 @@
     <td></td>
     <td></td>
     <td class="center">
-      <button class="btn-update">Sửa</button>
-      <button class="btn-option fas fa-caret-down"></button>
+      <button class="btn-update" @click="onClickEmployeeItemUpdate">Sửa</button>
+      <select class="btn-option fas fa-caret-down" v-model="selected">
+        <option selected style="display: none"></option>
+        <option value="0">Nhân bản</option>
+        <option value="1">Xóa</option>
+        <option value="2">Ngừng sử dụng</option>
+      </select>
     </td>
   </tr>
 </template>
@@ -28,6 +33,21 @@ import Checkbox from "../../components/Checkbox";
 export default {
   components: {
     Checkbox,
+  },
+  data() {
+    return {
+      /**
+       * Đơn vị ứng với nhân viên.
+       */
+      employeeDepartment: {},
+      selected: "",
+    };
+  },
+  created() {},
+  methods: {
+    onClickEmployeeItemUpdate() {
+      this.$emit("updateEmployee", this.employee.employeeId);
+    },
   },
   name: "EmployeeItem",
   props: {
@@ -66,32 +86,10 @@ export default {
     },
 
     /**
-     * Computed bind đơn vị của nhân viên. Mặc định là không rõ.
-     */
-    // departmentName: function () {
-    //   let url =
-    //     "https://localhost:44365/api/v1/EmployeeDepartments/" +
-    //     this.employee.employeeDepartmentId;
-
-    //   axios
-    //     .get(url)
-    //     .then((res) => {
-    //       if (res.status == 200) {
-    //         return res.data;
-    //       }
-    //       return Promise.reject("Không có dữ liệu.");
-    //     })
-    //     .then((data) => {
-    //       return data.employeeDepartmentName;
-    //     })
-    //     .catch((err) => console.log(err));
-    // },
-
-    /**
      * Computed bind phòng ban của nhân viên. Mặc định là không rõ.
      */
     departmentName: function () {
-      return this.employee.employeeDepartmentId || "Không rõ";
+      return this.employee.employeeDepartmentName || "Không rõ";
     },
   },
   filters: {
@@ -125,6 +123,14 @@ export default {
       return "Không rõ";
     },
   },
+  watch: {
+    selected: function (val) {
+      if (val == "1") {
+        this.$emit("btnDelEmployee", this.employee.employeeId);
+        this.selected = "";
+      }
+    },
+  },
 };
 </script>
 
@@ -153,5 +159,9 @@ tr td:last-child {
   background: none;
   border: none;
   cursor: pointer;
+}
+.btn-option {
+  width: 23px;
+  border: none;
 }
 </style>

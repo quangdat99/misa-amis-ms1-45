@@ -48,9 +48,9 @@
               v-for="e in employees"
               :key="e.EmployeeId"
               :employee="e"
-              :selectedId="selectedEmployeeId"
               @dblclick="onDblClickEmployeeItem"
-              @click="onClickEmployeeItem"
+              @updateEmployee="onDblClickEmployeeItem"
+              @btnDelEmployee="btnDelEmployee"
             />
           </tbody>
         </table>
@@ -61,15 +61,28 @@
             ghi
           </div>
           <div class="footer-right">
-            <Combobox
-              styleCombobox="width: 200px"
-              class="ml-1"
-              :option="optionDepartment"
-            />
+            <Combobox styleCombobox="width: 200px" />
           </div>
         </div>
       </div>
     </div>
+    <DialogEmployee
+      :show="isShowDialogEmployee"
+      :employee="selectedEmployee"
+      :optionDepartment="optionDepartment.slice(1)"
+      @onClose="onCloseDialogEmployee"
+    />
+    <AlertDialog
+      :show="isShowAlertDialog"
+      :msg="msg"
+      @onClose="onCloseAlertDialog"
+    />
+    <ConfirmDialog
+      :show="isShowConfirmDialog"
+      :msg="msgConfirm"
+      @onClose="onCloseConfirmDialog"
+      @onOk="delEmployee"
+    />
   </div>
 </template>
 
@@ -78,7 +91,10 @@ import Button from "../../components/Button";
 import FieldInput from "../../components/FieldInput";
 import Checkbox from "../../components/Checkbox";
 import Combobox from "../../components/Combobox";
+import AlertDialog from "../../components/AlertDialog";
+import ConfirmDialog from "../../components/ConfirmDialog";
 
+import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
 
 import axios from "axios";
@@ -90,11 +106,15 @@ export default {
     FieldInput,
     Checkbox,
     Combobox,
+    AlertDialog,
+    ConfirmDialog,
     EmployeeItem,
+    DialogEmployee,
   },
 
   created() {
     this.fetchData();
+    this.fetchDepartments();
   },
   data() {
     return {
@@ -109,9 +129,52 @@ export default {
       employees: [],
 
       /**
+       * Dữ liệu nhân viên đang được chọn. Biến này dùng để truyền qua component con dialog thêm và sửa.
+       * Mặc định là thêm mới - Nhân viên rỗng.
+       */
+      selectedEmployee: {},
+
+      /**
+       * Id của nhân viên đang được chọn từ bảng. Id này dùng xác định xóa nhân viên cần xóa.
+       * Mặc định là null.
+       */
+      selectedEmployeeId: null,
+
+      /**
        * Filter danh sách nhân viên theo mã hoặc tên hoặc số điện thoại. Mặc định là "".
        */
       employeeFilter: "",
+
+      /**
+       * Biến xác định trạng thái của dialog thêm và sửa.
+       * true: hiện
+       * false: ẩn
+       */
+      isShowDialogEmployee: false,
+
+      /**
+       * Biến xác định trạng thái của dialog thông báo.
+       * true: hiện
+       * false: ẩn.
+       */
+      isShowAlertDialog: false,
+
+      /**
+       * Biến xác định trạng thái của dialog xác nhận.
+       * true: hiện
+       * false: ẩn.
+       */
+      isShowConfirmDialog: false,
+
+      /**
+       * Câu thông báo hiển thị trong dialog thông báo. Mặc định là "".
+       */
+      msg: "",
+
+      /**
+       * Câu thông báo hiển thị trong dialog xác nhận. Mặc định là "".
+       */
+      msgConfirm: "",
     };
   },
   methods: {
@@ -138,19 +201,147 @@ export default {
     },
 
     /**
+     * Hàm lấy tất cả các phòng ban.
+     */
+    fetchDepartments() {
+      axios
+        .get("https://localhost:44365/api/v1/EmployeeDepartments")
+        .then((res) => res.data)
+        .then((data) => {
+          for (let d of data) {
+            let optDepartment = {
+              value: d.employeeDepartmentId,
+              text: d.employeeDepartmentName,
+            };
+            this.optionDepartment.push(optDepartment);
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+
+    /**
      * Sự kiện click button refresh.
      */
-    btnRefreshData() {},
+    btnRefreshData() {
+      this.fetchData();
+    },
 
     /**
      * Hàm click button thêm nhân viên.
      */
-    btnClickAddEmployee() {},
+    btnClickAddEmployee() {
+      axios
+        .get("https://localhost:44365/api/v1/Employees/EmployeeCodeMax")
+        .then((res) => res.data)
+        .then((data) => {
+          console.log(data);
+          if (data.indexOf("NV") == -1) {
+            data = "NV" + data;
+          }
+          console.log(parseInt(data.match(/\d/g).join("")) + 1);
+          this.selectedEmployee.employeeCode =
+            "NV-" + (parseInt(data.match(/\d/g).join("")) + 1);
+          this.showDialogEmployee();
+        })
+        .catch((err) => console.log(err));
+    },
 
     /**
      * Hàm double click vào employeeItem.
      */
-    onDblClickEmployeeItem() {},
+    onDblClickEmployeeItem(employeeId) {
+      axios
+        .get(`https://localhost:44365/api/v1/Employees/${employeeId}`)
+        .then((res) => res.data)
+        .then((data) => {
+          this.selectedEmployee = data;
+          this.showDialogEmployee();
+        })
+        .catch((err) => console.log(err));
+    },
+
+    /**
+     * Hàm hiển thị dialog thêm và sửa nhân viên.
+     */
+    showDialogEmployee() {
+      this.isShowDialogEmployee = true;
+    },
+
+    /**
+     * Hàm đóng dialog thông báo.
+     */
+    onCloseAlertDialog() {
+      this.isShowAlertDialog = false;
+      this.msg = "";
+    },
+
+    /**
+     * Hàm show dialog thông báo với msg.
+     */
+    showAlertDialogWithMsg(msg) {
+      this.msg = msg;
+      this.isShowAlertDialog = true;
+    },
+
+    /**
+     * Hàm đóng dialog thêm và sửa nhân viên.
+     */
+    onCloseDialogEmployee() {
+      this.isShowDialogEmployee = false;
+      this.selectedEmployee = {};
+    },
+
+    /**
+     * Hàm đóng dialog xác nhận.
+     */
+    onCloseConfirmDialog() {
+      this.isShowConfirmDialog = false;
+      this.msgConfirm = "";
+    },
+
+    /**
+     * Hàm hiển thị dialog xác nhận với một câu thông báo msg.
+     */
+    showConfirmDialogWithMsg(msg) {
+      this.msgConfirm = msg;
+      this.isShowConfirmDialog = true;
+    },
+
+    /**
+     * Sự kiện click button xóa nhân viên.
+     * Lưu ý: phải đã chọn nhân viên cần xóa.
+     */
+    btnDelEmployee(employeeId) {
+      this.selectedEmployeeId = employeeId;
+
+      this.showConfirmDialogWithMsg(
+        "Bạn có chắc muốn xóa nhân viên này không ?",
+        employeeId
+      );
+    },
+    /**
+     * Hàm xóa nhân viên đang được chọn.
+     */
+    delEmployee() {
+      if (this.selectedEmployeeId) {
+        axios
+          .delete(
+            `https://localhost:44365/api/v1/Employees/${this.selectedEmployeeId}`
+          )
+          .then(() => {
+            // hiển thị dialog thông báo với câu thông báo.
+            this.showAlertDialogWithMsg("Xóa thành công.");
+
+            // fetch lại dữ liệu.
+            this.fetchData();
+          })
+          .catch((err) => {
+            // hiển thị thông báo khi thất bại.
+            this.showAlertDialogWithMsg("Xóa thất bại.");
+            console.log(err);
+          });
+      }
+    },
 
     /**
      * Hàm click vào employeeItem.
@@ -204,12 +395,13 @@ export default {
 }
 .content .toolbar-right .btn-refresh {
   margin-left: 10px;
+  padding-bottom: 5px;
 }
 
 .grid {
   background-color: #fff;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 20px;
+  padding-right: 30px;
   max-height: calc(100% - 150px);
   top: 140px;
   left: 15px;

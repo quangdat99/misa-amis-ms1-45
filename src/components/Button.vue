@@ -85,6 +85,7 @@ export default {
   display: inline-block;
   cursor: pointer;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .btn.btn-primary {
@@ -115,7 +116,7 @@ export default {
 /* Button chỉ có icon */
 
 .btn-only-icon {
-  height: 40px;
+  height: 32px;
   line-height: 40px;
   border: 1px solid #bbbbbb;
   padding-left: 12px;

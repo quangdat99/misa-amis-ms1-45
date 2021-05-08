@@ -2,7 +2,7 @@
   <div class="field-input">
     <label v-if="label" class="label-input">
       {{ label }}
-      <template v-if="important">(<span class="important">*</span>)</template>
+      <template v-if="important"><span class="important"> *</span></template>
     </label>
     <select class="input" :style="styleCombobox" v-model="valueCombobox">
       <option v-for="(o, i) in option" :key="i" :value="o.value">
@@ -69,6 +69,7 @@ export default {
 .field-input .label-input {
   display: block;
   margin-bottom: 4px;
+  font-weight: bold;
 }
 
 .field-input .label-input .important {
@@ -78,8 +79,8 @@ export default {
 .field-input .input {
   border: 1px solid #bbb;
   outline: none;
-  border-radius: 5px;
-  height: 40px;
+  border-radius: 3px;
+  height: 32px;
   padding-left: 16px;
   font-size: 13px;
   width: 100%;

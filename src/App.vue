@@ -47,6 +47,14 @@ body {
   background-color: #bbb;
 }
 
+.pr-1 {
+  padding-right: 8px;
+}
+
+.pl-1 {
+  padding-right: 8px;
+}
+
 .px-1 {
   padding-left: 8px;
   padding-right: 8px;
@@ -61,6 +69,10 @@ body {
   margin-left: 8px;
 }
 
+.ml-2 {
+  margin-left: 16px;
+}
+
 .mt-1 {
   margin-top: 8px;
 }
@@ -71,6 +83,10 @@ body {
 
 .mb-2 {
   margin-bottom: 16px;
+}
+
+.mb-3 {
+  margin-bottom: 24px;
 }
 
 .has-text-left {

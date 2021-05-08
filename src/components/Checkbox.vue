@@ -12,4 +12,7 @@ export default {
 </script>
 
 <style scoped>
+input[type="checkbox"] {
+  zoom: 1.5;
+}
 </style>
