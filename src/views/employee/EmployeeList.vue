@@ -54,7 +54,7 @@
             />
           </tbody>
         </table>
-        <div class="footer">
+        <div class="footer" v-if="employees.length != 0">
           <div class="footer-left">
             Tổng số:
             <span style="font-weight: bold">{{ employees.length }}</span> bản
@@ -71,6 +71,7 @@
       :employee="selectedEmployee"
       :optionDepartment="optionDepartment.slice(1)"
       @onClose="onCloseDialogEmployee"
+      @onSave="saveEmployee"
     />
     <AlertDialog
       :show="isShowAlertDialog"
@@ -141,6 +142,12 @@ export default {
       selectedEmployeeId: null,
 
       /**
+       * Mã của nhân viên đang được chọn từ bảng. mã này dùng check trùng mã.
+       * Mặc định là null.
+       */
+      selectedEmployeeCode: null,
+
+      /**
        * Filter danh sách nhân viên theo mã hoặc tên hoặc số điện thoại. Mặc định là "".
        */
       employeeFilter: "",
@@ -175,6 +182,11 @@ export default {
        * Câu thông báo hiển thị trong dialog xác nhận. Mặc định là "".
        */
       msgConfirm: "",
+
+      /**
+       * Check mã nhân viên có bị trùng hay không. True -trùng mã , False - không trùng mã.
+       */
+      checkEmployeeCodeExist: true,
     };
   },
   methods: {
@@ -234,11 +246,6 @@ export default {
         .get("https://localhost:44365/api/v1/Employees/EmployeeCodeMax")
         .then((res) => res.data)
         .then((data) => {
-          console.log(data);
-          if (data.indexOf("NV") == -1) {
-            data = "NV" + data;
-          }
-          console.log(parseInt(data.match(/\d/g).join("")) + 1);
           this.selectedEmployee.employeeCode =
             "NV-" + (parseInt(data.match(/\d/g).join("")) + 1);
           this.showDialogEmployee();
@@ -255,6 +262,7 @@ export default {
         .then((res) => res.data)
         .then((data) => {
           this.selectedEmployee = data;
+          this.selectedEmployeeCode = this.selectedEmployee.employeeCode;
           this.showDialogEmployee();
         })
         .catch((err) => console.log(err));
@@ -284,11 +292,91 @@ export default {
     },
 
     /**
+     * lưu thông tin nhân viên.
+     */
+    async saveEmployee() {
+      // cấu hình axios req.
+      let configAxios = {
+        data: this.selectedEmployee,
+      };
+
+      if (this.selectedEmployee.employeeId) {
+        // nếu là sửa nhân viên.
+        configAxios.url = `https://localhost:44365/api/v1/Employees/${this.selectedEmployee.employeeId}`;
+        configAxios.method = "PUT";
+      } else {
+        // nếu là thêm mới nhân viên.
+        configAxios.url = "https://localhost:44365/api/v1/Employees";
+        configAxios.method = "POST";
+      }
+
+      if (
+        this.selectedEmployee.employeeId &&
+        this.selectedEmployeeCode == this.selectedEmployee.employeeCode
+      ) {
+        this.checkEmployeeCodeExist = false;
+      } else {
+        // kiểm tra xem có bị trùng mã nhân viên không.
+        await this.onCheckEmployeeCodeExist(this.selectedEmployee.employeeCode);
+      }
+
+      setTimeout(() => {
+        // nếu không trùng thì lưu thông tin nhân viên.
+        if (this.checkEmployeeCodeExist == false) {
+          // tiến hành call api lưu thông tin nhân viên.
+          axios(configAxios)
+            .then(() => {
+              // thực hiện đóng dialog thêm và sửa nhân viên.
+              this.onCloseDialogEmployee();
+
+              // show dialog thông báo với lời thông báo Lưu thành công.
+              this.showAlertDialogWithMsg("Lưu thành công.");
+
+              // Lấy lại dữ liệu từ api với bộ lọc mặc định.
+              this.btnRefreshData();
+            })
+            .catch((err) => {
+              // show dialog thông báo khi lưu thất bại.
+              this.showAlertDialogWithMsg("Lưu thất bại.");
+              console.log(err);
+            });
+        } else {
+          // show dialog thông báo khi lưu thất bại.
+          this.showAlertDialogWithMsg(
+            "Nhân viên <" + this.selectedEmployee.employeeCode + "> đã tồn tại."
+          );
+        }
+      }, 1000);
+    },
+
+    /**
+     * Hàm check mã nhân viên tồn tại.
+     */
+    onCheckEmployeeCodeExist(EmployeeCode) {
+      axios
+        .get(
+          "https://localhost:44365/api/v1/Employees/EmployeeCodeExist/" +
+            EmployeeCode
+        )
+        .then((res) => res.data)
+        .then((data) => {
+          if (data == 1) {
+            this.checkEmployeeCodeExist = true;
+          } else {
+            this.checkEmployeeCodeExist = false;
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+
+    /**
      * Hàm đóng dialog thêm và sửa nhân viên.
      */
     onCloseDialogEmployee() {
       this.isShowDialogEmployee = false;
       this.selectedEmployee = {};
+      this.selectedEmployeeCode = null;
+      this.checkEmployeeCodeExist = true;
     },
 
     /**
@@ -311,11 +399,11 @@ export default {
      * Sự kiện click button xóa nhân viên.
      * Lưu ý: phải đã chọn nhân viên cần xóa.
      */
-    btnDelEmployee(employeeId) {
+    btnDelEmployee(employeeId, employeeCode) {
       this.selectedEmployeeId = employeeId;
 
       this.showConfirmDialogWithMsg(
-        "Bạn có chắc muốn xóa nhân viên này không ?",
+        "Bạn có chắc muốn xóa nhân viên <" + employeeCode + "> này không ?",
         employeeId
       );
     },
@@ -402,7 +490,7 @@ export default {
   background-color: #fff;
   padding-left: 20px;
   padding-right: 30px;
-  max-height: calc(100% - 150px);
+  max-height: calc(100% - 155px);
   top: 140px;
   left: 15px;
   right: 15px;

@@ -8,8 +8,15 @@
       <div class="dialog-body">
         {{ msg }}
       </div>
+      <div class="divide"></div>
+
       <div class="dialog-footer">
-        <Button text="Hủy" :color="null" @click="closeDialog" />
+        <Button
+          text="Hủy"
+          :color="null"
+          @click="closeDialog"
+          styleBtn="border: 1px solid #8d9096;margin-right: 207px;"
+        />
         <Button text="Ok" @click="onConfirmed" />
       </div>
     </div>
@@ -78,6 +85,7 @@ export default {
   width: 400px;
   background-color: #fff;
   position: relative;
+  border-radius: 4px;
 }
 
 .dialog .dialog-header {
@@ -110,12 +118,19 @@ export default {
   padding: 0 24px 24px 24px;
 }
 
+.dialog .divide {
+  border-top: 1px solid #e0e0e0;
+  margin: 0px 30px 12px 28px;
+}
+
 .dialog .dialog-footer {
   padding-right: 24px;
   height: 60px;
-  background-color: #e5e5e5;
+  background-color: #fff;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding-bottom: 15px;
+  border-radius: 4px;
 }
 </style>

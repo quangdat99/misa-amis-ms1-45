@@ -70,9 +70,9 @@ export default {
      */
     genderName: function () {
       if (this.employee.gender == 0) {
-        return "Nam";
-      } else if (this.employee.gender == 1) {
         return "Nữ";
+      } else if (this.employee.gender == 1) {
+        return "Nam";
       } else {
         return "Không xác định";
       }
@@ -126,7 +126,11 @@ export default {
   watch: {
     selected: function (val) {
       if (val == "1") {
-        this.$emit("btnDelEmployee", this.employee.employeeId);
+        this.$emit(
+          "btnDelEmployee",
+          this.employee.employeeId,
+          this.employee.employeeCode
+        );
         this.selected = "";
       }
     },

@@ -4,11 +4,17 @@
       {{ label }}
       <template v-if="important"><span class="important"> *</span></template>
     </label>
-    <select class="input" :style="styleCombobox" v-model="valueCombobox">
+    <select
+      class="input"
+      :style="styleCombobox"
+      v-model="valueCombobox"
+      :class="{ 'has-error': errorMsg }"
+    >
       <option v-for="(o, i) in option" :key="i" :value="o.value">
         {{ o.text }}
       </option>
     </select>
+    <p v-if="errorMsg" class="text-error">{{ errorMsg }}</p>
   </div>
 </template>
 
@@ -49,6 +55,14 @@ export default {
      * Giá trị khởi tạo của combobox.
      */
     value: {
+      default: null,
+    },
+
+    /**
+     * Hiển thị lỗi combobox khi valid.
+     */
+    errorMsg: {
+      type: String,
       default: null,
     },
   },

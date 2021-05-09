@@ -21,14 +21,18 @@
                 label="Mã"
                 :important="true"
                 :autoFocusInput="true"
+                :errorMsg="errors.employeeCode"
                 v-model="employee.employeeCode"
+                @blur="onValidEmployeeCode"
               />
             </div>
             <div class="col-8 space-input">
               <FieldInput
                 label="Họ và tên"
                 :important="true"
+                :errorMsg="errors.employeeName"
                 v-model="employee.employeeName"
+                @blur="onValidFullName"
               />
             </div>
           </div>
@@ -41,7 +45,11 @@
               />
             </div>
             <div class="col-7 space-input">
-              <Combobox label="Giới tính" :option="genders" />
+              <Combobox
+                label="Giới tính"
+                :option="genders"
+                v-model="employee.gender"
+              />
             </div>
           </div>
           <div class="col-6 space-input">
@@ -49,7 +57,9 @@
               label="Đơn vị"
               :important="true"
               :option="optionDepartment"
+              :errorMsg="errors.employeeDepartment"
               v-model="employee.employeeDepartmentId"
+              @change="onValidDepartment"
               style="padding-right: 8px"
             />
           </div>
@@ -117,6 +127,7 @@
         <Button
           text="Cất"
           :color="null"
+          @click="onSaveEmployee"
           styleBtn="border: 1px solid #8d9096; margin-right: 12px;"
         />
         <Button text="Cất và Thêm" icon="save" @click="onSaveEmployee" />
@@ -185,11 +196,9 @@ export default {
        * Thông tin lỗi.
        */
       errors: {
-        EmployeeCode: "",
-        FullName: "",
-        IdentityNumber: "",
-        Email: "",
-        PhoneNumber: "",
+        employeeCode: "",
+        employeeName: "",
+        employeeDepartment: "",
       },
     };
   },
@@ -197,12 +206,65 @@ export default {
     /**
      * Hàm gọi khi click vào button lưu.
      */
-    onSaveEmployee() {},
+    onSaveEmployee() {
+      let valid = true;
+      this.onValidEmployeeCode();
+      this.onValidFullName();
+      this.onValidDepartment();
+      for (let err in this.errors) {
+        if (this.errors[err]) {
+          valid = false;
+          break;
+        }
+      }
+      if (valid) {
+        this.$emit("onSave");
+      } else {
+        console.log(this.errors);
+      }
+    },
+
+    /**
+     * valid mã nhân viên.
+     */
+    onValidEmployeeCode() {
+      if (this.employee && this.employee.employeeCode) {
+        this.errors.employeeCode = "";
+      } else {
+        this.errors.employeeCode = "Mã không được để trống.";
+      }
+    },
+
+    /**
+     * valid họ tên nhân viên.
+     */
+    onValidFullName() {
+      if (this.employee && this.employee.employeeName) {
+        this.errors.employeeName = "";
+      } else {
+        this.errors.employeeName = "Tên nhân viên không được để trống.";
+      }
+    },
+
+    /**
+     * valid đơn vị của nhân viên .
+     */
+    onValidDepartment() {
+      if (this.employee && this.employee.employeeDepartmentId) {
+        this.errors.employeeDepartment = "";
+      } else {
+        this.errors.employeeDepartment = "Đơn vị không được để trống.";
+      }
+    },
 
     /**
      * Hàm đóng dialog.
      */
     closeDialog() {
+      this.errors = {
+        employeeCode: "",
+        employeeName: "",
+      };
       this.$emit("onClose");
     },
 
@@ -240,7 +302,7 @@ export default {
     },
 
     /**
-     * Computed ngày sinh nhân viên.
+     * Computed ngày cấp CMND.
      */
     identityDateInput: {
       get() {
