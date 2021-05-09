@@ -294,7 +294,7 @@ export default {
     /**
      * lưu thông tin nhân viên.
      */
-    async saveEmployee() {
+    saveEmployee() {
       // cấu hình axios req.
       let configAxios = {
         data: this.selectedEmployee,
@@ -314,59 +314,61 @@ export default {
         this.selectedEmployee.employeeId &&
         this.selectedEmployeeCode == this.selectedEmployee.employeeCode
       ) {
-        this.checkEmployeeCodeExist = false;
+        // tiến hành call api lưu thông tin nhân viên.
+        axios(configAxios)
+          .then(() => {
+            // thực hiện đóng dialog thêm và sửa nhân viên.
+            this.onCloseDialogEmployee();
+
+            // show dialog thông báo với lời thông báo Lưu thành công.
+            this.showAlertDialogWithMsg("Lưu thành công.");
+
+            // Lấy lại dữ liệu từ api với bộ lọc mặc định.
+            this.btnRefreshData();
+          })
+          .catch((err) => {
+            // show dialog thông báo khi lưu thất bại.
+            this.showAlertDialogWithMsg("Lưu thất bại.");
+            console.log(err);
+          });
       } else {
         // kiểm tra xem có bị trùng mã nhân viên không.
-        await this.onCheckEmployeeCodeExist(this.selectedEmployee.employeeCode);
-      }
-
-      setTimeout(() => {
-        // nếu không trùng thì lưu thông tin nhân viên.
-        if (this.checkEmployeeCodeExist == false) {
-          // tiến hành call api lưu thông tin nhân viên.
-          axios(configAxios)
-            .then(() => {
-              // thực hiện đóng dialog thêm và sửa nhân viên.
-              this.onCloseDialogEmployee();
-
-              // show dialog thông báo với lời thông báo Lưu thành công.
-              this.showAlertDialogWithMsg("Lưu thành công.");
-
-              // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-              this.btnRefreshData();
-            })
-            .catch((err) => {
+        axios
+          .get(
+            "https://localhost:44365/api/v1/Employees/EmployeeCodeExist/" +
+              this.selectedEmployee.employeeCode
+          )
+          .then((res) => res.data)
+          .then((data) => {
+            if (data == 1) {
               // show dialog thông báo khi lưu thất bại.
-              this.showAlertDialogWithMsg("Lưu thất bại.");
-              console.log(err);
-            });
-        } else {
-          // show dialog thông báo khi lưu thất bại.
-          this.showAlertDialogWithMsg(
-            "Nhân viên <" + this.selectedEmployee.employeeCode + "> đã tồn tại."
-          );
-        }
-      }, 1000);
-    },
+              this.showAlertDialogWithMsg(
+                "Nhân viên <" +
+                  this.selectedEmployee.employeeCode +
+                  "> đã tồn tại."
+              );
+            } else {
+              // tiến hành call api lưu thông tin nhân viên.
+              axios(configAxios)
+                .then(() => {
+                  // thực hiện đóng dialog thêm và sửa nhân viên.
+                  this.onCloseDialogEmployee();
 
-    /**
-     * Hàm check mã nhân viên tồn tại.
-     */
-    onCheckEmployeeCodeExist(EmployeeCode) {
-      axios
-        .get(
-          "https://localhost:44365/api/v1/Employees/EmployeeCodeExist/" +
-            EmployeeCode
-        )
-        .then((res) => res.data)
-        .then((data) => {
-          if (data == 1) {
-            this.checkEmployeeCodeExist = true;
-          } else {
-            this.checkEmployeeCodeExist = false;
-          }
-        })
-        .catch((err) => console.log(err));
+                  // show dialog thông báo với lời thông báo Lưu thành công.
+                  this.showAlertDialogWithMsg("Lưu thành công.");
+
+                  // Lấy lại dữ liệu từ api với bộ lọc mặc định.
+                  this.btnRefreshData();
+                })
+                .catch((err) => {
+                  // show dialog thông báo khi lưu thất bại.
+                  this.showAlertDialogWithMsg("Lưu thất bại.");
+                  console.log(err);
+                });
+            }
+          })
+          .catch((err) => console.log(err));
+      }
     },
 
     /**
