@@ -45,7 +45,7 @@
               />
             </div>
             <div class="col-7 space-input">
-              <Combobox
+              <Radio
                 label="Giới tính"
                 :option="genders"
                 v-model="employee.gender"
@@ -141,6 +141,7 @@ import FieldInput from "../../components/FieldInput";
 import Combobox from "../../components/Combobox";
 import Button from "../../components/Button";
 import Checkbox from "../../components/Checkbox";
+import Radio from "../../components/Radio";
 
 export default {
   name: "DialogEmployee",
@@ -149,6 +150,7 @@ export default {
     Combobox,
     Button,
     Checkbox,
+    Radio,
   },
   props: {
     /**
