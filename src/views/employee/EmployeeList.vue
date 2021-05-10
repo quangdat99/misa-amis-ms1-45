@@ -65,11 +65,19 @@
         <div class="footer" v-if="employees.length != 0">
           <div class="footer-left">
             Tổng số:
-            <span style="font-weight: bold">{{ employees.length }}</span> bản
-            ghi
+            <span style="font-weight: bold">{{ countEmloyees }}</span> bản ghi
           </div>
+
           <div class="footer-right">
-            <Combobox styleCombobox="width: 200px" />
+            <div class="combobox">
+              <Combobox
+                styleCombobox="width: 210px"
+                :option="optionPage"
+                @change="onHandleEmployeeFilter"
+                v-model="limit"
+              />
+            </div>
+            <Pagination :page="page" :totalPage="totalPage" />
           </div>
         </div>
       </div>
@@ -102,6 +110,7 @@ import Checkbox from "../../components/Checkbox";
 import Combobox from "../../components/Combobox";
 import AlertDialog from "../../components/AlertDialog";
 import ConfirmDialog from "../../components/ConfirmDialog";
+import Pagination from "../../components/Pagination";
 
 import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
@@ -119,18 +128,31 @@ export default {
     ConfirmDialog,
     EmployeeItem,
     DialogEmployee,
+    Pagination,
   },
 
   created() {
+    this.fetchCountEmployees();
     this.fetchData();
     this.fetchDepartments();
   },
   data() {
     return {
       /**
-       * các option cho combobox phòng ban.
+       * các option cho combobox đơn vị.
        */
       optionDepartment: [{ value: "", text: "Tất cả phòng ban" }],
+
+      /**
+       * các option cho combobox phân trang.
+       */
+      optionPage: [
+        { value: 10, text: "10 bản ghi trên 1 trang" },
+        { value: 20, text: "20 bản ghi trên 1 trang" },
+        { value: 30, text: "30 bản ghi trên 1 trang" },
+        { value: 50, text: "50 bản ghi trên 1 trang" },
+        { value: 100, text: "100 bản ghi trên 1 trang" },
+      ],
 
       /**
        * Mảng nhân viên được fetch từ server (có filter).
@@ -207,14 +229,41 @@ export default {
        * Trang hiện tại. Mặc định là 1.
        */
       page: 1,
+
+      /**
+       * tổng số trang.
+       */
+      totalPage: 0,
+
+      /**
+       * Số bản ghi lọc theo filter.
+       */
+      countEmloyees: 0,
     };
   },
   methods: {
     /**
+     * Hàm lấy số nhân viên lọc theo filter.
+     */
+    fetchCountEmployees() {
+      axios
+        .get(
+          "https://localhost:44366/api/v1/Employees/CountEmployees?employeeFilter=" +
+            this.employeeFilter
+        )
+        .then((res) => res.data)
+        .then((data) => {
+          this.countEmloyees = data;
+          this.totalPage = Math.ceil(this.countEmloyees / this.limit);
+          console.log(this.totalPage);
+        })
+        .catch((err) => console.log(err));
+    },
+    /**
      * Hàm lấy danh sách có lọc nhân viên từ server.
      */
     fetchData() {
-      let url = `https://localhost:44365/api/v1/Employees/employeeFilter?pageSize=${this.limit}&pageNumber=${this.page}`;
+      let url = `https://localhost:44366/api/v1/Employees/employeeFilter?pageSize=${this.limit}&pageNumber=${this.page}`;
       if (this.employeeFilter) {
         url += `&employeeFilter=${this.employeeFilter}`;
         console.log(this.employeeFilter);
@@ -245,7 +294,7 @@ export default {
      */
     fetchDepartments() {
       axios
-        .get("https://localhost:44365/api/v1/EmployeeDepartments")
+        .get("https://localhost:44366/api/v1/EmployeeDepartments")
         .then((res) => res.data)
         .then((data) => {
           for (let d of data) {
@@ -274,6 +323,7 @@ export default {
      */
     btnRefreshData() {
       this.resetFilter();
+      this.fetchCountEmployees();
       this.fetchData();
     },
 
@@ -282,7 +332,7 @@ export default {
      */
     btnClickAddEmployee() {
       axios
-        .get("https://localhost:44365/api/v1/Employees/EmployeeCodeMax")
+        .get("https://localhost:44366/api/v1/Employees/EmployeeCodeMax")
         .then((res) => res.data)
         .then((data) => {
           this.selectedEmployee.employeeCode =
@@ -297,7 +347,7 @@ export default {
      */
     onDblClickEmployeeItem(employeeId) {
       axios
-        .get(`https://localhost:44365/api/v1/Employees/${employeeId}`)
+        .get(`https://localhost:44366/api/v1/Employees/${employeeId}`)
         .then((res) => res.data)
         .then((data) => {
           this.selectedEmployee = data;
@@ -341,11 +391,11 @@ export default {
 
       if (this.selectedEmployee.employeeId) {
         // nếu là sửa nhân viên.
-        configAxios.url = `https://localhost:44365/api/v1/Employees/${this.selectedEmployee.employeeId}`;
+        configAxios.url = `https://localhost:44366/api/v1/Employees/${this.selectedEmployee.employeeId}`;
         configAxios.method = "PUT";
       } else {
         // nếu là thêm mới nhân viên.
-        configAxios.url = "https://localhost:44365/api/v1/Employees";
+        configAxios.url = "https://localhost:44366/api/v1/Employees";
         configAxios.method = "POST";
       }
 
@@ -363,7 +413,9 @@ export default {
             this.showAlertDialogWithMsg("Lưu thành công.");
 
             // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-            this.btnRefreshData();
+            // this.btnRefreshData();
+            // this.fetchCountEmployees();
+            this.fetchData();
           })
           .catch((err) => {
             // show dialog thông báo khi lưu thất bại.
@@ -374,7 +426,7 @@ export default {
         // kiểm tra xem có bị trùng mã nhân viên không.
         axios
           .get(
-            "https://localhost:44365/api/v1/Employees/EmployeeCodeExist/" +
+            "https://localhost:44366/api/v1/Employees/EmployeeCodeExist/" +
               this.selectedEmployee.employeeCode
           )
           .then((res) => res.data)
@@ -384,7 +436,7 @@ export default {
               this.showAlertDialogWithMsg(
                 "Nhân viên <" +
                   this.selectedEmployee.employeeCode +
-                  "> đã tồn tại."
+                  "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại."
               );
             } else {
               // tiến hành call api lưu thông tin nhân viên.
@@ -397,7 +449,11 @@ export default {
                   this.showAlertDialogWithMsg("Lưu thành công.");
 
                   // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-                  this.btnRefreshData();
+                  if (configAxios.method == "PUT") {
+                    this.fetchData();
+                  } else {
+                    this.btnRefreshData();
+                  }
                 })
                 .catch((err) => {
                   // show dialog thông báo khi lưu thất bại.
@@ -455,13 +511,14 @@ export default {
       if (this.selectedEmployeeId) {
         axios
           .delete(
-            `https://localhost:44365/api/v1/Employees/${this.selectedEmployeeId}`
+            `https://localhost:44366/api/v1/Employees/${this.selectedEmployeeId}`
           )
           .then(() => {
             // hiển thị dialog thông báo với câu thông báo.
             this.showAlertDialogWithMsg("Xóa thành công.");
 
             // fetch lại dữ liệu.
+            this.fetchCountEmployees();
             this.fetchData();
           })
           .catch((err) => {
@@ -480,8 +537,25 @@ export default {
     onHandleEmployeeFilter() {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
+        this.page = 1;
         this.fetchData();
+        this.fetchCountEmployees();
       }, 300);
+    },
+  },
+  watch: {
+    "$route.query": function (val) {
+      if (val) {
+        this.page = parseInt(val.page) || 1;
+      } else {
+        this.page = 1;
+      }
+      this.fetchData();
+    },
+    page: function (val) {
+      if (val == 1) {
+        this.$router.replace({ query: null });
+      }
     },
   },
 };
@@ -600,6 +674,8 @@ export default {
   position: sticky;
   bottom: 0px;
   height: 45px;
+  display: flex;
+  align-items: center;
 }
 
 .footer .footer-left {
@@ -608,8 +684,12 @@ export default {
 }
 
 .footer .footer-right {
-  display: inline-block;
+  display: flex;
   position: absolute;
   right: 0;
+  top: 7px;
+}
+.footer .footer-right .combobox {
+  margin-right: 15px;
 }
 </style>

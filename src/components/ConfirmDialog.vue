@@ -2,9 +2,9 @@
   <div class="dialog" :class="{ 'dialog-hide': !show }">
     <div class="dialog-content">
       <div class="dialog-header">
-        <div class="dialog-title">CẢNH BÁO</div>
-        <div class="dialog-button-close" @click="closeDialog">&#x2715;</div>
+        <div class="dialog-title"></div>
       </div>
+      <div class="dialog-image"></div>
       <div class="dialog-body">
         {{ msg }}
       </div>
@@ -116,6 +116,17 @@ export default {
 
 .dialog .dialog-body {
   padding: 0 24px 24px 24px;
+  display: inline-block;
+  width: 300px;
+}
+
+.dialog-image {
+  background: url(/img/Sprites.64af8f61.svg) 1427px 1446px;
+  height: 41px;
+  width: 57px;
+  display: inline-block;
+  margin-top: 0px;
+  margin-left: 20px;
 }
 
 .dialog .divide {
