@@ -54,6 +54,14 @@
             />
           </tbody>
         </table>
+        <div v-if="!hasData">
+          <div
+            class="has-text-center"
+            style="font-size: 15px; font-weight: bold; padding: 100px"
+          >
+            Không có dữ liệu.
+          </div>
+        </div>
         <div class="footer" v-if="employees.length != 0">
           <div class="footer-left">
             Tổng số:
@@ -128,6 +136,7 @@ export default {
        * Mảng nhân viên được fetch từ server (có filter).
        */
       employees: [],
+      hasData: true,
 
       /**
        * Dữ liệu nhân viên đang được chọn. Biến này dùng để truyền qua component con dialog thêm và sửa.
@@ -151,6 +160,7 @@ export default {
        * Filter danh sách nhân viên theo mã hoặc tên hoặc số điện thoại. Mặc định là "".
        */
       employeeFilter: "",
+      timeOut: null,
 
       /**
        * Biến xác định trạng thái của dialog thêm và sửa.
@@ -187,6 +197,16 @@ export default {
        * Check mã nhân viên có bị trùng hay không. True -trùng mã , False - không trùng mã.
        */
       checkEmployeeCodeExist: true,
+
+      /**
+       * Số lượng nhân viên trên 1 trang. Mặc định là 10.
+       */
+      limit: 20,
+
+      /**
+       * Trang hiện tại. Mặc định là 1.
+       */
+      page: 1,
     };
   },
   methods: {
@@ -194,8 +214,11 @@ export default {
      * Hàm lấy danh sách có lọc nhân viên từ server.
      */
     fetchData() {
-      let url = "https://localhost:44365/api/v1/Employees";
-
+      let url = `https://localhost:44365/api/v1/Employees/employeeFilter?pageSize=${this.limit}&pageNumber=${this.page}`;
+      if (this.employeeFilter) {
+        url += `&employeeFilter=${this.employeeFilter}`;
+        console.log(this.employeeFilter);
+      }
       axios
         .get(url, { crossdomain: true })
 
@@ -207,6 +230,11 @@ export default {
         })
         .then((data) => {
           this.employees = data;
+          if (this.employees.length > 0) {
+            this.hasData = true;
+          } else {
+            this.hasData = false;
+          }
           console.log(this.employees);
         })
         .catch((err) => console.log(err));
@@ -232,9 +260,20 @@ export default {
     },
 
     /**
+     * Hàm reset bộ lọc về mặc định.
+     */
+    resetFilter() {
+      this.page = 1;
+      this.limit = 20;
+      this.employeeFilter = "";
+      this.hasData = true;
+    },
+
+    /**
      * Sự kiện click button refresh.
      */
     btnRefreshData() {
+      this.resetFilter();
       this.fetchData();
     },
 
@@ -438,7 +477,12 @@ export default {
      */
     onClickEmployeeItem() {},
 
-    onHandleEmployeeFilter() {},
+    onHandleEmployeeFilter() {
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.fetchData();
+      }, 300);
+    },
   },
 };
 </script>
