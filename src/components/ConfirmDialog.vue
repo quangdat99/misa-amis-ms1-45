@@ -121,7 +121,7 @@ export default {
 }
 
 .dialog-image {
-  background: url(/img/Sprites.64af8f61.svg) 1427px 1446px;
+  background: url(../assets/img/Sprites.svg) 1427px 1446px;
   height: 41px;
   width: 57px;
   display: inline-block;
