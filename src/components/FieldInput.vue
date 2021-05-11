@@ -133,8 +133,8 @@ export default {
 
 .field-input.has-icon .input-icon-right {
   position: absolute;
-  right: 16px;
-  top: 12px;
+  right: 9px;
+  top: 9px;
   font-size: 16px;
   color: #bbbbbb;
 }

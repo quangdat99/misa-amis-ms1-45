@@ -1,8 +1,7 @@
  <template>
-  <div class="radio-button-group">
+  <div>
     <label v-if="label" class="label-input">
       {{ label }}
-      <template v-if="important"><span class="important"> *</span></template>
     </label>
     <div class="input">
       <label v-for="(o, i) in option" :key="i">
@@ -10,7 +9,7 @@
           type="radio"
           name="radio-input"
           :value="o.value"
-          :checked="val == value"
+          :checked="value == o.value"
           v-model="valueCombobox"
         />
         {{ o.text }}
@@ -21,12 +20,7 @@
 
 <script>
 export default {
-  name: "BaseRadioButtonGroup",
-  data() {
-    return {
-      valRadio: null,
-    };
-  },
+  name: "Radio",
   props: {
     // Tên label của input.
     label: {
@@ -41,7 +35,7 @@ export default {
      * Giá trị khởi tạo của combobox.
      */
     value: {
-      default: "",
+      default: null,
     },
   },
   computed: {
@@ -49,8 +43,8 @@ export default {
       get() {
         return this.value;
       },
-      set(val) {
-        this.$emit("input", val);
+      set(val1) {
+        this.$emit("input", val1);
       },
     },
   },
@@ -58,9 +52,6 @@ export default {
 </script>
 
 <style>
-.radio-button-group {
-}
-
 .label-input {
   display: block;
   margin-bottom: 4px;

@@ -615,7 +615,7 @@ export default {
   left: 15px;
   right: 15px;
   position: absolute;
-  overflow-y: auto;
+  overflow: auto;
   flex: 1;
 }
 

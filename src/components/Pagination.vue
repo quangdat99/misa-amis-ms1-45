@@ -55,7 +55,7 @@ export default {
   computed: {
     rangePage: function () {
       let range = [];
-      let start = this.page > 3 ? this.page - 2 : 1;
+      let start = this.page > 2 ? this.page - 1 : 1;
       let end = this.page < this.totalPage - 2 ? this.page + 2 : this.totalPage;
       for (let i = start; i <= end; i++) range.push(i);
       return range;
