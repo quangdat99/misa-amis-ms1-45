@@ -101,12 +101,14 @@ export default {
 }
 
 .dialog .dialog-body {
-  padding: 0 24px 24px 24px;
+  padding: 30px;
+  padding-top: 0px;
+  padding-left: 40px;
 }
 
 .dialog .divide {
   border-top: 1px solid #e0e0e0;
-  margin: 0px 30px 12px 28px;
+  margin: 0px 24px 12px 24px;
 }
 
 .dialog .dialog-footer {

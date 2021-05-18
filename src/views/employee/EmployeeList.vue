@@ -6,7 +6,9 @@
         <Button text="Thêm mới nhân viên" @click="btnClickAddEmployee" />
       </div>
       <div class="toolbar-box mt-1">
-        <div class="toolbar-left"></div>
+        <div class="toolbar-left">
+          <ComboboxAutoComplete styleCombobox="width: 300px" />
+        </div>
         <div class="toolbar-right">
           <FieldInput
             styleInput="width: 280px"
@@ -108,6 +110,8 @@ import Button from "../../components/Button";
 import FieldInput from "../../components/FieldInput";
 import Checkbox from "../../components/Checkbox";
 import Combobox from "../../components/Combobox";
+import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
+
 import AlertDialog from "../../components/AlertDialog";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import Pagination from "../../components/Pagination";
@@ -124,6 +128,7 @@ export default {
     FieldInput,
     Checkbox,
     Combobox,
+    ComboboxAutoComplete,
     AlertDialog,
     ConfirmDialog,
     EmployeeItem,
