@@ -8,7 +8,7 @@
       <div class="header-left-icon fas fa-chevron-down"></div>
     </div>
     <div class="header-right">
-      <div class="header-right-notify fas fa-bell"></div>
+      <div class="header-right-notify"></div>
       <div class="header-right-avatar"></div>
       <div class="header-right-name">Đinh Quang Đạt</div>
       <div class="header-left-icon fas fa-chevron-down"></div>
@@ -63,7 +63,10 @@
 
 .header .header-right-notify {
   margin-right: 16px;
-  font-size: 20px;
+  background: url('../../assets/img/Sprites.svg') no-repeat -788px -30px;
+	width: 22px;
+	height: 25px;
+  cursor: pointer;
 }
 
 .header .header-right-avatar {

@@ -98,6 +98,7 @@ export default {
   padding-left: 16px;
   font-size: 13px;
   width: 100%;
+  padding-top: 0px;
 }
 
 .field-input .input::placeholder {

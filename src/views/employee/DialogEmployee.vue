@@ -9,8 +9,8 @@
           <Checkbox />
           <div class="line-height">Là nhà cung cấp</div>
         </div>
-        <div class="dialog-button-help fas fa-question-circle"></div>
-        <div class="dialog-button-close" @click="closeDialog">&#x2715;</div>
+        <div class="dialog-button-help"></div>
+        <div class="dialog-button-close" @click="closeDialog"></div>
       </div>
       <div class="dialog-body">
         <div class="row">
@@ -369,34 +369,28 @@ export default {
 }
 
 .dialog .dialog-header .dialog-button-close {
-  font-size: 16px;
+  background: url('../../assets/img/Sprites.svg') no-repeat -137px -136px;
   position: absolute;
   right: 0;
   top: 0;
   height: 40px;
   width: 40px;
-  line-height: 40px;
-  text-align: center;
   cursor: pointer;
-  border-bottom-left-radius: 4px;
 }
 
-.dialog .dialog-header .dialog-button-close:hover {
-  background-color: #e5e5e5;
-}
+
 
 .dialog .dialog-header .dialog-button-help {
-  font-size: 16px;
+  background: url('../../assets/img/Sprites.svg') no-repeat -80px -136px;
   position: absolute;
-  right: 35px;
+  right: 40px;
   top: 0;
   height: 40px;
   width: 40px;
-  line-height: 40px;
-  text-align: center;
   cursor: pointer;
-  border-bottom-left-radius: 4px;
 }
+
+
 
 .dialog .dialog-body {
   padding-left: 24px;

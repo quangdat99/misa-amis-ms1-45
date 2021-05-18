@@ -51,13 +51,22 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .label-input {
   display: block;
   margin-bottom: 4px;
   font-weight: bold;
 }
+
+label {
+  margin-right: 6px;
+}
 .input {
   padding-top: 6px;
+}
+input[type="radio"] {
+  -ms-transform: scale(1.3); /* IE 9 */
+    -webkit-transform: scale(1.3); /* Chrome, Safari, Opera */
+    transform: scale(1.3);
 }
 </style>

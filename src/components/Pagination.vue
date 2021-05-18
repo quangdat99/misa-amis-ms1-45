@@ -127,10 +127,11 @@ export default {
 }
 .disabled-prev {
   margin-right: 15px;
-  color: rgb(206, 206, 206);
+  color: rgb(163, 163, 163);
 }
 .disabled-next {
   margin-left: 15px;
-  color: rgb(206, 206, 206);
+  color: rgb(163, 163, 163);
+
 }
 </style>

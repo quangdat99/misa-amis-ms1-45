@@ -673,7 +673,7 @@ export default {
   background-color: #fff;
   position: sticky;
   bottom: 0px;
-  height: 45px;
+  height: 46px;
   display: flex;
   align-items: center;
 }
