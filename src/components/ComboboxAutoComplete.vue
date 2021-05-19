@@ -1,15 +1,16 @@
 <template>
   <div class="field-input">
-    <div class="input-icon-right"></div>
+    <div class="input-icon-right" @click="onClickShowMenu"></div>
     <input
+      ref="input"
       class="input"
       :style="styleCombobox"
       :class="{ 'has-error': errorMsg }"
-      v-model="valueInput"
-      @blur="$emit('blur')"
+      v-model="value"
+      @click="onClickShowMenu"
     />
-    <div class="combo-menu">
-      <div class="menu-header-container">
+    <div class="combo-menu" :class="{ 'menu-hide': !show }" >
+      <!-- <div class="menu-header-container">
         <table class="menu-table">
           <thead class="menu-header">
             <tr>
@@ -28,22 +29,22 @@
             </tr>
           </thead>
         </table>
-      </div>
+      </div> -->
       <div class="menu-body-container">
         <table class="menu-table">
           <tbody class="menu-items">
-            <tr class="dropdown-item">
-              <td
+            <tr class="dropdown-item" v-for="(o, i) in option" :key="i" @click="onClickOption">
+              <!-- <td
                 class="dropdown-item-td"
                 style="width: 100px; text-align: left"
               >
                 123
-              </td>
+              </td> -->
               <td
                 class="dropdown-item-td"
                 style="width: 250px; text-align: left"
               >
-                123
+                 {{ o.text }}
               </td>
             </tr>
           </tbody>
@@ -61,7 +62,19 @@ export default {
     prop: "value",
     event: "change",
   },
+  data() {
+    return {
+      /**
+     * Xác định trạng thái của dialog.
+     * true: hiện
+     * false: ẩn
+     */
+    show: false,
+    }
+  },
   props: {
+    
+
     // Tên label của input.
     label: {
       type: String,
@@ -103,6 +116,25 @@ export default {
     },
   },
 
+  methods: {
+    onClickShowMenu(){
+      this.show = !this.show;
+      this.$nextTick(function () {
+          this.$refs.input.focus();
+        });
+    },
+    outside(){
+      setTimeout(() => {
+      this.show = false;
+      }, 200);
+    },
+    onClickOption(){
+      // this.show = false;
+      this.$refs.input.focus();
+      this.$refs.input.value.$emit("change", "abc");
+    }
+  },
+
   computed: {
     valueInput: {
       get() {
@@ -112,6 +144,8 @@ export default {
         this.$emit("change", val);
       },
     },
+  },
+  watch: {
   },
 };
 </script>
@@ -217,5 +251,14 @@ export default {
 
 .dropdown-item .dropdown-item-td {
   padding: 0 10px;
+}
+
+.dropdown-item:hover {
+  color: #35bf22;
+  background-color: #e6e6e6;
+}
+
+.menu-hide {
+  display: none;
 }
 </style>

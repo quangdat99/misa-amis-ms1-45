@@ -7,7 +7,7 @@
       </div>
       <div class="toolbar-box mt-1">
         <div class="toolbar-left">
-          <ComboboxAutoComplete styleCombobox="width: 300px" />
+          <ComboboxAutoComplete styleCombobox="width: 300px" :option="optionDepartment.slice(1)" />
         </div>
         <div class="toolbar-right">
           <FieldInput
