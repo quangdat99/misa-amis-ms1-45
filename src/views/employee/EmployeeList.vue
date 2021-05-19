@@ -7,7 +7,10 @@
       </div>
       <div class="toolbar-box mt-1">
         <div class="toolbar-left">
-          <ComboboxAutoComplete styleCombobox="width: 300px" :option="optionDepartment.slice(1)" />
+          <ComboboxAutoComplete
+            styleCombobox="width: 300px"
+            :option="optionDepartment.slice(1)"
+          />
         </div>
         <div class="toolbar-right">
           <FieldInput
@@ -662,6 +665,7 @@ export default {
   border-bottom: 1px solid #c7c7c7;
   border-right: 1px dotted #c7c7c7;
   background-color: #f1f1f1;
+  white-space: nowrap;
 }
 
 .table thead tr th:first-child,
