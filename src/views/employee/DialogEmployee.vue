@@ -221,8 +221,6 @@ export default {
       }
       if (valid) {
         this.$emit("onSave");
-      } else {
-        console.log(this.errors);
       }
     },
 
@@ -369,7 +367,7 @@ export default {
 }
 
 .dialog .dialog-header .dialog-button-close {
-  background: url('../../assets/img/Sprites.svg') no-repeat -137px -136px;
+  background: url("../../assets/img/Sprites.svg") no-repeat -137px -136px;
   position: absolute;
   right: 0;
   top: 0;
@@ -378,10 +376,8 @@ export default {
   cursor: pointer;
 }
 
-
-
 .dialog .dialog-header .dialog-button-help {
-  background: url('../../assets/img/Sprites.svg') no-repeat -80px -136px;
+  background: url("../../assets/img/Sprites.svg") no-repeat -80px -136px;
   position: absolute;
   right: 40px;
   top: 0;
@@ -389,8 +385,6 @@ export default {
   width: 40px;
   cursor: pointer;
 }
-
-
 
 .dialog .dialog-body {
   padding-left: 24px;

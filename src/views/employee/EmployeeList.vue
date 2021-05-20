@@ -92,7 +92,7 @@
       :employee="selectedEmployee"
       :optionDepartment="optionDepartment.slice(1)"
       @onClose="onCloseDialogEmployee"
-      @onSave="saveEmployee"
+      @onSave="onClickButtonSaveEmployee"
     />
     <AlertDialog
       :show="isShowAlertDialog"
@@ -105,6 +105,7 @@
       @onClose="onCloseConfirmDialog"
       @onOk="delEmployee"
     />
+    <Loading :show="isShowLoading" />
   </div>
 </template>
 
@@ -113,6 +114,8 @@ import Button from "../../components/Button";
 import FieldInput from "../../components/FieldInput";
 import Checkbox from "../../components/Checkbox";
 import Combobox from "../../components/Combobox";
+import Loading from "../../components/Loading";
+
 import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
 
 import AlertDialog from "../../components/AlertDialog";
@@ -128,6 +131,7 @@ export default {
   name: "EmployeeList",
   components: {
     Button,
+    Loading,
     FieldInput,
     Checkbox,
     Combobox,
@@ -207,6 +211,13 @@ export default {
       isShowAlertDialog: false,
 
       /**
+       * Biến xác định trạng thái của Loading.
+       * true: hiện
+       * false: ẩn.
+       */
+      isShowLoading: false,
+
+      /**
        * Biến xác định trạng thái của dialog xác nhận.
        * true: hiện
        * false: ẩn.
@@ -263,7 +274,6 @@ export default {
         .then((data) => {
           this.countEmloyees = data;
           this.totalPage = Math.ceil(this.countEmloyees / this.limit);
-          console.log(this.totalPage);
         })
         .catch((err) => console.log(err));
     },
@@ -271,16 +281,17 @@ export default {
      * Hàm lấy danh sách có lọc nhân viên từ server.
      */
     fetchData() {
+      this.isShowLoading = true;
       let url = `https://localhost:44366/api/v1/Employees/employeeFilter?pageSize=${this.limit}&pageNumber=${this.page}`;
       if (this.employeeFilter) {
         url += `&employeeFilter=${this.employeeFilter}`;
-        console.log(this.employeeFilter);
       }
       axios
         .get(url, { crossdomain: true })
 
         .then((res) => {
           if (res.status == 200) {
+            this.isShowLoading = false;
             return res.data;
           }
           return Promise.reject("Không có dữ liệu.");
@@ -292,7 +303,6 @@ export default {
           } else {
             this.hasData = false;
           }
-          console.log(this.employees);
         })
         .catch((err) => console.log(err));
     },
@@ -389,9 +399,9 @@ export default {
     },
 
     /**
-     * lưu thông tin nhân viên.
+     * Hàm Click button Lưu nhân viên.
      */
-    saveEmployee() {
+    async onClickButtonSaveEmployee() {
       // cấu hình axios req.
       let configAxios = {
         data: this.selectedEmployee,
@@ -411,67 +421,78 @@ export default {
         this.selectedEmployee.employeeId &&
         this.selectedEmployeeCode == this.selectedEmployee.employeeCode
       ) {
+        // Nếu update không thay đổi mã nhân viên:
         // tiến hành call api lưu thông tin nhân viên.
-        axios(configAxios)
-          .then(() => {
-            // thực hiện đóng dialog thêm và sửa nhân viên.
-            this.onCloseDialogEmployee();
-
-            // show dialog thông báo với lời thông báo Lưu thành công.
-            this.showAlertDialogWithMsg("Lưu thành công.");
-
-            // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-            // this.btnRefreshData();
-            // this.fetchCountEmployees();
-            this.fetchData();
-          })
-          .catch((err) => {
-            // show dialog thông báo khi lưu thất bại.
-            this.showAlertDialogWithMsg("Lưu thất bại.");
-            console.log(err);
-          });
+        this.updateEmployee(configAxios);
       } else {
+        // Nếu là thêm mới hoặc thay đổi mã nhân viên:
         // kiểm tra xem có bị trùng mã nhân viên không.
-        axios
-          .get(
-            "https://localhost:44366/api/v1/Employees/EmployeeCodeExist/" +
-              this.selectedEmployee.employeeCode
-          )
-          .then((res) => res.data)
-          .then((data) => {
-            if (data == 1) {
-              // show dialog thông báo khi lưu thất bại.
-              this.showAlertDialogWithMsg(
-                "Nhân viên <" +
-                  this.selectedEmployee.employeeCode +
-                  "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại."
-              );
-            } else {
-              // tiến hành call api lưu thông tin nhân viên.
-              axios(configAxios)
-                .then(() => {
-                  // thực hiện đóng dialog thêm và sửa nhân viên.
-                  this.onCloseDialogEmployee();
+        const response = await axios.get(
+          "https://localhost:44366/api/v1/Employees/EmployeeCodeExist/" +
+            this.selectedEmployee.employeeCode
+        );
 
-                  // show dialog thông báo với lời thông báo Lưu thành công.
-                  this.showAlertDialogWithMsg("Lưu thành công.");
-
-                  // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-                  if (configAxios.method == "PUT") {
-                    this.fetchData();
-                  } else {
-                    this.btnRefreshData();
-                  }
-                })
-                .catch((err) => {
-                  // show dialog thông báo khi lưu thất bại.
-                  this.showAlertDialogWithMsg("Lưu thất bại.");
-                  console.log(err);
-                });
-            }
-          })
-          .catch((err) => console.log(err));
+        if (response.data == 1) {
+          // Nếu trùng thì show dialog thông báo.
+          this.showAlertDialogWithMsg(
+            "Nhân viên <" +
+              this.selectedEmployee.employeeCode +
+              "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại."
+          );
+        } else {
+          // tiến hành call api lưu thông tin nhân viên.
+          this.insertOrUpdateEmployee(configAxios);
+        }
       }
+    },
+
+    /**
+     * Hàm thêm mới hoặc update nhân viên vào database thêm mới hoặc thay đổi mã nhân viên.
+     */
+    insertOrUpdateEmployee(configAxios) {
+      axios(configAxios)
+        .then(() => {
+          // thực hiện đóng dialog thêm và sửa nhân viên.
+          this.onCloseDialogEmployee();
+
+          // show dialog thông báo với lời thông báo Lưu thành công.
+          this.$toast.success("Cập nhật bản ghi thành công", {
+            position: "top-right",
+          });
+
+          // Lấy lại dữ liệu từ api với bộ lọc mặc định.
+          if (configAxios.method == "PUT") {
+            this.fetchData();
+          } else {
+            this.btnRefreshData();
+          }
+        })
+        .catch((err) => {
+          // show dialog thông báo khi lưu thất bại.
+          this.$toast.error("Lưu thất bại", { position: "top-right" });
+          console.log(err);
+        });
+    },
+    /**
+     * Hàm update thông nhân viên vào database khi không thay đổi mã nhân viên.
+     */
+    updateEmployee(configAxios) {
+      axios(configAxios)
+        .then(() => {
+          // thực hiện đóng dialog thêm và sửa nhân viên.
+          this.onCloseDialogEmployee();
+          // show thông báo Lưu thành công.
+          this.$toast.success("Cập nhật bản ghi thành công", {
+            position: "top-right",
+          });
+          // Lấy lại dữ liệu từ api với bộ lọc mặc định.
+          this.fetchData();
+        })
+        .catch((err) => {
+          // show dialog thông báo khi lưu thất bại.
+          this.$toast.error("Lưu thất bại", { position: "top-right" });
+          console.log(err);
+        });
     },
 
     /**
@@ -512,6 +533,7 @@ export default {
         employeeId
       );
     },
+
     /**
      * Hàm xóa nhân viên đang được chọn.
      */
@@ -523,7 +545,9 @@ export default {
           )
           .then(() => {
             // hiển thị dialog thông báo với câu thông báo.
-            this.showAlertDialogWithMsg("Xóa thành công.");
+            this.$toast.success("Xóa bản ghi thành công", {
+              position: "top-right",
+            });
 
             // fetch lại dữ liệu.
             this.fetchCountEmployees();
@@ -531,17 +555,16 @@ export default {
           })
           .catch((err) => {
             // hiển thị thông báo khi thất bại.
-            this.showAlertDialogWithMsg("Xóa thất bại.");
+            this.$toast.error("Xóa thất bại", { position: "top-right" });
+
             console.log(err);
           });
       }
     },
 
     /**
-     * Hàm click vào employeeItem.
+     * Hàm filter khi change value input search.
      */
-    onClickEmployeeItem() {},
-
     onHandleEmployeeFilter() {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
@@ -566,6 +589,7 @@ export default {
       }
     },
   },
+  mounted() {},
 };
 </script>
 
