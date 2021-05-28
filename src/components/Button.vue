@@ -97,6 +97,10 @@ export default {
   background-color: #37c225;
 }
 
+.btn.btn-white:hover {
+  background-color: rgb(218, 218, 218);
+}
+
 /* Button có icon */
 
 .btn.has-icon {
@@ -111,6 +115,9 @@ export default {
 .btn.has-icon .btn-text {
   display: inline-block;
   margin-left: 8px;
+}
+
+.btn .btn-text:hover {
 }
 
 /* Button chỉ có icon */

@@ -1,54 +1,37 @@
 <template>
   <div class="field-input">
-    <div class="input-icon-right" @click="onClickShowMenu"></div>
-    <input
-      ref="input"
-      class="input"
-      :style="styleCombobox"
-      :class="{ 'has-error': errorMsg }"
-      v-model="value"
-      @click="onClickShowMenu"
-    />
-    <div class="combo-menu" :class="{ 'menu-hide': !show }" >
-      <!-- <div class="menu-header-container">
-        <table class="menu-table">
-          <thead class="menu-header">
-            <tr>
-              <th
-                class="menu-header__th"
-                style="width: 100px; text-align: left"
+    <label v-if="label" class="label-input">
+      {{ label }}
+      <template v-if="important"><span class="important"> *</span></template>
+    </label>
+    <div class="combobox-auto-complete">
+      <div class="input-icon-right" @click="onClickShowMenu"></div>
+      <input
+        :type="typeInput"
+        ref="input"
+        class="input"
+        :style="styleCombobox"
+        :class="{ 'has-error': errorMsg }"
+        v-model="valueInput"
+        @click="onClickShowMenu"
+      />
+      <div class="combo-menu" :class="{ 'menu-hide': !show }">
+        <div class="menu-body-container">
+          <table class="menu-table">
+            <tbody class="menu-items">
+              <tr
+                class="dropdown-item"
+                v-for="(o, i) in option"
+                :key="i"
+                @click="onClickOption(o.text)"
               >
-                Mã đơn vị
-              </th>
-              <th
-                class="menu-header__th"
-                style="width: 250px; text-align: left"
-              >
-                Tên đơn vị
-              </th>
-            </tr>
-          </thead>
-        </table>
-      </div> -->
-      <div class="menu-body-container">
-        <table class="menu-table">
-          <tbody class="menu-items">
-            <tr class="dropdown-item" v-for="(o, i) in option" :key="i" @click="onClickOption">
-              <!-- <td
-                class="dropdown-item-td"
-                style="width: 100px; text-align: left"
-              >
-                123
-              </td> -->
-              <td
-                class="dropdown-item-td"
-                style="width: 250px; text-align: left"
-              >
-                 {{ o.text }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                {{
+                  o.text
+                }}
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <p v-if="errorMsg" class="text-error">{{ errorMsg }}</p>
@@ -65,16 +48,14 @@ export default {
   data() {
     return {
       /**
-     * Xác định trạng thái của dialog.
-     * true: hiện
-     * false: ẩn
-     */
-    show: false,
-    }
+       * Xác định trạng thái của dialog.
+       * true: hiện
+       * false: ẩn
+       */
+      show: false,
+    };
   },
   props: {
-    
-
     // Tên label của input.
     label: {
       type: String,
@@ -98,6 +79,12 @@ export default {
       default: null,
     },
 
+    // type của input. Mặc định là text. Không hỗ trợ cho radio và checkbox.
+    typeInput: {
+      type: String,
+      default: "text",
+    },
+
     // Các option của combobox.
     option: Array,
 
@@ -117,22 +104,26 @@ export default {
   },
 
   methods: {
-    onClickShowMenu(){
+    onClickShowMenu() {
       this.show = !this.show;
-      this.$nextTick(function () {
+      if (this.show == true) {
+        this.$nextTick(function () {
           this.$refs.input.focus();
         });
+      }
     },
-    outside(){
+    outside() {
       setTimeout(() => {
-      this.show = false;
+        this.show = false;
       }, 200);
     },
-    onClickOption(){
-      // this.show = false;
+    onClickOption(text) {
       this.$refs.input.focus();
-      this.$refs.input.value.$emit("change", "abc");
-    }
+      this.valueInput = text;
+      console.log(this.valueInput);
+      // this.$emit("updateEmployeeDepartmentName", text);
+      this.show = false;
+    },
   },
 
   computed: {
@@ -145,8 +136,7 @@ export default {
       },
     },
   },
-  watch: {
-  },
+  watch: {},
 };
 </script>
 
@@ -179,7 +169,6 @@ export default {
 .field-input .input-icon-right {
   position: absolute;
   right: 1px;
-  top: 1px;
   height: 30px;
   width: 30px;
   background: url("../assets/img/Sprites.svg") no-repeat -552px -350px;
@@ -204,6 +193,10 @@ export default {
 .field-input .text-error {
   margin: 0;
   color: red;
+}
+
+.combobox-auto-complete {
+  position: relative;
 }
 
 .combo-menu {
@@ -247,11 +240,12 @@ export default {
   height: 32px;
   line-height: 32px;
   white-space: nowrap;
-}
-
-.dropdown-item .dropdown-item-td {
   padding: 0 10px;
 }
+
+/* .dropdown-item .dropdown-item-td {
+  padding: 0 10px;
+} */
 
 .dropdown-item:hover {
   color: #35bf22;

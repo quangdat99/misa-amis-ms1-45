@@ -75,6 +75,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 110;
 }
 
 .dialog.dialog-hide {

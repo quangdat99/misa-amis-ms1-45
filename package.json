@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",
+    "vue-tippy": "^4.10.1",
     "vue-toast-notification": "^0.6.1"
   },
   "devDependencies": {

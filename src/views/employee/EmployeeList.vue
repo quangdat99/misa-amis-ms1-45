@@ -20,69 +20,84 @@
             v-model="employeeFilter"
             @change="onHandleEmployeeFilter"
           />
-          <div class="btn-refresh">
-            <Button
+          <div
+            class="btn-refresh"
+            @click="btnRefreshData"
+            content="Lấy lại dữ liệu"
+            v-tippy="{
+              placement: 'bottom',
+            }"
+          >
+            <!-- <Button
               :onlyIcon="true"
               icon="redo fa-2x"
               styleBtn=" border:none;padding-top:4px;"
               @click="btnRefreshData"
-            />
+            /> -->
           </div>
         </div>
       </div>
-      <div class="grid bg-white">
-        <table class="table">
-          <thead>
-            <tr>
-              <th><Checkbox /></th>
-              <th>MÃ NHÂN VIÊN</th>
-              <th>TÊN NHÂN VIÊN</th>
-              <th>GIỚI TÍNH</th>
-              <th>NGÀY SINH</th>
-              <th>SỐ CMND</th>
-              <th>CHỨC DANH</th>
-              <th>TÊN ĐƠN VỊ</th>
-              <th>SỐ TÀI KHOẢN</th>
-              <th>TÊN NGÂN HÀNG</th>
-              <th>CHI NHÁNH TK NGÂN HÀNG</th>
-              <th>CHỨC NĂNG</th>
-            </tr>
-          </thead>
-          <tbody>
-            <EmployeeItem
-              v-for="e in employees"
-              :key="e.EmployeeId"
-              :employee="e"
-              @dblclick="onDblClickEmployeeItem"
-              @updateEmployee="onDblClickEmployeeItem"
-              @btnDelEmployee="btnDelEmployee"
-            />
-          </tbody>
-        </table>
-        <div v-if="!hasData">
-          <div
-            class="has-text-center"
-            style="font-size: 15px; font-weight: bold; padding: 100px"
-          >
-            Không có dữ liệu.
-          </div>
-        </div>
-        <div class="footer" v-if="employees.length != 0">
-          <div class="footer-left">
-            Tổng số:
-            <span style="font-weight: bold">{{ countEmloyees }}</span> bản ghi
-          </div>
-
-          <div class="footer-right">
-            <div class="combobox">
-              <Combobox
-                styleCombobox="width: 210px"
-                :option="optionPage"
-                @change="onHandleEmployeeFilter"
-                v-model="limit"
+      <div class="grid-contain">
+        <div class="grid bg-white">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>
+                  <Checkbox />
+                  <div class="border-right"></div>
+                </th>
+                <th>MÃ NHÂN VIÊN</th>
+                <th>TÊN NHÂN VIÊN</th>
+                <th>GIỚI TÍNH</th>
+                <th>NGÀY SINH</th>
+                <th>SỐ CMND</th>
+                <th>CHỨC DANH</th>
+                <th>TÊN ĐƠN VỊ</th>
+                <th>SỐ TÀI KHOẢN</th>
+                <th>TÊN NGÂN HÀNG</th>
+                <th>CHI NHÁNH TK NGÂN HÀNG</th>
+                <th>
+                  <div class="border-left"></div>
+                  CHỨC NĂNG
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <EmployeeItem
+                v-for="e in employees"
+                :key="e.EmployeeId"
+                :employee="e"
+                @dblclick="onDblClickEmployeeItem"
+                @updateEmployee="onDblClickEmployeeItem"
+                @btnDelEmployee="btnDelEmployee"
               />
+            </tbody>
+          </table>
+          <div v-if="!hasData">
+            <div
+              class="has-text-center"
+              style="font-size: 15px; font-weight: bold; padding: 100px"
+            >
+              Không có dữ liệu.
             </div>
-            <Pagination :page="page" :totalPage="totalPage" />
+          </div>
+          <div class="footer" v-if="employees.length != 0">
+            <div class="footer-left">
+              Tổng số:
+              <span style="font-weight: bold">{{ countEmloyees }}</span> bản ghi
+            </div>
+
+            <div class="footer-right">
+              <div class="combobox">
+                <Combobox
+                  styleCombobox="width: 210px"
+                  :option="optionPage"
+                  @change="onHandleEmployeeFilter"
+                  v-model="limit"
+                />
+              </div>
+              <Pagination :page="page" :totalPage="totalPage" />
+            </div>
           </div>
         </div>
       </div>
@@ -573,6 +588,10 @@ export default {
         this.fetchCountEmployees();
       }, 300);
     },
+
+    updateEmployeeDepartmentName(val) {
+      this.selectedEmployee.employeeDepartmentName = val;
+    },
   },
   watch: {
     "$route.query": function (val) {
@@ -624,7 +643,6 @@ export default {
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 16px;
-  padding-bottom: 40px;
   background-color: #fff;
 }
 
@@ -632,23 +650,32 @@ export default {
 .content .toolbar-right {
   display: flex;
   align-items: center;
+  margin-right: 10px;
 }
 .content .toolbar-right .btn-refresh {
-  margin-left: 10px;
+  margin-left: 15px;
   padding-bottom: 5px;
+  background: url("../../assets/img/Sprites.svg") no-repeat -425px -201px;
+  width: 21px;
+  height: 23px;
+}
+
+.content .toolbar-right .btn-refresh:hover {
+  background: url("../../assets/img/Sprites.svg") no-repeat -1098px -90px;
+  width: 20px;
+  height: 21px;
+}
+
+.grid-contain {
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: #fff;
 }
 
 .grid {
   background-color: #fff;
-  padding-left: 20px;
-  padding-right: 30px;
-  max-height: calc(100% - 155px);
-  top: 140px;
-  left: 15px;
-  right: 15px;
-  position: absolute;
+  max-height: calc(100vh - 200px);
   overflow: auto;
-  flex: 1;
 }
 
 /* Table */
@@ -657,8 +684,7 @@ export default {
   border-collapse: collapse;
 }
 
-.table thead tr,
-.table tbody tr {
+.table thead tr {
   border-bottom: 2px solid #e5e5e5;
   height: 44px;
   text-align: left;
@@ -668,47 +694,64 @@ export default {
   height: 35px;
 }
 
-.table th {
-  position: sticky;
-  top: 0px;
-}
-
-.table tbody tr:hover {
-  background-color: #ecececb2;
-}
-
-.table tbody tr:last-child {
-  border: none;
-}
-
-.table thead tr th,
-.table tbody tr td {
+.table tr th {
   padding-left: 10px;
-  padding-right: 8px;
+  padding-right: 10px;
   height: 20px;
   border-bottom: 1px solid #c7c7c7;
   border-right: 1px dotted #c7c7c7;
   background-color: #f1f1f1;
   white-space: nowrap;
+  position: sticky;
+  top: 0px;
 }
 
-.table thead tr th:first-child,
-.table tbody tr td:first-child {
-  padding-left: 16px;
+.table tr th:first-child {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  border-right: none;
+  width: 20px;
 }
 
-.table thead tr th:last-child,
-.table tbody tr td:last-child {
-  padding-right: 16px;
+.table tr th:last-child {
+  position: sticky;
+  right: 0px;
+  top: 0px;
+  z-index: 3;
+}
+
+.table tr th:nth-last-child(2) {
+  border-right: none;
+}
+
+.border-right {
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  bottom: -1px;
+  border-left: 1px dotted #c7c7c7;
+  box-sizing: border-box;
+}
+
+.border-left {
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  bottom: -1px;
+  border-left: 1px dotted #c7c7c7;
+  box-sizing: border-box;
 }
 
 .footer {
   background-color: #fff;
   position: sticky;
-  bottom: 0px;
-  height: 46px;
+  bottom: -1px;
+  height: 55px;
   display: flex;
   align-items: center;
+  left: 0px;
 }
 
 .footer .footer-left {
@@ -719,8 +762,8 @@ export default {
 .footer .footer-right {
   display: flex;
   position: absolute;
-  right: 0;
-  top: 7px;
+  right: 25px;
+  top: 10px;
 }
 .footer .footer-right .combobox {
   margin-right: 15px;

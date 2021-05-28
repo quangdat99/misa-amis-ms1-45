@@ -9,8 +9,21 @@
           <Checkbox />
           <div class="line-height">Là nhà cung cấp</div>
         </div>
-        <div class="dialog-button-help"></div>
-        <div class="dialog-button-close" @click="closeDialog"></div>
+        <div
+          class="dialog-button-help"
+          content="Giúp (F1)"
+          v-tippy="{
+            placement: 'bottom',
+          }"
+        ></div>
+        <div
+          class="dialog-button-close"
+          @click="closeDialog"
+          content="Đóng (ESC)"
+          v-tippy="{
+            placement: 'bottom',
+          }"
+        ></div>
       </div>
       <div class="dialog-body">
         <div class="row">
@@ -53,7 +66,16 @@
             </div>
           </div>
           <div class="col-6 space-input">
-            <Combobox
+            <ComboboxAutoComplete
+              :important="true"
+              :errorMsg="errors.employeeDepartment"
+              @updateEmployeeDepartmentName="updateEmployeeDepartmentName"
+              label="Đơn vị"
+              v-model="DepartmentName"
+              :option="optionDepartment.slice(1)"
+              @blur="onValidDepartment"
+            />
+            <!-- <Combobox
               label="Đơn vị"
               :important="true"
               :option="optionDepartment"
@@ -61,11 +83,19 @@
               v-model="employee.employeeDepartmentId"
               @change="onValidDepartment"
               style="padding-right: 8px"
-            />
+            /> -->
           </div>
           <div class="row col-6">
             <div class="col-7 space-input">
-              <FieldInput label="Số CMTND" v-model="employee.identityNumber" />
+              <FieldInput
+                label="Số CMTND"
+                v-model="employee.identityNumber"
+                content="Số chứng minh nhân dân"
+                v-tippy="{
+                  placement: 'bottom-end',
+                  followCursor: true,
+                }"
+              />
             </div>
             <div class="col-5 space-input">
               <FieldInput
@@ -120,17 +150,31 @@
       <div class="dialog-footer">
         <Button
           text="Hủy"
-          :color="null"
+          :color="'white'"
           styleBtn="border: 1px solid #8d9096;margin-right: 567px;"
           @click="closeDialog"
         />
         <Button
           text="Cất"
-          :color="null"
+          :color="'white'"
           @click="onSaveEmployee"
           styleBtn="border: 1px solid #8d9096; margin-right: 12px;"
+          content="Cất (Ctrl+S)"
+          v-tippy="{
+            placement: 'bottom-end',
+            followCursor: true,
+          }"
         />
-        <Button text="Cất và Thêm" icon="save" @click="onSaveEmployee" />
+        <Button
+          text="Cất và Thêm"
+          icon="save"
+          @click="onSaveEmployee"
+          content="Cất và thêm (Ctrl + Shift + S)"
+          v-tippy="{
+            placement: 'bottom-end',
+            followCursor: true,
+          }"
+        />
       </div>
     </div>
   </div>
@@ -138,7 +182,9 @@
 
 <script>
 import FieldInput from "../../components/FieldInput";
-import Combobox from "../../components/Combobox";
+// import Combobox from "../../components/Combobox";
+import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
+
 import Button from "../../components/Button";
 import Checkbox from "../../components/Checkbox";
 import Radio from "../../components/Radio";
@@ -147,7 +193,7 @@ export default {
   name: "DialogEmployee",
   components: {
     FieldInput,
-    Combobox,
+    ComboboxAutoComplete,
     Button,
     Checkbox,
     Radio,
@@ -250,7 +296,7 @@ export default {
      * valid đơn vị của nhân viên .
      */
     onValidDepartment() {
-      if (this.employee && this.employee.employeeDepartmentId) {
+      if (this.employee && this.employee.employeeDepartmentName) {
         this.errors.employeeDepartment = "";
       } else {
         this.errors.employeeDepartment = "Đơn vị không được để trống.";
@@ -287,6 +333,10 @@ export default {
       }
       return null;
     },
+
+    updateEmployeeDepartmentName(val) {
+      this.employee.employeeDepartmentName = val;
+    },
   },
   computed: {
     /**
@@ -298,6 +348,18 @@ export default {
       },
       set(val) {
         this.employee.dateOfBirth = val;
+      },
+    },
+
+    /**
+     * Computed ngày sinh nhân viên.
+     */
+    DepartmentName: {
+      get() {
+        return this.employee.employeeDepartmentName;
+      },
+      set(val) {
+        this.$emit("input", val);
       },
     },
 
@@ -319,6 +381,8 @@ export default {
         this.$nextTick(function () {
           this.$refs.employeeCode.$el.children[1].focus();
         });
+
+        console.log(this.employee);
       }
     },
   },
@@ -335,6 +399,7 @@ export default {
   height: 100vh;
   background-color: #000;
   background-color: rgba(0, 0, 0, 0.4);
+  z-index: 100;
 }
 
 .dialog.dialog-hide {

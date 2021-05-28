@@ -4,7 +4,10 @@
     @dblclick="$emit('dblclick', employee.employeeId)"
     @click="$emit('click', employee.employeeId)"
   >
-    <td><Checkbox /></td>
+    <td>
+      <Checkbox />
+      <div class="border-right"></div>
+    </td>
     <td>{{ employee.employeeCode }}</td>
     <td>{{ employee.employeeName }}</td>
     <td>{{ genderName }}</td>
@@ -16,6 +19,7 @@
     <td></td>
     <td></td>
     <td class="center">
+      <div class="border-left"></div>
       <button class="btn-update" @click="onClickEmployeeItemUpdate">Sửa</button>
       <select class="btn-option fas fa-caret-down" v-model="selected">
         <option selected style="display: none"></option>
@@ -139,6 +143,10 @@ export default {
 </script>
 
 <style scoped>
+tr:last-child {
+  border: none;
+}
+
 tr td {
   padding-left: 10px;
   padding-right: 8px;
@@ -148,12 +156,45 @@ tr td {
 }
 
 tr td:first-child {
-  padding-left: 16px;
+  padding-left: 10px;
+  position: sticky;
+  left: -1px;
+  background-color: #fff;
+  border-right: none;
 }
 
 tr td:last-child {
   padding-left: 25px;
   border-right: none;
+  position: sticky;
+  right: -1px;
+  background-color: #fff;
+}
+
+tr td:nth-last-child(2) {
+  border-right: none;
+}
+
+tr:hover td {
+  background-color: #ececec;
+}
+
+.border-right {
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  bottom: -1px;
+  border-left: 1px dotted #c7c7c7;
+  box-sizing: border-box;
+}
+
+.border-left {
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  bottom: -1px;
+  border-left: 1px dotted #c7c7c7;
+  box-sizing: border-box;
 }
 
 .btn-update,
