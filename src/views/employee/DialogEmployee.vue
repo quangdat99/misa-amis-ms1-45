@@ -58,11 +58,58 @@
               />
             </div>
             <div class="col-7 space-input">
-              <Radio
+              <div>
+                <label class="label-input">Giới tính</label>
+                <div class="flex-row-align-center" style="height: 32px">
+                  <div class="flex-row-align-center" style="margin-right: 16px">
+                    <Radio
+                      name="gender"
+                      value="1"
+                      :checked="employee && employee.gender == 1"
+                      @change="
+                        $emit('update:employee', {
+                          ...employee,
+                          gender: parseInt($event),
+                        })
+                      "
+                    />
+                    <label style="margin-left: 8px">Nam</label>
+                  </div>
+                  <div class="flex-row-align-center" style="margin-right: 16px">
+                    <Radio
+                      name="gender"
+                      value="1"
+                      :checked="employee && employee.gender == 0"
+                      @change="
+                        $emit('update:employee', {
+                          ...employee,
+                          gender: parseInt($event),
+                        })
+                      "
+                    />
+                    <label style="margin-left: 8px">Nữ</label>
+                  </div>
+                  <div class="flex-row-align-center" style="margin-right: 16px">
+                    <Radio
+                      name="gender"
+                      value="2"
+                      :checked="employee && employee.gender == 2"
+                      @change="
+                        $emit('update:employee', {
+                          ...employee,
+                          gender: parseInt($event),
+                        })
+                      "
+                    />
+                    <label style="margin-left: 8px">Khác</label>
+                  </div>
+                </div>
+              </div>
+              <!-- <Radio
                 label="Giới tính"
                 :option="genders"
                 v-model="employee.gender"
-              />
+              /> -->
             </div>
           </div>
           <div class="col-6 space-input">
@@ -255,6 +302,8 @@ export default {
      * Hàm gọi khi click vào button lưu.
      */
     onSaveEmployee() {
+      console.log(this.employee);
+
       let valid = true;
       this.onValidEmployeeCode();
       this.onValidFullName();
@@ -388,117 +437,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.dialog {
-  overflow: auto;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 100;
-}
-
-.dialog.dialog-hide {
-  display: none;
-}
-
-.dialog .dialog-content {
-  width: 900px;
-  margin: 150px auto;
-  background-color: #fff;
-  position: relative;
-}
-
-.dialog .dialog-header {
-  padding: 16px;
-}
-
-.dialog .dialog-header .dialog-title {
-  font-size: 24px;
-  font-family: Google-Sans-Bold;
-  margin-right: 16px;
-}
-
-.dialog .dialog-header .line-height {
-  line-height: 33px;
-  padding-left: 4px;
-  margin-right: 8px;
-  font-size: 16px;
-  display: inline-block;
-}
-
-.dialog .dialog-header .dialog-button-close {
-  background: url("../../assets/img/Sprites.svg") no-repeat -137px -136px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-}
-
-.dialog .dialog-header .dialog-button-help {
-  background: url("../../assets/img/Sprites.svg") no-repeat -80px -136px;
-  position: absolute;
-  right: 40px;
-  top: 0;
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-}
-
-.dialog .dialog-body {
-  padding-left: 24px;
-  padding-right: 24px;
-}
-
-.dialog .divide {
-  border-top: 1px solid #e0e0e0;
-  margin: 32px 30px 12px 28px;
-}
-
-.dialog .dialog-footer {
-  padding-right: 24px;
-  padding-bottom: 12px;
-  height: 70px;
-  background-color: #fff;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-/* nội dung dialog thêm và sửa */
-
-.dialog .dialog-body .input-avatar {
-  margin-top: 16px;
-  background-image: url("../../assets/img/default-avatar.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 180px;
-  border-radius: 50%;
-  border: 1px solid #bbb;
-}
-
-.dialog .dialog-body .space-input {
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-top: 16px;
-}
-
-.dialog .dialog-body .title {
-  font-size: 15px;
-  margin-bottom: 4px;
-}
-
-.dialog .dialog-body .underline-title {
-  border-top: 5px solid #019160;
-  width: 100px;
-  margin-left: 4px;
-}
-</style>
