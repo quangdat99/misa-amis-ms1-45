@@ -8,22 +8,34 @@
           <div class="line-height">Là khách hàng</div>
           <Checkbox />
           <div class="line-height">Là nhà cung cấp</div>
+          <div class="dialog-header-right">
+            <div
+              class="dialog-button-help"
+              content="Giúp (F1)"
+              v-tippy="{
+                placement: 'bottom',
+              }"
+            >
+              <IconButton
+                icon="icon icon-help"
+                style="margin: 8px; padding: 0"
+              />
+            </div>
+            <div
+              class="dialog-button-close"
+              @click="onClickCloseDialog"
+              content="Đóng (ESC)"
+              v-tippy="{
+                placement: 'bottom',
+              }"
+            >
+              <IconButton
+                icon="icon icon-close"
+                style="margin: 8px; padding: 0"
+              />
+            </div>
+          </div>
         </div>
-        <div
-          class="dialog-button-help"
-          content="Giúp (F1)"
-          v-tippy="{
-            placement: 'bottom',
-          }"
-        ></div>
-        <div
-          class="dialog-button-close"
-          @click="closeDialog"
-          content="Đóng (ESC)"
-          v-tippy="{
-            placement: 'bottom',
-          }"
-        ></div>
       </div>
       <div class="dialog-body">
         <div class="row">
@@ -195,33 +207,31 @@
       </div>
       <div class="divide"></div>
       <div class="dialog-footer">
-        <Button
-          text="Hủy"
-          :color="'white'"
-          styleBtn="border: 1px solid #8d9096;margin-right: 567px;"
-          @click="closeDialog"
-        />
-        <Button
-          text="Cất"
-          :color="'white'"
-          @click="onSaveEmployee"
-          styleBtn="border: 1px solid #8d9096; margin-right: 12px;"
-          content="Cất (Ctrl+S)"
-          v-tippy="{
-            placement: 'bottom-end',
-            followCursor: true,
-          }"
-        />
-        <Button
-          text="Cất và Thêm"
-          icon="save"
-          @click="onSaveEmployee"
-          content="Cất và thêm (Ctrl + Shift + S)"
-          v-tippy="{
-            placement: 'bottom-end',
-            followCursor: true,
-          }"
-        />
+        <div class="dialog-footer-left">
+          <Button color="secondary" text="Hủy" @click="onClickCloseDialog" />
+        </div>
+        <div class="dialog-footer-right flex-row-align-center">
+          <Button
+            text="Cất"
+            :color="'secondary'"
+            style="margin-right: 10px"
+            @click="onClickSaveEmployee"
+            content="Cất (Ctrl+S)"
+            v-tippy="{
+              placement: 'bottom-end',
+              followCursor: true,
+            }"
+          />
+          <Button
+            text="Cất và Thêm"
+            @click="onClickSaveEmployee"
+            content="Cất và thêm (Ctrl + Shift + S)"
+            v-tippy="{
+              placement: 'bottom-end',
+              followCursor: true,
+            }"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -229,12 +239,12 @@
 
 <script>
 import FieldInput from "../../components/FieldInput";
-// import Combobox from "../../components/Combobox";
+import IconButton from "../../components/common/IconButton";
 import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
 
-import Button from "../../components/Button";
-import Checkbox from "../../components/Checkbox";
-import Radio from "../../components/Radio";
+import Button from "../../components/common/Button";
+import Checkbox from "../../components/common/Checkbox";
+import Radio from "../../components/common/Radio";
 
 export default {
   name: "DialogEmployee",
@@ -242,6 +252,7 @@ export default {
     FieldInput,
     ComboboxAutoComplete,
     Button,
+    IconButton,
     Checkbox,
     Radio,
   },
@@ -301,7 +312,7 @@ export default {
     /**
      * Hàm gọi khi click vào button lưu.
      */
-    onSaveEmployee() {
+    onClickSaveEmployee() {
       console.log(this.employee);
 
       let valid = true;
@@ -355,7 +366,7 @@ export default {
     /**
      * Hàm đóng dialog.
      */
-    closeDialog() {
+    onClickCloseDialog() {
       this.errors = {
         employeeCode: "",
         employeeName: "",

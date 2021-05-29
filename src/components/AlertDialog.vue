@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Button from "./Button";
+import Button from "./common/Button";
 export default {
   name: "AlertDialog",
   components: {

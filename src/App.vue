@@ -30,6 +30,11 @@ export default {
   src: url("./assets/fonts/notosans-regular.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: Google-Sans-Bold;
+  src: url("./assets/fonts/notosans-bold.woff2") format("woff2");
+}
+
 // Biến chung.
 $navbar-width: 178px;
 $navbar-width-toggle: 52px;
@@ -86,8 +91,8 @@ a {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Track */
@@ -103,6 +108,58 @@ a {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+// Icon
+.icon {
+  @include icon-default();
+
+  // icon-header
+  &.icon-three-stripes {
+    @include icon-bind(-843px -30px);
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  &.icon-chevron-down {
+    @include icon-bind(-80px -360px, 14px);
+    transform: rotate(90deg);
+    margin-left: 10px;
+  }
+
+  &.icon-notify {
+    @include icon-bind(-788px -30px);
+    margin-right: 8px;
+  }
+
+  // icon-content
+  &.icon-refresh {
+    @include icon-bind(-423px -201px);
+
+    &:hover {
+      @include icon-bind(-1097px -88px);
+    }
+  }
+
+  &.icon-excel {
+    @include icon-bind(-704px -200px);
+
+    &:hover {
+      @include icon-bind(-704px -256px);
+    }
+  }
+
+  // icon-dialog
+  &.icon-help {
+    @include icon-bind(-89px -144px);
+  }
+
+  &.icon-close {
+    @include icon-bind(-144px -144px);
+  }
+
+  &.icon-warning-48 {
+    @include icon-bind(-592px -456px, 48px);
+  }
 }
 
 // Navbar
@@ -199,12 +256,6 @@ a {
     cursor: pointer;
     .header-left-icon {
       margin-left: 10px;
-      color: #333333;
-      font-size: 14px;
-      &.fa-bars {
-        font-size: 22px;
-        margin-left: 0px;
-      }
     }
     .header-left-text {
       font-family: Google-Sans-Bold;
@@ -219,9 +270,6 @@ a {
     align-items: center;
     .header-right-notify {
       margin-right: 16px;
-      background: url("./assets/img/Sprites.svg") no-repeat -788px -30px;
-      width: 22px;
-      height: 25px;
       cursor: pointer;
     }
     .header-right-avatar {
@@ -471,24 +519,11 @@ a {
         font-size: 16px;
         display: inline-block;
       }
-
-      .dialog-button-close {
-        background: url("./assets/img/Sprites.svg") no-repeat -137px -136px;
+      .dialog-header-right {
         position: absolute;
         right: 0;
         top: 0;
-        height: 40px;
-        width: 40px;
-        cursor: pointer;
-      }
-      .dialog-button-help {
-        background: url("./assets/img/Sprites.svg") no-repeat -80px -136px;
-        position: absolute;
-        right: 40px;
-        top: 0;
-        height: 40px;
-        width: 40px;
-        cursor: pointer;
+        display: flex;
       }
     }
     .dialog-body {
@@ -512,6 +547,10 @@ a {
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      .dialog-footer-left {
+        position: absolute;
+        left: 27px;
+      }
     }
   }
 }
@@ -555,6 +594,80 @@ a {
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
           inset 0px 1px 3px rgba(0, 0, 0, 0.1);
       }
+    }
+  }
+}
+
+// checkbox
+.checkbox {
+  display: none;
+
+  & + label {
+    border: 1px solid #cacece;
+    height: 18px;
+    width: 18px;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+
+    &:active {
+      // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+      //   inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &:checked + label {
+    animation-name: rotateIn;
+    animation-duration: 0.25s;
+    border: 1px solid #adb8c0;
+
+    &:active {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+        inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    &::after {
+      @include icon-default();
+      @include icon-bind(-1224px -360px, 16px);
+      content: "";
+      font-size: 14px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+// button.
+.btn {
+  height: 40px;
+  padding-left: 24px;
+  padding-right: 24px;
+  line-height: 40px;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+
+  &.btn-primary {
+    background-color: #2ca01c;
+    color: $color-white;
+    font-weight: bold;
+    border: 1px solid #ccc;
+
+    &:hover {
+      background-color: #34aa24;
+    }
+  }
+
+  &.btn-secondary {
+    background-color: transparent;
+    border: 1px solid #ccc;
+
+    &:hover {
+      background-color: #f4f5f6;
     }
   }
 }

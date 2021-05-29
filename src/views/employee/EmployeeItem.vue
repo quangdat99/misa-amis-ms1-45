@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Checkbox from "../../components/Checkbox";
+import Checkbox from "../../components/common/Checkbox";
 
 export default {
   components: {

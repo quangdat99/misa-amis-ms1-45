@@ -3,15 +3,10 @@
     <div class="content">
       <div class="title-box">
         <div class="title">Nhân viên</div>
-        <Button text="Thêm mới nhân viên" @click="btnClickAddEmployee" />
+        <Button text="Thêm mới nhân viên" @click="onClickAddEmployee" />
       </div>
       <div class="toolbar-box mt-1">
-        <div class="toolbar-left">
-          <ComboboxAutoComplete
-            styleCombobox="width: 300px"
-            :option="optionDepartment.slice(1)"
-          />
-        </div>
+        <div class="toolbar-left"></div>
         <div class="toolbar-right">
           <FieldInput
             styleInput="width: 280px"
@@ -21,19 +16,28 @@
             @change="onHandleEmployeeFilter"
           />
           <div
-            class="btn-refresh"
-            @click="btnRefreshData"
             content="Lấy lại dữ liệu"
             v-tippy="{
               placement: 'bottom',
             }"
           >
-            <!-- <Button
-              :onlyIcon="true"
-              icon="redo fa-2x"
-              styleBtn=" border:none;padding-top:4px;"
-              @click="btnRefreshData"
-            /> -->
+            <IconButton
+              icon="icon icon-refresh"
+              style="margin-left: 8px; padding: 0"
+              @click="onClickBtnRefresh"
+            />
+          </div>
+          <div
+            content="Xuất ra Excel"
+            v-tippy="{
+              placement: 'bottom',
+            }"
+          >
+            <IconButton
+              icon="icon icon-excel"
+              style="margin-left: 8px; padding: 0"
+              @click="onClickBtnExport"
+            />
           </div>
         </div>
       </div>
@@ -125,16 +129,16 @@
 </template>
 
 <script>
-import Button from "../../components/Button";
+import IconButton from "../../components/common/IconButton";
+
+import Button from "../../components/common/Button";
 import FieldInput from "../../components/FieldInput";
-import Checkbox from "../../components/Checkbox";
+import Checkbox from "../../components/common/Checkbox";
 import Combobox from "../../components/Combobox";
 import Loading from "../../components/Loading";
 
-import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
-
 import AlertDialog from "../../components/AlertDialog";
-import ConfirmDialog from "../../components/ConfirmDialog";
+import ConfirmDialog from "../../components/common/ConfirmDialog";
 import Pagination from "../../components/Pagination";
 
 import DialogEmployee from "./DialogEmployee";
@@ -146,11 +150,11 @@ export default {
   name: "EmployeeList",
   components: {
     Button,
+    IconButton,
     Loading,
     FieldInput,
     Checkbox,
     Combobox,
-    ComboboxAutoComplete,
     AlertDialog,
     ConfirmDialog,
     EmployeeItem,
@@ -354,7 +358,7 @@ export default {
     /**
      * Sự kiện click button refresh.
      */
-    btnRefreshData() {
+    onClickBtnRefresh() {
       this.resetFilter();
       this.fetchCountEmployees();
       this.fetchData();
@@ -363,7 +367,7 @@ export default {
     /**
      * Hàm click button thêm nhân viên.
      */
-    btnClickAddEmployee() {
+    onClickAddEmployee() {
       axios
         .get("https://localhost:44366/api/v1/Employees/EmployeeCodeMax")
         .then((res) => res.data)
@@ -479,7 +483,7 @@ export default {
           if (configAxios.method == "PUT") {
             this.fetchData();
           } else {
-            this.btnRefreshData();
+            this.onClickBtnRefresh();
           }
         })
         .catch((err) => {

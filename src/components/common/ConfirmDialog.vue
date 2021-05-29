@@ -1,23 +1,23 @@
 <template>
   <div class="dialog" :class="{ 'dialog-hide': !show }">
-    <div class="dialog-content">
-      <div class="dialog-header">
-        <div class="dialog-title"></div>
-      </div>
-      <div class="dialog-image"></div>
-      <div class="dialog-body">
-        {{ msg }}
+    <div class="dialog-content" style="width: 450px">
+      <div class="flex-row-align-center" style="padding: 32px 24px 0 24px">
+        <div class="icon icon-warning-48"></div>
+        <div style="margin-left: 16px">
+          {{ msg }}
+        </div>
       </div>
       <div class="divide"></div>
 
       <div class="dialog-footer">
         <Button
-          text="Hủy"
-          :color="null"
+          text="Không"
+          :color="'secondary'"
+          style="position: absolute; left: 28px"
           @click="closeDialog"
           styleBtn="border: 1px solid #8d9096;margin-right: 207px;"
         />
-        <Button text="Ok" @click="onConfirmed" />
+        <Button text="Có" @click="onConfirmed" />
       </div>
     </div>
   </div>
@@ -62,8 +62,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.dialog {
+<style >
+/* .dialog {
   overflow: auto;
   position: fixed;
   top: 0;
@@ -76,9 +76,9 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 110;
-}
+} */
 
-.dialog.dialog-hide {
+/* .dialog.dialog-hide {
   display: none;
 }
 
@@ -87,18 +87,18 @@ export default {
   background-color: #fff;
   position: relative;
   border-radius: 4px;
-}
+} */
 
-.dialog .dialog-header {
+/* .dialog .dialog-header {
   padding: 16px;
-}
+} */
 
-.dialog .dialog-header .dialog-title {
+/* .dialog .dialog-header .dialog-title {
   font-size: 15px;
   font-family: Google-Sans-Bold;
-}
+} */
 
-.dialog .dialog-header .dialog-button-close {
+/* .dialog .dialog-header .dialog-button-close {
   font-size: 16px;
   position: absolute;
   right: 0;
@@ -109,9 +109,9 @@ export default {
   text-align: center;
   cursor: pointer;
   border-bottom-left-radius: 4px;
-}
+} */
 
-.dialog .dialog-header .dialog-button-close:hover {
+/* .dialog .dialog-header .dialog-button-close:hover {
   background-color: #e5e5e5;
 }
 
@@ -122,15 +122,15 @@ export default {
 }
 
 .dialog-image {
-  background: url(../assets/img/Sprites.svg) 1427px 1446px;
+  background: url(../../assets/img/Sprites.svg) 1427px 1446px;
   height: 41px;
   width: 57px;
   display: inline-block;
   margin-top: 0px;
   margin-left: 20px;
-}
+} */
 
-.dialog .divide {
+/* .dialog .divide {
   border-top: 1px solid #e0e0e0;
   margin: 0px 30px 12px 28px;
 }
@@ -144,5 +144,5 @@ export default {
   align-items: center;
   padding-bottom: 15px;
   border-radius: 4px;
-}
+} */
 </style>
