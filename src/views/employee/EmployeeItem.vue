@@ -11,7 +11,8 @@
     <td>{{ employee.employeeCode }}</td>
     <td>{{ employee.employeeName }}</td>
     <td>{{ genderName }}</td>
-    <td>{{ employee.dateOfBirth | formatDateOfBirth }}</td>
+    <td style="text-align: center">{{ dateOfBirth(employee.dateOfBirth) }}</td>
+
     <td>{{ employee.identityNumber }}</td>
     <td>{{ employee.employeePosition }}</td>
     <td>{{ departmentName }}</td>
@@ -32,6 +33,8 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+
 import Checkbox from "../../components/common/Checkbox";
 
 export default {
@@ -51,6 +54,10 @@ export default {
   methods: {
     onClickEmployeeItemUpdate() {
       this.$emit("updateEmployee", this.employee.employeeId);
+    },
+
+    dateOfBirth(dateStr) {
+      return dateStr ? dayjs(dateStr).format("DD/MM/YYYY") : null;
     },
   },
   name: "EmployeeItem",

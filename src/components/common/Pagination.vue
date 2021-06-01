@@ -10,11 +10,8 @@
 
     <div class="pagination_item disabled-prev" v-if="page == 1">Trước</div>
 
-    <router-link
-      :to="'/employee?page=' + 1"
-      class="pagination-item"
-    >
-      <div class="page" :class="{ active:  page == 1 }">1</div>
+    <router-link :to="'/employee?page=' + 1" class="pagination-item">
+      <div class="page" :class="{ active: page == 1 }">1</div>
     </router-link>
 
     <div class="three-dot" v-if="page > 4">...</div>
@@ -28,13 +25,16 @@
       <div class="page" :class="{ active: n == page }">{{ n }}</div>
     </router-link>
 
-    <div class="three-dot"  v-if="page < totalPage - 3">...</div>
+    <div class="three-dot" v-if="page < totalPage - 3">...</div>
 
     <router-link
+      v-if="totalPage > 1"
       :to="'/employee?page=' + totalPage"
       class="pagination-item"
     >
-      <div class="page" :class="{ active:  page == totalPage }">{{totalPage}}</div>
+      <div class="page" :class="{ active: page == totalPage }">
+        {{ totalPage }}
+      </div>
     </router-link>
 
     <router-link
@@ -75,7 +75,8 @@ export default {
     rangePage: function () {
       let range = [];
       let start = this.page > 4 ? this.page - 2 : 2;
-      let end = this.page < this.totalPage - 3 ? this.page + 2 : this.totalPage -1;
+      let end =
+        this.page < this.totalPage - 3 ? this.page + 2 : this.totalPage - 1;
       for (let i = start; i <= end; i++) range.push(i);
       return range;
     },
@@ -132,6 +133,5 @@ export default {
 .disabled-next {
   margin-left: 15px;
   color: rgb(163, 163, 163);
-
 }
 </style>

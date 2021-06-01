@@ -19,33 +19,15 @@ export default {
 </script>
 
 <style scoped>
-.dialog {
-  overflow: auto;
-  position: fixed;
-  top: 50px;
-  left: 224px;
-  width: calc(100vw - 226px);
-  height: calc(100vh - 50px);
-  /* background-color: #000; */
-  background-color: rgba(255, 255, 255, 0.01);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 150;
-}
-
-.dialog.dialog-hide {
-  display: none;
-}
-
 .dialog .dialog-content {
   width: 42px;
   height: 42px;
   position: relative;
-  background: url("../assets/loading.svg") no-repeat 0 0;
-  -webkit-animation: spin 0.7s linear infinite; /* Safari */
+  background: url("../../assets/loading.svg") no-repeat 0 0;
+  -webkit-animation: spin 0.7s linear infinite;
   animation: spin 0.7s linear infinite;
 }
+
 /* Safari */
 @-webkit-keyframes spin {
   0% {

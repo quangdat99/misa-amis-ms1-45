@@ -8,13 +8,16 @@
       <div class="toolbar-box mt-1">
         <div class="toolbar-left"></div>
         <div class="toolbar-right">
-          <FieldInput
-            styleInput="width: 280px"
-            placeholder="Tìm theo Mã, Tên hoặc Số điện thoại"
-            icon="search"
-            v-model="employeeFilter"
-            @change="onHandleEmployeeFilter"
-          />
+          <div class="con-input">
+            <Input
+              style="width: 280px"
+              placeholder="Tìm theo mã, tên hoặc số điện thoại"
+              :hasIcon="true"
+              :value="employeeFilter"
+              @input="onInputFilterEmployee"
+            />
+            <div class="icon-input icon icon-search"></div>
+          </div>
           <div
             content="Lấy lại dữ liệu"
             v-tippy="{
@@ -36,7 +39,6 @@
             <IconButton
               icon="icon icon-excel"
               style="margin-left: 8px; padding: 0"
-              @click="onClickBtnExport"
             />
           </div>
         </div>
@@ -96,7 +98,7 @@
                 <Combobox
                   styleCombobox="width: 210px"
                   :option="optionPage"
-                  @change="onHandleEmployeeFilter"
+                  @change="onChangePageSize"
                   v-model="limit"
                 />
               </div>
@@ -132,14 +134,15 @@
 import IconButton from "../../components/common/IconButton";
 
 import Button from "../../components/common/Button";
-import FieldInput from "../../components/FieldInput";
+import Input from "../../components/common/Input.vue";
+
 import Checkbox from "../../components/common/Checkbox";
 import Combobox from "../../components/Combobox";
-import Loading from "../../components/Loading";
+import Loading from "../../components/common/Loading";
 
 import AlertDialog from "../../components/AlertDialog";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../components/common/Pagination";
 
 import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
@@ -152,7 +155,7 @@ export default {
     Button,
     IconButton,
     Loading,
-    FieldInput,
+    Input,
     Checkbox,
     Combobox,
     AlertDialog,
@@ -584,7 +587,20 @@ export default {
     /**
      * Hàm filter khi change value input search.
      */
-    onHandleEmployeeFilter() {
+    onInputFilterEmployee(val) {
+      this.employeeFilter = val;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.page = 1;
+        this.fetchData();
+        this.fetchCountEmployees();
+      }, 300);
+    },
+
+    /**
+     * Hàm filter khi change pageSize combobox
+     */
+    onChangePageSize() {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.page = 1;

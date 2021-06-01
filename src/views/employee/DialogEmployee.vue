@@ -4,10 +4,14 @@
       <div class="dialog-header">
         <div class="row ml-2">
           <div class="dialog-title">Thông tin nhân viên</div>
-          <Checkbox />
-          <div class="line-height">Là khách hàng</div>
-          <Checkbox />
-          <div class="line-height">Là nhà cung cấp</div>
+          <div class="row">
+            <Checkbox class="pt-1" />
+            <div class="line-height">Là khách hàng</div>
+          </div>
+          <div class="row">
+            <Checkbox class="pt-1" />
+            <div class="line-height">Là nhà cung cấp</div>
+          </div>
           <div class="dialog-header-right">
             <div
               class="dialog-button-help"
@@ -39,92 +43,161 @@
       </div>
       <div class="dialog-body">
         <div class="row">
-          <div class="row col-6" style="padding-right: 8px">
-            <div class="col-4 space-input">
-              <FieldInput
-                ref="employeeCode"
-                label="Mã"
-                :important="true"
-                :autoFocusInput="true"
-                :errorMsg="errors.employeeCode"
-                v-model="employee.employeeCode"
-                @blur="onValidEmployeeCode"
-              />
-            </div>
-            <div class="col-8 space-input">
-              <FieldInput
+          <div class="col-6 pr-2">
+            <div class="row">
+              <div class="col-4 pr-1">
+                <div class="con-input">
+                  <label class="label-input"
+                    >Mã <span style="color: #f20">*</span></label
+                  >
+                  <Input
+                    ref="employeeCode"
+                    :value="employee && employee.employeeCode"
+                    :class="{ 'has-error': errors && errors.employeeCode }"
+                    @input="
+                      $emit('update:employee', {
+                        ...employee,
+                        employeeCode: $event,
+                      })
+                    "
+                    @blur="onValidEmployeeCode"
+                  />
+                  <span
+                    v-if="errors && errors.employeeCode"
+                    class="text-error"
+                    >{{ errors && errors.employeeCode }}</span
+                  >
+                </div>
+              </div>
+              <div class="col-8">
+                <div class="con-input">
+                  <label class="label-input"
+                    >Tên <span style="color: #f20">*</span></label
+                  >
+                  <Input
+                    :class="{ 'has-error': errors && errors.employeeName }"
+                    :value="employee && employee.employeeName"
+                    @input="
+                      $emit('update:employee', {
+                        ...employee,
+                        employeeName: $event,
+                      })
+                    "
+                    @blur="onValidFullName"
+                  />
+                  <span
+                    v-if="errors && errors.employeeName"
+                    class="text-error"
+                    >{{ errors && errors.employeeName }}</span
+                  >
+                </div>
+                <!-- <FieldInput
                 label="Họ và tên"
                 :important="true"
                 :errorMsg="errors.employeeName"
                 v-model="employee.employeeName"
                 @blur="onValidFullName"
-              />
+              /> -->
+              </div>
             </div>
           </div>
-          <div class="row col-6">
-            <div class="col-5 space-input">
-              <FieldInput
-                label="Ngày sinh"
-                typeInput="date"
-                v-model="dateOfBirthInput"
-              />
-            </div>
-            <div class="col-7 space-input">
-              <div>
-                <label class="label-input">Giới tính</label>
-                <div class="flex-row-align-center" style="height: 32px">
-                  <div class="flex-row-align-center" style="margin-right: 16px">
-                    <Radio
-                      name="gender"
-                      value="1"
-                      :checked="employee && employee.gender == 1"
-                      @change="
-                        $emit('update:employee', {
-                          ...employee,
-                          gender: parseInt($event),
-                        })
-                      "
-                    />
-                    <label style="margin-left: 8px">Nam</label>
-                  </div>
-                  <div class="flex-row-align-center" style="margin-right: 16px">
-                    <Radio
-                      name="gender"
-                      value="1"
-                      :checked="employee && employee.gender == 0"
-                      @change="
-                        $emit('update:employee', {
-                          ...employee,
-                          gender: parseInt($event),
-                        })
-                      "
-                    />
-                    <label style="margin-left: 8px">Nữ</label>
-                  </div>
-                  <div class="flex-row-align-center" style="margin-right: 16px">
-                    <Radio
-                      name="gender"
-                      value="2"
-                      :checked="employee && employee.gender == 2"
-                      @change="
-                        $emit('update:employee', {
-                          ...employee,
-                          gender: parseInt($event),
-                        })
-                      "
-                    />
-                    <label style="margin-left: 8px">Khác</label>
-                  </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-5 pr-1">
+                <div>
+                  <label class="label-input">Ngày sinh</label>
+                  <DatePicker
+                    ref="dateOfBirth"
+                    displayFormat="DD/MM/YYYY"
+                    :inputAttributes="{
+                      class: 'input',
+                      style: 'font-size: 13px',
+                      placeholder: 'DD/MM/YYYY',
+                    }"
+                    :weekdays="localeDatePicker.weekdays"
+                    :months="localeDatePicker.months"
+                    :isDateDisabled="isDateDisabled"
+                    :value="
+                      employee && employee.dateOfBirth
+                        ? formatYYYMMDD(employee.dateOfBirth)
+                        : null
+                    "
+                    @input="
+                      $emit('update:employee', {
+                        ...employee,
+                        dateOfBirth: $event,
+                      })
+                    "
+                  />
                 </div>
               </div>
-              <!-- <Radio
+              <div class="col-7">
+                <div>
+                  <label class="label-input">Giới tính</label>
+                  <div class="flex-row-align-center" style="height: 32px">
+                    <div
+                      class="flex-row-align-center"
+                      style="margin-right: 16px"
+                    >
+                      <Radio
+                        name="gender"
+                        value="1"
+                        :checked="employee && employee.gender == 1"
+                        @change="
+                          $emit('update:employee', {
+                            ...employee,
+                            gender: parseInt($event),
+                          })
+                        "
+                      />
+                      <label style="margin-left: 8px">Nam</label>
+                    </div>
+                    <div
+                      class="flex-row-align-center"
+                      style="margin-right: 16px"
+                    >
+                      <Radio
+                        name="gender"
+                        value="1"
+                        :checked="employee && employee.gender == 0"
+                        @change="
+                          $emit('update:employee', {
+                            ...employee,
+                            gender: parseInt($event),
+                          })
+                        "
+                      />
+                      <label style="margin-left: 8px">Nữ</label>
+                    </div>
+                    <div
+                      class="flex-row-align-center"
+                      style="margin-right: 16px"
+                    >
+                      <Radio
+                        name="gender"
+                        value="2"
+                        :checked="employee && employee.gender == 2"
+                        @change="
+                          $emit('update:employee', {
+                            ...employee,
+                            gender: parseInt($event),
+                          })
+                        "
+                      />
+                      <label style="margin-left: 8px">Khác</label>
+                    </div>
+                  </div>
+                </div>
+                <!-- <Radio
                 label="Giới tính"
                 :option="genders"
                 v-model="employee.gender"
               /> -->
+              </div>
             </div>
           </div>
-          <div class="col-6 space-input">
+
+          <div class="col-6 pr-2">
             <ComboboxAutoComplete
               :important="true"
               :errorMsg="errors.employeeDepartment"
@@ -144,64 +217,194 @@
               style="padding-right: 8px"
             /> -->
           </div>
-          <div class="row col-6">
-            <div class="col-7 space-input">
-              <FieldInput
-                label="Số CMTND"
-                v-model="employee.identityNumber"
-                content="Số chứng minh nhân dân"
-                v-tippy="{
-                  placement: 'bottom-end',
-                  followCursor: true,
-                }"
+          <div class="col-6">
+            <div class="row">
+              <div class="col-7 pr-1">
+                <div>
+                  <label class="label-input">Số CMND</label>
+                  <Input
+                    :value="employee && employee.identityNumber"
+                    @input="
+                      $emit('update:employee', {
+                        ...employee,
+                        identityNumber: $event,
+                      })
+                    "
+                    content="Số chứng minh nhân dân"
+                    v-tippy="{
+                      placement: 'bottom-end',
+                      followCursor: true,
+                    }"
+                  />
+                </div>
+              </div>
+              <div class="col-5">
+                <div>
+                  <label class="label-input">Ngày sinh</label>
+                  <DatePicker
+                    ref="dateOfBirth"
+                    displayFormat="DD/MM/YYYY"
+                    :inputAttributes="{
+                      class: 'input',
+                      style: 'font-size: 13px',
+                      placeholder: 'DD/MM/YYYY',
+                    }"
+                    :weekdays="localeDatePicker.weekdays"
+                    :months="localeDatePicker.months"
+                    :isDateDisabled="isDateDisabled"
+                    :value="
+                      employee && employee.dateOfBirth
+                        ? formatYYYMMDD(employee.dateOfBirth)
+                        : null
+                    "
+                    @input="
+                      $emit('update:employee', {
+                        ...employee,
+                        dateOfBirth: $event,
+                      })
+                    "
+                  />
+                </div>
+                <!-- <FieldInput
+                  label="Ngày cấp"
+                  typeInput="date"
+                  v-model="identityDateInput"
+                /> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 pr-2">
+            <div>
+              <label class="label-input">Chức danh</label>
+              <Input
+                :value="employee && employee.employeePosition"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    employeePosition: $event,
+                  })
+                "
               />
             </div>
-            <div class="col-5 space-input">
-              <FieldInput
-                label="Ngày cấp"
-                typeInput="date"
-                v-model="identityDateInput"
+          </div>
+          <div class="col-6">
+            <div>
+              <label class="label-input">Nơi cấp</label>
+              <Input
+                :value="employee && employee.identityPlace"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    identityPlace: $event,
+                  })
+                "
               />
             </div>
           </div>
-          <div class="col-6 space-input">
-            <FieldInput
-              label="Chức danh"
-              style="padding-right: 8px"
-              v-model="employee.employeePosition"
-            />
-          </div>
-          <div class="col-6 space-input">
-            <FieldInput label="Nơi cấp" v-model="employee.identityPlace" />
-          </div>
-          <div class="col-12 space-input mt-2">
-            <FieldInput label="Địa chỉ" v-model="employee.employeeAddress" />
+          <div class="col-12 mt-2">
+            <div>
+              <label class="label-input">Địa chỉ</label>
+              <Input
+                :value="employee && employee.employeeAddress"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    employeeAddress: $event,
+                  })
+                "
+              />
+            </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-3 space-input">
-            <FieldInput label="DT di động" v-model="employee.phoneNumber" />
+          <div class="col-3 pr-1">
+            <div>
+              <label class="label-input">Điện thoại di động</label>
+              <Input
+                :value="employee && employee.phoneNumber"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    phoneNumber: $event,
+                  })
+                "
+              />
+            </div>
           </div>
-          <div class="col-3 space-input">
-            <FieldInput label="DT cố định" v-model="employee.teleNumber" />
+          <div class="col-3 pr-1">
+            <div>
+              <label class="label-input">Điện thoại cố định</label>
+              <Input
+                :value="employee && employee.teleNumber"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    teleNumber: $event,
+                  })
+                "
+              />
+            </div>
           </div>
-          <div class="col-3 space-input">
-            <FieldInput
-              label="Email"
-              typeInput="email"
-              v-model="employee.email"
-            />
+          <div class="col-3">
+            <div>
+              <label class="label-input">Email</label>
+              <Input
+                :value="employee && employee.email"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    email: $event,
+                  })
+                "
+              />
+            </div>
           </div>
         </div>
         <div class="row mb-2">
-          <div class="col-3 space-input">
-            <FieldInput label="Tài khoản ngân hàng" />
+          <div class="col-3 pr-1">
+            <div>
+              <label class="label-input">Tài khoản ngân hàng</label>
+              <Input
+                :value="employee && employee.bankAccountNumber"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    bankAccountNumber: $event,
+                  })
+                "
+              />
+            </div>
           </div>
-          <div class="col-3 space-input">
-            <FieldInput label="Tên ngân hàng" />
+          <div class="col-3 pr-1">
+            <div>
+              <label class="label-input">Tên ngân hàng</label>
+              <input
+                type="text"
+                class="input"
+                :value="employee && employee.bankName"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    bankName: $event,
+                  })
+                "
+              />
+            </div>
           </div>
-          <div class="col-3 space-input">
-            <FieldInput label="Chi nhánh" />
+          <div class="col-3">
+            <div>
+              <label class="label-input">Chi nhánh</label>
+              <Input
+                :value="employee && employee.bankBranchName"
+                @input="
+                  $emit('update:employee', {
+                    ...employee,
+                    bankBranchName: $event,
+                  })
+                "
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -238,7 +441,12 @@
 </template>
 
 <script>
-import FieldInput from "../../components/FieldInput";
+import dayjs from "dayjs";
+import DatePicker from "vue-date-pick";
+import "vue-date-pick/dist/vueDatePick.css";
+
+import Input from "../../components/common/Input";
+
 import IconButton from "../../components/common/IconButton";
 import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
 
@@ -249,7 +457,8 @@ import Radio from "../../components/common/Radio";
 export default {
   name: "DialogEmployee",
   components: {
-    FieldInput,
+    DatePicker,
+    Input,
     ComboboxAutoComplete,
     Button,
     IconButton,
@@ -305,6 +514,27 @@ export default {
         employeeCode: "",
         employeeName: "",
         employeeDepartment: "",
+      },
+
+      /**
+       * Locale datepicker
+       */
+      localeDatePicker: {
+        weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+        months: [
+          "Tháng 1",
+          "Tháng 2",
+          "Tháng 3",
+          "Tháng 4",
+          "Tháng 5",
+          "Tháng 6",
+          "Tháng 7",
+          "Tháng 8",
+          "Tháng 9",
+          "Tháng 10",
+          "Tháng 11",
+          "Tháng 12",
+        ],
       },
     };
   },
@@ -375,23 +605,15 @@ export default {
     },
 
     /**
-     * Hàm chuyển date string về dạng YYYY-MM-DD
+     * Hàm format date về dạng YYYY-MM-DD
+     * CreatedBy: dqdat (25/05/2021)
      */
-    formatDate(dateStr) {
-      if (dateStr) {
-        let date = new Date(dateStr);
-        let dateString =
-          date.getDate() < 10
-            ? "0" + date.getDate().toString()
-            : date.getDate().toString();
-        let monthString =
-          date.getMonth() < 9
-            ? "0" + (date.getMonth() + 1).toString()
-            : (date.getMonth() + 1).toString();
-        let yearString = date.getFullYear().toString();
-        return `${yearString}-${monthString}-${dateString}`;
-      }
-      return null;
+    formatYYYMMDD(dateStr) {
+      return dateStr ? dayjs(dateStr).format("YYYY-MM-DD") : null;
+    },
+
+    isDateDisabled(date) {
+      return date > new Date();
     },
 
     updateEmployeeDepartmentName(val) {
@@ -439,12 +661,15 @@ export default {
     show: function (val) {
       if (val) {
         this.$nextTick(function () {
-          this.$refs.employeeCode.$el.children[1].focus();
+          this.$refs.employeeCode.$el.focus();
         });
 
         console.log(this.employee);
       }
     },
+  },
+  mounted() {
+    this.$refs.employeeCode.$el.focus();
   },
 };
 </script>

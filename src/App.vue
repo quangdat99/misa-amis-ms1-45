@@ -132,6 +132,10 @@ a {
   }
 
   // icon-content
+  &.icon-search {
+    @include icon-bind(-992px -360px, 16px);
+  }
+
   &.icon-refresh {
     @include icon-bind(-423px -201px);
 
@@ -488,15 +492,19 @@ a {
 
 // Dialog
 .dialog {
-  overflow: auto;
   position: fixed;
   top: 0;
+  bottom: 0;
   left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
   width: 100vw;
   height: 100vh;
   background-color: #000;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.2);
   &.dialog-hide {
     display: none;
   }
@@ -638,6 +646,68 @@ a {
   }
 }
 
+// input
+.input {
+  height: 32px;
+  outline: none;
+  border: 1px solid #ccc;
+  padding-left: 12px;
+  width: 100%;
+
+  &::placeholder {
+    font-style: italic;
+  }
+
+  &:focus {
+    border-color: #2ca01c;
+  }
+
+  &:hover:not(:focus) {
+    border-color: #888b8f;
+  }
+
+  &.has-icon {
+    padding-right: 28px;
+  }
+
+  &.has-error:not(:focus) {
+    border-color: #f20;
+  }
+}
+
+.con-input {
+  position: relative;
+
+  .text-error {
+    display: none;
+  }
+
+  &:hover .text-error {
+    white-space: nowrap;
+    display: inline-block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #38393d;
+    color: $color-white;
+    padding: 8px;
+    z-index: 10;
+  }
+
+  .icon-input {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+  }
+}
+
+.label-input {
+  display: inline-block;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
 // button.
 .btn {
   height: 40px;
@@ -674,6 +744,14 @@ a {
 
 .pr-1 {
   padding-right: 8px;
+}
+
+.pr-2 {
+  padding-right: 16px;
+}
+
+.pt-1 {
+  padding-top: 8px;
 }
 
 .pl-1 {
