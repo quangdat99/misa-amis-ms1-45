@@ -102,13 +102,45 @@ a {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgb(214, 214, 214);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgb(196, 196, 196);
 }
+
+// animate css
+
+// zoomIn
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.8, 0.8, 0.8);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.zoomIn {
+  animation-name: zoomIn;
+  animation-duration: 0.25s;
+}
+
+@keyframes rotateIn {
+  from {
+    transform: rotate3d(0, 0, 1, 200deg);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
 // Icon
 .icon {
   @include icon-default();
@@ -150,6 +182,9 @@ a {
     &:hover {
       @include icon-bind(-704px -256px);
     }
+  }
+  &.icon-chevron-down-blue {
+    @include icon-bind(-896px -359px, 16px);
   }
 
   // icon-dialog
@@ -384,8 +419,8 @@ a {
     height: 35px;
     text-align: left;
     th {
-      padding-left: 10px;
-      padding-right: 10px;
+      padding-left: 25px;
+      padding-right: 25px;
       height: 20px;
       border-bottom: 1px solid #c7c7c7;
       border-right: 1px dotted #c7c7c7;
@@ -394,6 +429,8 @@ a {
       position: sticky;
       top: 0px;
       &:first-child {
+        padding-left: 10px;
+        padding-right: 10px;
         position: sticky;
         left: 0;
         top: 0;
@@ -411,7 +448,7 @@ a {
       }
       &:last-child {
         position: sticky;
-        right: 0px;
+        right: -1px;
         top: 0px;
         z-index: 3;
         .border-left {
@@ -430,13 +467,13 @@ a {
   }
   tbody tr {
     &:hover td {
-      background-color: #ececec;
+      background-color: #f0feff !important;
     }
     &:last-child {
       border: none;
     }
     td {
-      padding-left: 10px;
+      padding-left: 25px;
       padding-right: 8px;
       height: 40px;
       border-bottom: 1px solid #c7c7c7;
@@ -457,7 +494,7 @@ a {
         }
       }
       &:last-child {
-        padding-left: 25px;
+        padding-left: 37px;
         border-right: none;
         position: sticky;
         right: -1px;
@@ -617,11 +654,6 @@ a {
     border-radius: 3px;
     display: inline-block;
     position: relative;
-
-    &:active {
-      // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
-      //   inset 0px 1px 3px rgba(0, 0, 0, 0.1);
-    }
   }
 
   &:checked + label {
@@ -713,7 +745,7 @@ a {
   height: 40px;
   padding-left: 24px;
   padding-right: 24px;
-  line-height: 40px;
+  //line-height: 40px;
   outline: none;
   background-color: transparent;
   cursor: pointer;

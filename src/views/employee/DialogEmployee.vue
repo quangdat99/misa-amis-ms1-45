@@ -1,6 +1,6 @@
 <template>
   <div class="dialog" :class="{ 'dialog-hide': !show }">
-    <div class="dialog-content">
+    <div class="dialog-content zoomIn">
       <div class="dialog-header">
         <div class="row ml-2">
           <div class="dialog-title">Thông tin nhân viên</div>

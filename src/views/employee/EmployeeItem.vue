@@ -21,13 +21,17 @@
     <td></td>
     <td class="center">
       <div class="border-left"></div>
-      <button class="btn-update" @click="onClickEmployeeItemUpdate">Sửa</button>
+      <button class="btn-update" @click="onClickBtnEdit">Sửa</button>
       <select class="btn-option fas fa-caret-down" v-model="selected">
         <option selected style="display: none"></option>
         <option value="0">Nhân bản</option>
         <option value="1">Xóa</option>
         <option value="2">Ngừng sử dụng</option>
       </select>
+      <!-- <IconButton
+        icon="icon icon-chevron-down-blue"
+        @click="toggleDropdown($event, employee)"
+      /> -->
     </td>
   </tr>
 </template>
@@ -36,10 +40,12 @@
 import dayjs from "dayjs";
 
 import Checkbox from "../../components/common/Checkbox";
+//import IconButton from "../../components/common/IconButton";
 
 export default {
   components: {
     Checkbox,
+    //IconButton,
   },
   data() {
     return {
@@ -52,7 +58,16 @@ export default {
   },
   created() {},
   methods: {
-    onClickEmployeeItemUpdate() {
+    /**
+     * Hàm đóng mở dropdown
+     * CreatedBy: dqdat 30/05/2021
+     */
+    toggleDropdown(event, empl) {
+      let left = event.clientX;
+      let top = event.clientY;
+      this.$emit("toggleTableOption", { left, top, employee: empl });
+    },
+    onClickBtnEdit() {
       this.$emit("updateEmployee", this.employee.employeeId);
     },
 
@@ -65,7 +80,7 @@ export default {
     /**
      * Thông tin nhân viên.
      */
-    employee: Object,
+    employee: { type: Object, default: null },
 
     /**
      * Id của nhân viên đang được chọn.
