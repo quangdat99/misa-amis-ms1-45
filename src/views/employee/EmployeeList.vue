@@ -132,15 +132,13 @@
 </template>
 
 <script>
+import { getEmployees } from "../../api/employee.js";
 import IconButton from "../../components/common/IconButton";
-
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input.vue";
-
 import Checkbox from "../../components/common/Checkbox";
 import Combobox from "../../components/Combobox";
 import Loading from "../../components/common/Loading";
-
 import AlertDialog from "../../components/AlertDialog";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 import Pagination from "../../components/common/Pagination";
@@ -168,7 +166,7 @@ export default {
 
   created() {
     this.fetchCountEmployees();
-    this.fetchData();
+    this.getEmployees();
     this.fetchDepartments();
   },
   data() {
@@ -303,23 +301,15 @@ export default {
     /**
      * Hàm lấy danh sách có lọc nhân viên từ server.
      */
-    fetchData() {
+    getEmployees() {
       this.isShowLoading = true;
-      let url = `https://localhost:44366/api/v1/Employees/employeeFilter?pageSize=${this.limit}&pageNumber=${this.page}`;
-      if (this.employeeFilter) {
-        url += `&employeeFilter=${this.employeeFilter}`;
-      }
-      axios
-        .get(url, { crossdomain: true })
-
-        .then((res) => {
-          if (res.status == 200) {
-            this.isShowLoading = false;
-            return res.data;
-          }
-          return Promise.reject("Không có dữ liệu.");
-        })
+      getEmployees({
+        page: this.page,
+        pageSize: this.limit,
+        employeeFilter: this.employeeFilter,
+      })
         .then((data) => {
+          this.isShowLoading = false;
           this.employees = data;
           if (this.employees.length > 0) {
             this.hasData = true;
@@ -365,7 +355,7 @@ export default {
     onClickBtnRefresh() {
       this.resetFilter();
       this.fetchCountEmployees();
-      this.fetchData();
+      this.getEmployees();
     },
 
     /**
@@ -498,7 +488,7 @@ export default {
 
           // Lấy lại dữ liệu từ api với bộ lọc mặc định.
           if (configAxios.method == "PUT") {
-            this.fetchData();
+            this.getEmployees();
           } else {
             this.onClickBtnRefresh();
           }
@@ -522,7 +512,7 @@ export default {
             position: "top-right",
           });
           // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-          this.fetchData();
+          this.getEmployees();
         })
         .catch((err) => {
           // show dialog thông báo khi lưu thất bại.
@@ -587,7 +577,7 @@ export default {
 
             // fetch lại dữ liệu.
             this.fetchCountEmployees();
-            this.fetchData();
+            this.getEmployees();
           })
           .catch((err) => {
             // hiển thị thông báo khi thất bại.
@@ -606,7 +596,7 @@ export default {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.page = 1;
-        this.fetchData();
+        this.getEmployees();
         this.fetchCountEmployees();
       }, 300);
     },
@@ -618,7 +608,7 @@ export default {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.page = 1;
-        this.fetchData();
+        this.getEmployees();
         this.fetchCountEmployees();
       }, 300);
     },
@@ -634,7 +624,7 @@ export default {
       } else {
         this.page = 1;
       }
-      this.fetchData();
+      this.getEmployees();
     },
     page: function (val) {
       if (val == 1) {
