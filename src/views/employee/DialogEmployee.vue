@@ -91,13 +91,6 @@
                     >{{ errors && errors.employeeName }}</span
                   >
                 </div>
-                <!-- <FieldInput
-                label="Họ và tên"
-                :important="true"
-                :errorMsg="errors.employeeName"
-                v-model="employee.employeeName"
-                @blur="onValidFullName"
-              /> -->
               </div>
             </div>
           </div>
@@ -158,7 +151,7 @@
                     >
                       <Radio
                         name="gender"
-                        value="1"
+                        value="0"
                         :checked="employee && employee.gender == 0"
                         @change="
                           $emit('update:employee', {
@@ -188,11 +181,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- <Radio
-                label="Giới tính"
-                :option="genders"
-                v-model="employee.gender"
-              /> -->
               </div>
             </div>
           </div>
@@ -230,11 +218,6 @@
                         identityNumber: $event,
                       })
                     "
-                    content="Số chứng minh nhân dân"
-                    v-tippy="{
-                      placement: 'bottom-end',
-                      followCursor: true,
-                    }"
                   />
                 </div>
               </div>
@@ -265,11 +248,6 @@
                     "
                   />
                 </div>
-                <!-- <FieldInput
-                  label="Ngày cấp"
-                  typeInput="date"
-                  v-model="identityDateInput"
-                /> -->
               </div>
             </div>
           </div>
@@ -418,20 +396,18 @@
             text="Cất"
             :color="'secondary'"
             style="margin-right: 10px"
-            @click="onClickSaveEmployee"
+            @click="onClickSave"
             content="Cất (Ctrl+S)"
             v-tippy="{
-              placement: 'bottom-end',
-              followCursor: true,
+              placement: 'bottom',
             }"
           />
           <Button
             text="Cất và Thêm"
-            @click="onClickSaveEmployee"
+            @click="onClickSaveAndAdd"
             content="Cất và thêm (Ctrl + Shift + S)"
             v-tippy="{
-              placement: 'bottom-end',
-              followCursor: true,
+              placement: 'bottom',
             }"
           />
         </div>
@@ -539,12 +515,7 @@ export default {
     };
   },
   methods: {
-    /**
-     * Hàm gọi khi click vào button lưu.
-     */
-    onClickSaveEmployee() {
-      console.log(this.employee);
-
+    validateBeforeSave() {
       let valid = true;
       this.onValidEmployeeCode();
       this.onValidFullName();
@@ -555,8 +526,32 @@ export default {
           break;
         }
       }
+      return valid;
+    },
+    /**
+     * Hàm gọi khi click vào button lưu.
+     */
+    onClickSave() {
+      // let valid = true;
+      // this.onValidEmployeeCode();
+      // this.onValidFullName();
+      // this.onValidDepartment();
+      // for (let err in this.errors) {
+      //   if (this.errors[err]) {
+      //     valid = false;
+      //     break;
+      //   }
+      // }
+      let valid = this.validateBeforeSave();
       if (valid) {
         this.$emit("onSave");
+      }
+    },
+
+    onClickSaveAndAdd() {
+      let valid = this.validateBeforeSave();
+      if (valid) {
+        this.$emit("onSaveAndAdd");
       }
     },
 
@@ -619,20 +614,32 @@ export default {
     updateEmployeeDepartmentName(val) {
       this.employee.employeeDepartmentName = val;
     },
+
+    /**
+     * sự kiện nhấn phím
+     * CreatedBy: dqdat 01/06/2021
+     */
+    onKeyDownListener(e) {
+      if (e.keyCode == 27) {
+        // ESC
+        this.onClickCloseDialog();
+        e.preventDefault();
+      }
+
+      if (e.key == "s" && (e.ctrlKey || e.metaKey)) {
+        // Ctrl + s
+        this.onClickSave();
+        e.preventDefault();
+      }
+
+      if (e.key == "S" && (e.ctrlKey || e.metaKey)) {
+        // Ctrl + Shift + s
+        this.onClickSaveAndAdd();
+        e.preventDefault();
+      }
+    },
   },
   computed: {
-    /**
-     * Computed ngày sinh nhân viên.
-     */
-    dateOfBirthInput: {
-      get() {
-        return this.formatDate(this.employee.dateOfBirth);
-      },
-      set(val) {
-        this.employee.dateOfBirth = val;
-      },
-    },
-
     /**
      * Computed ngày sinh nhân viên.
      */
@@ -644,18 +651,6 @@ export default {
         this.$emit("input", val);
       },
     },
-
-    /**
-     * Computed ngày cấp CMND.
-     */
-    identityDateInput: {
-      get() {
-        return this.formatDate(this.employee.identityDate);
-      },
-      set(val) {
-        this.employee.identityDate = val;
-      },
-    },
   },
   watch: {
     show: function (val) {
@@ -663,8 +658,9 @@ export default {
         this.$nextTick(function () {
           this.$refs.employeeCode.$el.focus();
         });
-
-        console.log(this.employee);
+        document.addEventListener("keydown", this.onKeyDownListener);
+      } else {
+        document.removeEventListener("keydown", this.onKeyDownListener);
       }
     },
   },

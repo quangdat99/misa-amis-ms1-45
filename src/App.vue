@@ -97,17 +97,17 @@ a {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #fff;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(214, 214, 214);
+  background: rgb(226, 226, 226);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(196, 196, 196);
+  background: rgb(212, 212, 212);
 }
 
 // animate css
@@ -126,7 +126,7 @@ a {
 
 .zoomIn {
   animation-name: zoomIn;
-  animation-duration: 0.25s;
+  animation-duration: 0.3s;
 }
 
 @keyframes rotateIn {
@@ -420,11 +420,11 @@ a {
     text-align: left;
     th {
       padding-left: 25px;
-      padding-right: 25px;
+      padding-right: 40px;
       height: 20px;
       border-bottom: 1px solid #c7c7c7;
       border-right: 1px dotted #c7c7c7;
-      background-color: #f1f1f1;
+      background-color: #e6e9eb;
       white-space: nowrap;
       position: sticky;
       top: 0px;
@@ -447,8 +447,9 @@ a {
         }
       }
       &:last-child {
+        border-right: none;
         position: sticky;
-        right: -1px;
+        right: 0px;
         top: 0px;
         z-index: 3;
         .border-left {
@@ -467,7 +468,7 @@ a {
   }
   tbody tr {
     &:hover td {
-      background-color: #f0feff !important;
+      background-color: #f1f6f7 !important;
     }
     &:last-child {
       border: none;
@@ -481,7 +482,7 @@ a {
       &:first-child {
         padding-left: 10px;
         position: sticky;
-        left: -1px;
+        left: 0px;
         background-color: #fff;
         border-right: none;
         .border-right {
@@ -497,7 +498,7 @@ a {
         padding-left: 37px;
         border-right: none;
         position: sticky;
-        right: -1px;
+        right: 0px;
         background-color: #fff;
         .border-left {
           position: absolute;
@@ -648,7 +649,7 @@ a {
   display: none;
 
   & + label {
-    border: 1px solid #cacece;
+    border: 1px solid #afafaf;
     height: 18px;
     width: 18px;
     border-radius: 3px;
@@ -659,7 +660,7 @@ a {
   &:checked + label {
     animation-name: rotateIn;
     animation-duration: 0.25s;
-    border: 1px solid #adb8c0;
+    border: 1px solid #afafaf;
 
     &:active {
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),

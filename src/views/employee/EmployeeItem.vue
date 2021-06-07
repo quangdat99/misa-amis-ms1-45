@@ -4,7 +4,7 @@
     @dblclick="$emit('dblclick', employee.employeeId)"
     @click="$emit('click', employee.employeeId)"
   >
-    <td>
+    <td @dblclick.stop>
       <Checkbox />
       <div class="border-right"></div>
     </td>
@@ -19,7 +19,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="center">
+    <td class="center" @dblclick.stop>
       <div class="border-left"></div>
       <button class="btn-update" @click="onClickBtnEdit">Sửa</button>
       <select class="btn-option fas fa-caret-down" v-model="selected">

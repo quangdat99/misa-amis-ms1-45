@@ -114,6 +114,7 @@
       :optionDepartment="optionDepartment.slice(1)"
       @onClose="onCloseDialogEmployee"
       @onSave="onClickButtonSaveEmployee"
+      @onSaveAndAdd="onSaveAndAddEmployee"
     />
     <AlertDialog
       :show="isShowAlertDialog"
@@ -466,6 +467,19 @@ export default {
           this.insertOrUpdateEmployee(configAxios);
         }
       }
+    },
+
+    /**
+     * click button cất và thêm
+     * CreatedBy: dqdat 03/06/2021
+     */
+    onSaveAndAddEmployee() {
+      this.onClickButtonSaveEmployee()
+        .then(() => {
+          this.onClickAddEmployee();
+        })
+        .catch();
+      //this.onClickAddEmployee();
     },
 
     /**
