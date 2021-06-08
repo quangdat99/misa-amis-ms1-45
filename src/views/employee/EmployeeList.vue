@@ -132,7 +132,13 @@
 </template>
 
 <script>
-import { getEmployees } from "../../api/employee.js";
+import {
+  getEmployees,
+  getCountEmployees,
+  getNewEmployeeCode,
+  getEmployee,
+  delEmployee,
+} from "../../api/employee.js";
 import IconButton from "../../components/common/IconButton";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input.vue";
@@ -165,7 +171,7 @@ export default {
   },
 
   created() {
-    this.fetchCountEmployees();
+    this.getCountEmployees();
     this.getEmployees();
     this.fetchDepartments();
   },
@@ -285,18 +291,13 @@ export default {
     /**
      * Hàm lấy số nhân viên lọc theo filter.
      */
-    fetchCountEmployees() {
-      axios
-        .get(
-          "https://localhost:44366/api/v1/Employees/CountEmployees?employeeFilter=" +
-            this.employeeFilter
-        )
-        .then((res) => res.data)
+    getCountEmployees() {
+      getCountEmployees(this.employeeFilter)
         .then((data) => {
           this.countEmloyees = data;
           this.totalPage = Math.ceil(this.countEmloyees / this.limit);
         })
-        .catch((err) => console.log(err));
+        .catch();
     },
     /**
      * Hàm lấy danh sách có lọc nhân viên từ server.
@@ -354,7 +355,7 @@ export default {
      */
     onClickBtnRefresh() {
       this.resetFilter();
-      this.fetchCountEmployees();
+      this.getCountEmployees();
       this.getEmployees();
     },
 
@@ -362,30 +363,25 @@ export default {
      * Hàm click button thêm nhân viên.
      */
     onClickAddEmployee() {
-      axios
-        .get("https://localhost:44366/api/v1/Employees/EmployeeCodeMax")
-        .then((res) => res.data)
+      getNewEmployeeCode()
         .then((data) => {
-          this.selectedEmployee.employeeCode =
-            "NV-" + (parseInt(data.match(/\d/g).join("")) + 1);
+          this.selectedEmployee.employeeCode = data;
           this.showDialogEmployee();
         })
-        .catch((err) => console.log(err));
+        .catch();
     },
 
     /**
      * Hàm double click vào employeeItem.
      */
     onDblClickEmployeeItem(employeeId) {
-      axios
-        .get(`https://localhost:44366/api/v1/Employees/${employeeId}`)
-        .then((res) => res.data)
+      getEmployee(employeeId)
         .then((data) => {
           this.selectedEmployee = data;
           this.selectedEmployeeCode = this.selectedEmployee.employeeCode;
           this.showDialogEmployee();
         })
-        .catch((err) => console.log(err));
+        .catch();
     },
 
     /**
@@ -565,10 +561,7 @@ export default {
      */
     delEmployee() {
       if (this.selectedEmployeeId) {
-        axios
-          .delete(
-            `https://localhost:44366/api/v1/Employees/${this.selectedEmployeeId}`
-          )
+        delEmployee(this.selectedEmployeeId)
           .then(() => {
             // hiển thị dialog thông báo với câu thông báo.
             this.$toast.success("Xóa bản ghi thành công", {
@@ -576,14 +569,12 @@ export default {
             });
 
             // fetch lại dữ liệu.
-            this.fetchCountEmployees();
+            this.getCountEmployees();
             this.getEmployees();
           })
-          .catch((err) => {
+          .catch(() => {
             // hiển thị thông báo khi thất bại.
             this.$toast.error("Xóa thất bại", { position: "top-right" });
-
-            console.log(err);
           });
       }
     },
@@ -597,7 +588,7 @@ export default {
       this.timeOut = setTimeout(() => {
         this.page = 1;
         this.getEmployees();
-        this.fetchCountEmployees();
+        this.getCountEmployees();
       }, 300);
     },
 
@@ -609,7 +600,7 @@ export default {
       this.timeOut = setTimeout(() => {
         this.page = 1;
         this.getEmployees();
-        this.fetchCountEmployees();
+        this.getCountEmployees();
       }, 300);
     },
 
