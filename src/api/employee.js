@@ -73,3 +73,35 @@ export const delEmployee = (employeeId) =>
         })
         .catch(err => Promise.reject(err));
 //#endregion
+
+//#region checkEmployeeCodeExist
+/**
+ * Check mã nhân viên tồn tại trên hệ thống
+ * @param {string} employeeCode 
+ * @returns boolean
+ */
+export const checkEmployeeCodeExist = (employeeCode, employeeId) =>
+    req.get(`${PREFIX_URL}/EmployeeCodeExist?employeeCode=${employeeCode}&employeeId=${employeeId}`)
+        .then(res => res.data)
+        .then(data => Promise.resolve(data))
+        .catch(err => Promise.reject(err));
+
+//#endregion
+
+//#region saveEmployee
+/**
+ * Lưu thông tin nhân viên
+ * @returns 
+ */
+export const saveEmployee = (data, isInsert = true) =>
+    req({
+        url: isInsert ? `${PREFIX_URL}` : `${PREFIX_URL}/${data.employeeId}`,
+        data: data,
+        method: isInsert ? 'POST' : 'PUT'
+    })
+        .then(res => {
+            if (res.status == 200 || res.status == 201) return Promise.resolve();
+            return Promise.reject();
+        })
+        .catch(err => Promise.reject(err));
+//#endregion

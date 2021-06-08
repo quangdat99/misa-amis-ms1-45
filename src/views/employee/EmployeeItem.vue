@@ -15,10 +15,10 @@
 
     <td>{{ employee.identityNumber }}</td>
     <td>{{ employee.employeePosition }}</td>
-    <td>{{ departmentName }}</td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td style="min-width: 200px">{{ departmentName }}</td>
+    <td>{{ employee.bankAccountNumber }}</td>
+    <td>{{ employee.bankName }}</td>
+    <td>{{ employee.bankBranchName }}</td>
     <td class="center" @dblclick.stop>
       <div class="border-left"></div>
       <button class="btn-update" @click="onClickBtnEdit">Sửa</button>

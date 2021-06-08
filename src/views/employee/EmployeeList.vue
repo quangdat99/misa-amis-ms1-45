@@ -113,8 +113,8 @@
       :employee.sync="selectedEmployee"
       :optionDepartment="optionDepartment.slice(1)"
       @onClose="onCloseDialogEmployee"
-      @onSave="onClickButtonSaveEmployee"
-      @onSaveAndAdd="onSaveAndAddEmployee"
+      @onSave="onClickBtnSave"
+      @onSaveAndAdd="onClickBtnSaveAndAdd"
     />
     <AlertDialog
       :show="isShowAlertDialog"
@@ -138,6 +138,8 @@ import {
   getNewEmployeeCode,
   getEmployee,
   delEmployee,
+  checkEmployeeCodeExist,
+  saveEmployee,
 } from "../../api/employee.js";
 import IconButton from "../../components/common/IconButton";
 import Button from "../../components/common/Button";
@@ -363,12 +365,14 @@ export default {
      * Hàm click button thêm nhân viên.
      */
     onClickAddEmployee() {
-      getNewEmployeeCode()
-        .then((data) => {
-          this.selectedEmployee.employeeCode = data;
-          this.showDialogEmployee();
-        })
-        .catch();
+      if (this.isShowDialogEmployee == false) {
+        getNewEmployeeCode()
+          .then((data) => {
+            this.selectedEmployee.employeeCode = data;
+            this.showDialogEmployee();
+          })
+          .catch();
+      }
     },
 
     /**
@@ -410,48 +414,51 @@ export default {
     /**
      * Hàm Click button Lưu nhân viên.
      */
-    async onClickButtonSaveEmployee() {
-      // cấu hình axios req.
-      let configAxios = {
-        data: this.selectedEmployee,
-      };
+    async onClickBtnSave() {
+      var checkDuplicate;
+      await checkEmployeeCodeExist(
+        this.selectedEmployee.employeeCode,
+        this.selectedEmployee.employeeId
+      )
+        .then((data) => {
+          checkDuplicate = data;
+        })
+        .catch();
 
-      if (this.selectedEmployee.employeeId) {
-        // nếu là sửa nhân viên.
-        configAxios.url = `https://localhost:44366/api/v1/Employees/${this.selectedEmployee.employeeId}`;
-        configAxios.method = "PUT";
-      } else {
-        // nếu là thêm mới nhân viên.
-        configAxios.url = "https://localhost:44366/api/v1/Employees";
-        configAxios.method = "POST";
+      var isInsert = true;
+      if (this.selectedEmployee.employeeId != null) {
+        isInsert = false;
       }
+      if (checkDuplicate != 1) {
+        await saveEmployee(this.selectedEmployee, isInsert)
+          .then(() => {
+            // thực hiện đóng dialog thêm và sửa nhân viên.
+            this.onCloseDialogEmployee();
 
-      if (
-        this.selectedEmployee.employeeId &&
-        this.selectedEmployeeCode == this.selectedEmployee.employeeCode
-      ) {
-        // Nếu update không thay đổi mã nhân viên:
-        // tiến hành call api lưu thông tin nhân viên.
-        this.updateEmployee(configAxios);
+            // show dialog thông báo với lời thông báo Lưu thành công.
+            this.$toast.success("Cập nhật bản ghi thành công", {
+              position: "top-right",
+            });
+
+            // Lấy lại dữ liệu từ api với bộ lọc mặc định.
+            if (isInsert == true) {
+              this.onClickBtnRefresh();
+            } else {
+              this.getEmployees();
+            }
+          })
+          .catch((err) => {
+            // show dialog thông báo khi lưu thất bại.
+            this.$toast.error("Lưu thất bại", { position: "top-right" });
+            console.log(err);
+          });
       } else {
-        // Nếu là thêm mới hoặc thay đổi mã nhân viên:
-        // kiểm tra xem có bị trùng mã nhân viên không.
-        const response = await axios.get(
-          "https://localhost:44366/api/v1/Employees/EmployeeCodeExist/" +
-            this.selectedEmployee.employeeCode
+        // Nếu trùng thì show dialog thông báo.
+        this.showAlertDialogWithMsg(
+          "Nhân viên <" +
+            this.selectedEmployee.employeeCode +
+            "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại."
         );
-
-        if (response.data == 1) {
-          // Nếu trùng thì show dialog thông báo.
-          this.showAlertDialogWithMsg(
-            "Nhân viên <" +
-              this.selectedEmployee.employeeCode +
-              "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại."
-          );
-        } else {
-          // tiến hành call api lưu thông tin nhân viên.
-          this.insertOrUpdateEmployee(configAxios);
-        }
       }
     },
 
@@ -459,62 +466,12 @@ export default {
      * click button cất và thêm
      * CreatedBy: dqdat 03/06/2021
      */
-    onSaveAndAddEmployee() {
-      this.onClickButtonSaveEmployee()
+    onClickBtnSaveAndAdd() {
+      this.onClickBtnSave()
         .then(() => {
           this.onClickAddEmployee();
         })
         .catch();
-      //this.onClickAddEmployee();
-    },
-
-    /**
-     * Hàm thêm mới hoặc update nhân viên vào database thêm mới hoặc thay đổi mã nhân viên.
-     */
-    insertOrUpdateEmployee(configAxios) {
-      axios(configAxios)
-        .then(() => {
-          // thực hiện đóng dialog thêm và sửa nhân viên.
-          this.onCloseDialogEmployee();
-
-          // show dialog thông báo với lời thông báo Lưu thành công.
-          this.$toast.success("Cập nhật bản ghi thành công", {
-            position: "top-right",
-          });
-
-          // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-          if (configAxios.method == "PUT") {
-            this.getEmployees();
-          } else {
-            this.onClickBtnRefresh();
-          }
-        })
-        .catch((err) => {
-          // show dialog thông báo khi lưu thất bại.
-          this.$toast.error("Lưu thất bại", { position: "top-right" });
-          console.log(err);
-        });
-    },
-    /**
-     * Hàm update thông nhân viên vào database khi không thay đổi mã nhân viên.
-     */
-    updateEmployee(configAxios) {
-      axios(configAxios)
-        .then(() => {
-          // thực hiện đóng dialog thêm và sửa nhân viên.
-          this.onCloseDialogEmployee();
-          // show thông báo Lưu thành công.
-          this.$toast.success("Cập nhật bản ghi thành công", {
-            position: "top-right",
-          });
-          // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-          this.getEmployees();
-        })
-        .catch((err) => {
-          // show dialog thông báo khi lưu thất bại.
-          this.$toast.error("Lưu thất bại", { position: "top-right" });
-          console.log(err);
-        });
     },
 
     /**
@@ -545,13 +502,11 @@ export default {
 
     /**
      * Sự kiện click button xóa nhân viên.
-     * Lưu ý: phải đã chọn nhân viên cần xóa.
      */
     btnDelEmployee(employeeId, employeeCode) {
       this.selectedEmployeeId = employeeId;
-
       this.showConfirmDialogWithMsg(
-        "Bạn có chắc muốn xóa nhân viên <" + employeeCode + "> này không ?",
+        "Bạn có chắc chắn muốn xóa nhân viên <" + employeeCode + "> không ?",
         employeeId
       );
     },
@@ -623,6 +578,5 @@ export default {
       }
     },
   },
-  mounted() {},
 };
 </script>
