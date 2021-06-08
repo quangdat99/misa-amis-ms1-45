@@ -117,13 +117,14 @@
       @onSaveAndAdd="onClickBtnSaveAndAdd"
     />
     <AlertDialog
-      :show="isShowAlertDialog"
-      :msg="msg"
+      :show="alertDialogConfig.isShow"
+      :msg="alertDialogConfig.msg"
+      :type="alertDialogConfig.type"
       @onClose="onCloseAlertDialog"
     />
     <ConfirmDialog
-      :show="isShowConfirmDialog"
-      :msg="msgConfirm"
+      :show="alertDialogConfig.isShow"
+      :msg="alertDialogConfig.msg"
       @onClose="onCloseConfirmDialog"
       @onOk="delEmployee"
     />
@@ -180,6 +181,27 @@ export default {
   data() {
     return {
       /**
+       * Thông tin nhân viên đang được chọn để thao tác
+       */
+      employeeModify: null,
+
+      /**
+       * Config của dialog xác nhận
+       */
+      confirmDialogConfig: {
+        isShow: false,
+        msg: "",
+      },
+      /**
+       * Config của dialog alert.
+       */
+      alertDialogConfig: {
+        isShow: false,
+        msg: "",
+        type: "warning",
+      },
+
+      /**
        * các option cho combobox đơn vị.
        */
       optionDepartment: [{ value: "", text: "Tất cả phòng ban" }],
@@ -233,35 +255,11 @@ export default {
       isShowDialogEmployee: false,
 
       /**
-       * Biến xác định trạng thái của dialog thông báo.
-       * true: hiện
-       * false: ẩn.
-       */
-      isShowAlertDialog: false,
-
-      /**
        * Biến xác định trạng thái của Loading.
        * true: hiện
        * false: ẩn.
        */
       isShowLoading: false,
-
-      /**
-       * Biến xác định trạng thái của dialog xác nhận.
-       * true: hiện
-       * false: ẩn.
-       */
-      isShowConfirmDialog: false,
-
-      /**
-       * Câu thông báo hiển thị trong dialog thông báo. Mặc định là "".
-       */
-      msg: "",
-
-      /**
-       * Câu thông báo hiển thị trong dialog xác nhận. Mặc định là "".
-       */
-      msgConfirm: "",
 
       /**
        * Check mã nhân viên có bị trùng hay không. True -trùng mã , False - không trùng mã.
@@ -399,16 +397,16 @@ export default {
      * Hàm đóng dialog thông báo.
      */
     onCloseAlertDialog() {
-      this.isShowAlertDialog = false;
-      this.msg = "";
+      this.alertDialogConfig.isShow = false;
+      this.alertDialogConfig.msg = "";
     },
 
     /**
      * Hàm show dialog thông báo với msg.
      */
     showAlertDialogWithMsg(msg) {
-      this.msg = msg;
-      this.isShowAlertDialog = true;
+      this.alertDialogConfig.msg = msg;
+      this.alertDialogConfig.isShow = true;
     },
 
     /**
@@ -488,16 +486,16 @@ export default {
      * Hàm đóng dialog xác nhận.
      */
     onCloseConfirmDialog() {
-      this.isShowConfirmDialog = false;
-      this.msgConfirm = "";
+      this.alertDialogConfig.isShow = false;
+      this.alertDialogConfig.msg = "";
     },
 
     /**
      * Hàm hiển thị dialog xác nhận với một câu thông báo msg.
      */
     showConfirmDialogWithMsg(msg) {
-      this.msgConfirm = msg;
-      this.isShowConfirmDialog = true;
+      this.alertDialogConfig.msg = msg;
+      this.alertDialogConfig.isShow = true;
     },
 
     /**

@@ -11,7 +11,7 @@
     <td>{{ employee.employeeCode }}</td>
     <td>{{ employee.employeeName }}</td>
     <td>{{ genderName }}</td>
-    <td style="text-align: center">{{ dateOfBirth(employee.dateOfBirth) }}</td>
+    <td>{{ dateOfBirth(employee.dateOfBirth) }}</td>
 
     <td>{{ employee.identityNumber }}</td>
     <td>{{ employee.employeePosition }}</td>
