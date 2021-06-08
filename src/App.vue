@@ -549,6 +549,11 @@ a {
   &.dialog-hide {
     display: none;
   }
+  .dialog-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
   .dialog-content {
     width: 900px;
     margin: 150px auto;

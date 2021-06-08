@@ -1,5 +1,6 @@
 <template>
-  <div class="dialog" :class="{ 'dialog-hide': !show }">
+  <div class="dialog">
+    <div class="dialog-background" @click="onClickCloseDialog"></div>
     <div class="dialog-content zoomIn">
       <div class="dialog-header">
         <div class="row ml-2">
@@ -445,13 +446,6 @@ export default {
   },
   props: {
     /**
-     * Xác định trạng thái của dialog.
-     * true: hiện
-     * false: ẩn
-     */
-    show: Boolean,
-
-    /**
      * nhân viên đang được chỉnh sửa.
      * Lưu ý: Khi thêm mới: nhân viên rỗng.
      */
@@ -473,18 +467,6 @@ export default {
 
   data() {
     return {
-      /**
-       * Option trong combobox giới tính.
-       */
-      genders: [
-        { value: 0, text: "Nữ" },
-        { value: 1, text: "Nam" },
-        {
-          value: null,
-          text: "Không xác định",
-        },
-      ],
-
       /**
        * Thông tin lỗi.
        */
@@ -531,25 +513,18 @@ export default {
       return valid;
     },
     /**
-     * Hàm gọi khi click vào button lưu.
+     * Hàm gọi khi click vào button Cất.
      */
     onClickSave() {
-      // let valid = true;
-      // this.onValidEmployeeCode();
-      // this.onValidFullName();
-      // this.onValidDepartment();
-      // for (let err in this.errors) {
-      //   if (this.errors[err]) {
-      //     valid = false;
-      //     break;
-      //   }
-      // }
       let valid = this.validateBeforeSave();
       if (valid) {
         this.$emit("onSave");
       }
     },
 
+    /**
+     * Hàm gọi khi click vào button Cất và thêm.
+     */
     onClickSaveAndAdd() {
       let valid = this.validateBeforeSave();
       if (valid) {
@@ -603,12 +578,13 @@ export default {
 
     /**
      * Hàm format date về dạng YYYY-MM-DD
-     * CreatedBy: dqdat (25/05/2021)
      */
     formatYYYMMDD(dateStr) {
       return dateStr ? dayjs(dateStr).format("YYYY-MM-DD") : null;
     },
-
+    /**
+     * Hàm disabled ngày tháng năm lớn hơn hiện tại
+     */
     isDateDisabled(date) {
       return date > new Date();
     },
@@ -619,7 +595,6 @@ export default {
 
     /**
      * sự kiện nhấn phím
-     * CreatedBy: dqdat 01/06/2021
      */
     onKeyDownListener(e) {
       if (e.keyCode == 27) {
@@ -654,20 +629,13 @@ export default {
       },
     },
   },
-  watch: {
-    show: function (val) {
-      if (val) {
-        this.$nextTick(function () {
-          this.$refs.employeeCode.$el.focus();
-        });
-        document.addEventListener("keydown", this.onKeyDownListener);
-      } else {
-        document.removeEventListener("keydown", this.onKeyDownListener);
-      }
-    },
-  },
+
   mounted() {
     this.$refs.employeeCode.$el.focus();
+    document.addEventListener("keydown", this.onKeyDownListener);
+  },
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.onKeyDownListener);
   },
 };
 </script>

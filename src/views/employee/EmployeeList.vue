@@ -109,7 +109,7 @@
       </div>
     </div>
     <DialogEmployee
-      :show="employeeDialogConfig.isShow"
+      v-if="employeeDialogConfig.isShow"
       :employee.sync="employeeDialogConfig.employee"
       :optionDepartment="optionDepartment.slice(1)"
       @onClose="onClickBtnCloseEmployeeDialog"
@@ -117,13 +117,13 @@
       @onSaveAndAdd="onClickBtnSaveAndAdd"
     />
     <AlertDialog
-      :show="alertDialogConfig.isShow"
+      v-if="alertDialogConfig.isShow"
       :msg="alertDialogConfig.msg"
       :type="alertDialogConfig.type"
       @onClose="onCloseAlertDialog"
     />
     <ConfirmDialog
-      :show="confirmDialogConfig.isShow"
+      v-if="confirmDialogConfig.isShow"
       :msg="confirmDialogConfig.msg"
       @onClose="onCloseConfirmDialog"
       @onOk="delEmployee"

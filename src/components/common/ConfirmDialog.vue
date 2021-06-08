@@ -1,5 +1,6 @@
 <template>
-  <div class="dialog" :class="{ 'dialog-hide': !show }">
+  <div class="dialog">
+    <div class="dialog-background" @click="closeDialog"></div>
     <div class="dialog-content zoomIn" style="width: 450px">
       <div class="flex-row-align-center" style="padding: 32px 24px 0 24px">
         <div class="icon icon-warning-48" style="width: 70px"></div>
@@ -31,13 +32,6 @@ export default {
     Button,
   },
   props: {
-    /**
-     * Prop xác định trạng thái của dialog.
-     * true: hiện
-     * false: ẩn
-     */
-    show: Boolean,
-
     /**
      * Lời nhắn.
      */
