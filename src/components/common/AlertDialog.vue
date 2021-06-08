@@ -1,6 +1,6 @@
 <template>
   <div class="dialog" :class="{ 'dialog-hide': !show }">
-    <div class="dialog-content zoomIn" style="width: 450px">
+    <div class="dialog-content zoomIn" style="width: 500px">
       <div class="flex-row-align-center" style="padding: 32px 24px 0 24px">
         <div class="icon" :class="classType"></div>
         <div style="margin-left: 16px">
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Button from "./common/Button";
+import Button from "./Button";
 export default {
   name: "AlertDialog",
   components: {

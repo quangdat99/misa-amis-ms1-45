@@ -199,6 +199,9 @@ a {
   &.icon-warning-48 {
     @include icon-bind(-592px -456px, 48px);
   }
+  &.icon-question {
+    @include icon-bind(-826px -456px, 48px);
+  }
 }
 
 // Navbar

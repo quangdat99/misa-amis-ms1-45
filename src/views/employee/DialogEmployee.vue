@@ -186,7 +186,7 @@
           </div>
 
           <div class="col-6 pr-2">
-            <ComboboxAutoComplete
+            <!-- <ComboboxAutoComplete
               :important="true"
               :errorMsg="errors.employeeDepartment"
               @updateEmployeeDepartmentName="updateEmployeeDepartmentName"
@@ -194,8 +194,8 @@
               v-model="DepartmentName"
               :option="optionDepartment.slice(1)"
               @blur="onValidDepartment"
-            />
-            <!-- <Combobox
+            /> -->
+            <Combobox
               label="Đơn vị"
               :important="true"
               :option="optionDepartment"
@@ -203,7 +203,7 @@
               v-model="employee.employeeDepartmentId"
               @change="onValidDepartment"
               style="padding-right: 8px"
-            /> -->
+            />
           </div>
           <div class="col-6">
             <div class="row">
@@ -424,7 +424,8 @@ import "vue-date-pick/dist/vueDatePick.css";
 import Input from "../../components/common/Input";
 
 import IconButton from "../../components/common/IconButton";
-import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
+// import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
+import Combobox from "../../components/Combobox";
 
 import Button from "../../components/common/Button";
 import Checkbox from "../../components/common/Checkbox";
@@ -435,7 +436,8 @@ export default {
   components: {
     DatePicker,
     Input,
-    ComboboxAutoComplete,
+    // ComboboxAutoComplete,
+    Combobox,
     Button,
     IconButton,
     Checkbox,

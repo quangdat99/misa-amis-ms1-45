@@ -99,7 +99,7 @@
                   styleCombobox="width: 210px"
                   :option="optionPage"
                   @change="onChangePageSize"
-                  v-model="limit"
+                  v-model="pageSize"
                 />
               </div>
               <Pagination :page="page" :totalPage="totalPage" />
@@ -109,10 +109,10 @@
       </div>
     </div>
     <DialogEmployee
-      :show="isShowDialogEmployee"
-      :employee.sync="selectedEmployee"
+      :show="employeeDialogConfig.isShow"
+      :employee.sync="employeeDialogConfig.employee"
       :optionDepartment="optionDepartment.slice(1)"
-      @onClose="onCloseDialogEmployee"
+      @onClose="onClickBtnCloseEmployeeDialog"
       @onSave="onClickBtnSave"
       @onSaveAndAdd="onClickBtnSaveAndAdd"
     />
@@ -123,12 +123,18 @@
       @onClose="onCloseAlertDialog"
     />
     <ConfirmDialog
-      :show="alertDialogConfig.isShow"
-      :msg="alertDialogConfig.msg"
+      :show="confirmDialogConfig.isShow"
+      :msg="confirmDialogConfig.msg"
       @onClose="onCloseConfirmDialog"
       @onOk="delEmployee"
     />
     <Loading :show="isShowLoading" />
+    <InformationDialog
+      v-if="infoDialogConfig.isShow"
+      @onClose="infoDialogConfig.isShow = false"
+      @onNegative="onNegativeInfoDialog"
+      @onPositive="onPositiveInfoDialog"
+    />
   </div>
 </template>
 
@@ -148,12 +154,13 @@ import Input from "../../components/common/Input.vue";
 import Checkbox from "../../components/common/Checkbox";
 import Combobox from "../../components/Combobox";
 import Loading from "../../components/common/Loading";
-import AlertDialog from "../../components/AlertDialog";
+import AlertDialog from "../../components/common/AlertDialog";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 import Pagination from "../../components/common/Pagination";
 
 import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
+import InformationDialog from "./InformationDialog.vue";
 
 import axios from "axios";
 
@@ -170,6 +177,7 @@ export default {
     ConfirmDialog,
     EmployeeItem,
     DialogEmployee,
+    InformationDialog,
     Pagination,
   },
 
@@ -181,9 +189,24 @@ export default {
   data() {
     return {
       /**
-       * Thông tin nhân viên đang được chọn để thao tác
+       * Config của dialog info
+       * CreatedBy: dqdat 03/06/2021
        */
-      employeeModify: null,
+      infoDialogConfig: {
+        isShow: false,
+      },
+
+      /**
+       * Config của dialog nhân viên
+       * CreatedBy: dqdat 01/06/2021
+       */
+      employeeDialogConfig: {
+        isShow: false,
+        employee: {},
+        employeeOrigin: {},
+        isInsert: true,
+        errors: null,
+      },
 
       /**
        * Config của dialog xác nhận
@@ -224,35 +247,20 @@ export default {
       hasData: true,
 
       /**
-       * Dữ liệu nhân viên đang được chọn. Biến này dùng để truyền qua component con dialog thêm và sửa.
-       * Mặc định là thêm mới - Nhân viên rỗng.
+       * Số bản ghi lọc theo filter.
        */
-      selectedEmployee: {},
+      countEmloyees: 0,
 
       /**
-       * Id của nhân viên đang được chọn từ bảng. Id này dùng xác định xóa nhân viên cần xóa.
-       * Mặc định là null.
+       * Thông tin nhân viên đang được chọn để thao tác
        */
-      selectedEmployeeId: null,
-
-      /**
-       * Mã của nhân viên đang được chọn từ bảng. mã này dùng check trùng mã.
-       * Mặc định là null.
-       */
-      selectedEmployeeCode: null,
+      employeeModify: {},
 
       /**
        * Filter danh sách nhân viên theo mã hoặc tên hoặc số điện thoại. Mặc định là "".
        */
       employeeFilter: "",
       timeOut: null,
-
-      /**
-       * Biến xác định trạng thái của dialog thêm và sửa.
-       * true: hiện
-       * false: ẩn
-       */
-      isShowDialogEmployee: false,
 
       /**
        * Biến xác định trạng thái của Loading.
@@ -262,14 +270,9 @@ export default {
       isShowLoading: false,
 
       /**
-       * Check mã nhân viên có bị trùng hay không. True -trùng mã , False - không trùng mã.
-       */
-      checkEmployeeCodeExist: true,
-
-      /**
        * Số lượng nhân viên trên 1 trang. Mặc định là 10.
        */
-      limit: 20,
+      pageSize: 20,
 
       /**
        * Trang hiện tại. Mặc định là 1.
@@ -280,11 +283,6 @@ export default {
        * tổng số trang.
        */
       totalPage: 0,
-
-      /**
-       * Số bản ghi lọc theo filter.
-       */
-      countEmloyees: 0,
     };
   },
   methods: {
@@ -295,7 +293,7 @@ export default {
       getCountEmployees(this.employeeFilter)
         .then((data) => {
           this.countEmloyees = data;
-          this.totalPage = Math.ceil(this.countEmloyees / this.limit);
+          this.totalPage = Math.ceil(this.countEmloyees / this.pageSize);
         })
         .catch();
     },
@@ -306,7 +304,7 @@ export default {
       this.isShowLoading = true;
       getEmployees({
         page: this.page,
-        pageSize: this.limit,
+        pageSize: this.pageSize,
         employeeFilter: this.employeeFilter,
       })
         .then((data) => {
@@ -345,7 +343,7 @@ export default {
      */
     resetFilter() {
       this.page = 1;
-      this.limit = 20;
+      this.pageSize = 20;
       this.employeeFilter = "";
       this.hasData = true;
     },
@@ -363,11 +361,22 @@ export default {
      * Hàm click button thêm nhân viên.
      */
     onClickAddEmployee() {
-      if (this.isShowDialogEmployee == false) {
+      if (this.employeeDialogConfig.isShow == false) {
         getNewEmployeeCode()
           .then((data) => {
-            this.selectedEmployee.employeeCode = data;
-            this.showDialogEmployee();
+            //this.employeeModify.employeeCode = data;
+            //this.showDialogEmployee();
+            this.employeeDialogConfig = {
+              isShow: true,
+              employee: {
+                employeeCode: data,
+              },
+              isInsert: true,
+              errors: null,
+            };
+            this.employeeDialogConfig.employeeOrigin = {
+              ...this.employeeDialogConfig.employee,
+            };
           })
           .catch();
       }
@@ -379,9 +388,17 @@ export default {
     onDblClickEmployeeItem(employeeId) {
       getEmployee(employeeId)
         .then((data) => {
-          this.selectedEmployee = data;
-          this.selectedEmployeeCode = this.selectedEmployee.employeeCode;
-          this.showDialogEmployee();
+          //this.employeeModify = data;
+          // this.showDialogEmployee();
+          this.employeeDialogConfig = {
+            isShow: true,
+            employee: data,
+            isInsert: false,
+            errors: null,
+          };
+          this.employeeDialogConfig.employeeOrigin = {
+            ...this.employeeDialogConfig.employee,
+          };
         })
         .catch();
     },
@@ -390,7 +407,7 @@ export default {
      * Hàm hiển thị dialog thêm và sửa nhân viên.
      */
     showDialogEmployee() {
-      this.isShowDialogEmployee = true;
+      this.employeeDialogConfig.isShow = true;
     },
 
     /**
@@ -415,23 +432,26 @@ export default {
     async onClickBtnSave() {
       var checkDuplicate;
       await checkEmployeeCodeExist(
-        this.selectedEmployee.employeeCode,
-        this.selectedEmployee.employeeId
+        this.employeeDialogConfig.employee.employeeCode,
+        this.employeeDialogConfig.employee.employeeId
       )
         .then((data) => {
           checkDuplicate = data;
         })
         .catch();
 
-      var isInsert = true;
-      if (this.selectedEmployee.employeeId != null) {
-        isInsert = false;
-      }
+      // var isInsert = true;
+      // if (this.employeeDialogConfig.employee.employeeId != null) {
+      //   isInsert = false;
+      // }
       if (checkDuplicate != 1) {
-        await saveEmployee(this.selectedEmployee, isInsert)
+        await saveEmployee(
+          this.employeeDialogConfig.employee,
+          this.employeeDialogConfig.isInsert
+        )
           .then(() => {
             // thực hiện đóng dialog thêm và sửa nhân viên.
-            this.onCloseDialogEmployee();
+            this.closeEmployeeDialog();
 
             // show dialog thông báo với lời thông báo Lưu thành công.
             this.$toast.success("Cập nhật bản ghi thành công", {
@@ -439,7 +459,7 @@ export default {
             });
 
             // Lấy lại dữ liệu từ api với bộ lọc mặc định.
-            if (isInsert == true) {
+            if (this.employeeDialogConfig.isInsert == true) {
               this.onClickBtnRefresh();
             } else {
               this.getEmployees();
@@ -454,7 +474,7 @@ export default {
         // Nếu trùng thì show dialog thông báo.
         this.showAlertDialogWithMsg(
           "Nhân viên <" +
-            this.selectedEmployee.employeeCode +
+            this.employeeDialogConfig.employee.employeeCode +
             "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại."
         );
       }
@@ -473,36 +493,59 @@ export default {
     },
 
     /**
-     * Hàm đóng dialog thêm và sửa nhân viên.
+     * Hàm đóng dialog nhân viên.
      */
-    onCloseDialogEmployee() {
-      this.isShowDialogEmployee = false;
-      this.selectedEmployee = {};
-      this.selectedEmployeeCode = null;
+    closeEmployeeDialog() {
+      this.employeeDialogConfig = {
+        isShow: false,
+        employee: {},
+        employeeOrigin: {},
+        errors: null,
+        isInsert: true,
+      };
+
+      //this.employeeModify = {};
       this.checkEmployeeCodeExist = true;
+    },
+
+    /**
+     * click button đóng dialog nhân viên
+     * CreatedBy: dqdat 03/06/2021
+     */
+    onClickBtnCloseEmployeeDialog() {
+      for (let key in this.employeeDialogConfig.employee) {
+        if (
+          this.employeeDialogConfig.employeeOrigin[key] !=
+          this.employeeDialogConfig.employee[key]
+        ) {
+          this.infoDialogConfig.isShow = true;
+          return;
+        }
+      }
+      this.closeEmployeeDialog();
     },
 
     /**
      * Hàm đóng dialog xác nhận.
      */
     onCloseConfirmDialog() {
-      this.alertDialogConfig.isShow = false;
-      this.alertDialogConfig.msg = "";
+      this.confirmDialogConfig.isShow = false;
+      this.confirmDialogConfig.msg = "";
     },
 
     /**
      * Hàm hiển thị dialog xác nhận với một câu thông báo msg.
      */
     showConfirmDialogWithMsg(msg) {
-      this.alertDialogConfig.msg = msg;
-      this.alertDialogConfig.isShow = true;
+      this.confirmDialogConfig.msg = msg;
+      this.confirmDialogConfig.isShow = true;
     },
 
     /**
      * Sự kiện click button xóa nhân viên.
      */
     btnDelEmployee(employeeId, employeeCode) {
-      this.selectedEmployeeId = employeeId;
+      this.employeeModify.employeeId = employeeId;
       this.showConfirmDialogWithMsg(
         "Bạn có chắc chắn muốn xóa nhân viên <" + employeeCode + "> không ?",
         employeeId
@@ -513,8 +556,8 @@ export default {
      * Hàm xóa nhân viên đang được chọn.
      */
     delEmployee() {
-      if (this.selectedEmployeeId) {
-        delEmployee(this.selectedEmployeeId)
+      if (this.employeeModify.employeeId) {
+        delEmployee(this.employeeModify.employeeId)
           .then(() => {
             // hiển thị dialog thông báo với câu thông báo.
             this.$toast.success("Xóa bản ghi thành công", {
@@ -557,8 +600,23 @@ export default {
       }, 300);
     },
 
-    updateEmployeeDepartmentName(val) {
-      this.selectedEmployee.employeeDepartmentName = val;
+    /**
+     * click button Không trong info dialog.
+     * CreatedBy: dqdat 03/06/2021
+     */
+    onNegativeInfoDialog() {
+      this.infoDialogConfig.isShow = false;
+      this.closeEmployeeDialog();
+    },
+
+    /**
+     * click button Có trong info dialog
+     * CreatedBy: dqdat 03/06/2021
+     */
+    onPositiveInfoDialog() {
+      this.infoDialogConfig.isShow = false;
+      //this.$refs.employeeDialogRef.validateBeforeSave();
+      this.onClickBtnSave();
     },
   },
   watch: {

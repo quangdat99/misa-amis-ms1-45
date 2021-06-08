@@ -99,6 +99,8 @@ export default {
         return "Nữ";
       } else if (this.employee.gender == 1) {
         return "Nam";
+      } else if (this.employee.gender == 2) {
+        return "Khác";
       } else {
         return "Không xác định";
       }
