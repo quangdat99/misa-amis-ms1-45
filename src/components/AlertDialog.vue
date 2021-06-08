@@ -1,12 +1,11 @@
 <template>
   <div class="dialog" :class="{ 'dialog-hide': !show }">
-    <div class="dialog-content zoomIn">
-      <div class="dialog-header">
-        <div class="dialog-title">THÔNG BÁO</div>
-        <div class="dialog-button-close" @click="closeDialog">&#x2715;</div>
-      </div>
-      <div class="dialog-body">
-        {{ msg }}
+    <div class="dialog-content zoomIn" style="width: 450px">
+      <div class="flex-row-align-center" style="padding: 32px 24px 0 24px">
+        <div class="icon icon-warning-48"></div>
+        <div style="margin-left: 16px">
+          {{ msg }}
+        </div>
       </div>
       <div class="divide"></div>
 
@@ -47,79 +46,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.dialog {
-  overflow: auto;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 120;
-}
-
-.dialog.dialog-hide {
-  display: none;
-}
-
-.dialog .dialog-content {
-  width: 400px;
-  background-color: #fff;
-  position: relative;
-  border-radius: 4px;
-}
-
-.dialog .dialog-header {
-  padding: 16px;
-}
-
-.dialog .dialog-header .dialog-title {
-  font-size: 15px;
-  font-family: Google-Sans-Bold;
-}
-
-.dialog .dialog-header .dialog-button-close {
-  font-size: 16px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  text-align: center;
-  cursor: pointer;
-  border-bottom-left-radius: 4px;
-}
-
-.dialog .dialog-header .dialog-button-close:hover {
-  background-color: #e5e5e5;
-}
-
-.dialog .dialog-body {
-  padding: 30px;
-  padding-top: 0px;
-  padding-left: 40px;
-}
-
-.dialog .divide {
-  border-top: 1px solid #e0e0e0;
-  margin: 0px 24px 12px 24px;
-}
-
-.dialog .dialog-footer {
-  padding-right: 24px;
-  height: 60px;
-  background-color: #fff;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  border-radius: 4px;
-  padding-bottom: 15px;
-}
-</style>

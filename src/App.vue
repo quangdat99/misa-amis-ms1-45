@@ -126,7 +126,7 @@ a {
 
 .zoomIn {
   animation-name: zoomIn;
-  animation-duration: 0.3s;
+  animation-duration: 0.2s;
 }
 
 @keyframes rotateIn {
@@ -582,8 +582,8 @@ a {
       }
     }
     .divide {
-      border-top: 1px solid #e0e0e0;
-      margin: 32px 30px 12px 28px;
+      border-top: 1px solid #ccc;
+      margin: 32px 26px 12px 24px;
     }
     .dialog-footer {
       padding-right: 24px;
@@ -595,7 +595,7 @@ a {
       align-items: center;
       .dialog-footer-left {
         position: absolute;
-        left: 27px;
+        left: 24px;
       }
     }
   }
