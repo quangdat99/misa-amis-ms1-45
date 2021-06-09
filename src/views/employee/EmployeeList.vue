@@ -96,10 +96,15 @@
             <div class="footer-right">
               <div class="combobox">
                 <Combobox
-                  styleCombobox="width: 210px"
-                  :option="optionPage"
-                  @change="onChangePageSize"
-                  v-model="pageSize"
+                  :value.sync="pageSize"
+                  :suggestions="[
+                    { value: 10, text: '10 bản ghi trên trang' },
+                    { value: 20, text: '20 bản ghi trên trang' },
+                    { value: 30, text: '30 bản ghi trên trang' },
+                    { value: 50, text: '50 bản ghi trên trang' },
+                    { value: 100, text: '100 bản ghi trên trang' },
+                  ]"
+                  @onChange="onChangePageSize"
                 />
               </div>
               <Pagination :page="page" :totalPage="totalPage" />
@@ -148,15 +153,16 @@ import {
   checkEmployeeCodeExist,
   saveEmployee,
 } from "../../api/employee.js";
+
 import IconButton from "../../components/common/IconButton";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input.vue";
 import Checkbox from "../../components/common/Checkbox";
-import Combobox from "../../components/Combobox";
 import Loading from "../../components/common/Loading";
 import AlertDialog from "../../components/common/AlertDialog";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 import Pagination from "../../components/common/Pagination";
+import Combobox from "../../components/common/Combobox";
 
 import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
@@ -172,13 +178,13 @@ export default {
     Loading,
     Input,
     Checkbox,
-    Combobox,
     AlertDialog,
     ConfirmDialog,
     EmployeeItem,
     DialogEmployee,
     InformationDialog,
     Pagination,
+    Combobox,
   },
 
   created() {
@@ -257,7 +263,7 @@ export default {
       employeeModify: {},
 
       /**
-       * Filter danh sách nhân viên theo mã hoặc tên hoặc số điện thoại. Mặc định là "".
+       * Từ khóa để lọc danh sách nhân viên
        */
       employeeFilter: "",
       timeOut: null,
@@ -343,7 +349,6 @@ export default {
      */
     resetFilter() {
       this.page = 1;
-      this.pageSize = 20;
       this.employeeFilter = "";
       this.hasData = true;
     },
@@ -592,6 +597,7 @@ export default {
      * Hàm filter khi change pageSize combobox
      */
     onChangePageSize() {
+      //this.pageSize = pageSize;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.page = 1;

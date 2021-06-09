@@ -186,6 +186,9 @@ a {
   &.icon-chevron-down-blue {
     @include icon-bind(-896px -359px, 16px);
   }
+  &.icon-arrow-dropdown {
+    @include icon-bind(-560px -359px, 16px);
+  }
 
   // icon-dialog
   &.icon-help {
@@ -780,6 +783,72 @@ a {
     &:hover {
       background-color: #f4f5f6;
     }
+  }
+}
+
+// dropdown
+.dropdown {
+  position: relative;
+
+  .dropdown-content {
+    min-width: 100%;
+    position: absolute;
+    background-color: $color-white;
+    border: 1px solid #ccc;
+    white-space: nowrap;
+    z-index: 20;
+    min-width: 100%☺;
+
+    &.reserve {
+      top: auto;
+      bottom: 100%;
+    }
+
+    &.hide {
+      display: none;
+    }
+
+    &.right {
+      right: 0;
+    }
+
+    .dropdown-item {
+      height: 32px;
+      line-height: 32px;
+      padding-left: 12px;
+      padding-right: 12px;
+
+      &:hover {
+        background-color: #f4f5f6;
+        color: #2ca01c;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+// autocomplete
+.autocomplete {
+  .icon-dropdown-box {
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    top: 1px;
+    right: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: #f4f5f6;
+      border-left: none;
+      border-radius: 4px;
+    }
+  }
+
+  .active {
+    background-color: #2ca01c;
+    color: $color-white;
   }
 }
 
