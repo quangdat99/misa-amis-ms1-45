@@ -116,7 +116,7 @@
     <DialogEmployee
       v-if="employeeDialogConfig.isShow"
       :employee.sync="employeeDialogConfig.employee"
-      :optionDepartment="optionDepartment.slice(1)"
+      :optionDepartment="optionDepartment"
       @onClose="onClickBtnCloseEmployeeDialog"
       @onSave="onClickBtnSave"
       @onSaveAndAdd="onClickBtnSaveAndAdd"
@@ -154,6 +154,8 @@ import {
   saveEmployee,
 } from "../../api/employee.js";
 
+import { getEmployeeDepartments } from "../../api/employeeDepartment.js";
+
 import IconButton from "../../components/common/IconButton";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input.vue";
@@ -167,8 +169,6 @@ import Combobox from "../../components/common/Combobox";
 import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
 import InformationDialog from "./InformationDialog.vue";
-
-import axios from "axios";
 
 export default {
   name: "EmployeeList",
@@ -190,7 +190,7 @@ export default {
   created() {
     this.getCountEmployees();
     this.getEmployees();
-    this.fetchDepartments();
+    this.getEmployeeDepartments();
   },
   data() {
     return {
@@ -233,7 +233,7 @@ export default {
       /**
        * các option cho combobox đơn vị.
        */
-      optionDepartment: [{ value: "", text: "Tất cả phòng ban" }],
+      optionDepartment: [],
 
       /**
        * các option cho combobox phân trang.
@@ -328,20 +328,15 @@ export default {
     /**
      * Hàm lấy tất cả các phòng ban.
      */
-    fetchDepartments() {
-      axios
-        .get("https://localhost:44366/api/v1/EmployeeDepartments")
-        .then((res) => res.data)
+    getEmployeeDepartments() {
+      getEmployeeDepartments()
         .then((data) => {
-          for (let d of data) {
-            let optDepartment = {
-              value: d.employeeDepartmentId,
-              text: d.employeeDepartmentName,
-            };
-            this.optionDepartment.push(optDepartment);
-          }
+          this.optionDepartment = data.map((d) => ({
+            value: d.employeeDepartmentId,
+            text: d.employeeDepartmentName,
+          }));
         })
-        .catch((err) => console.log(err));
+        .catch();
     },
 
     /**

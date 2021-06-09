@@ -86,11 +86,11 @@
                     "
                     @blur="onValidFullName"
                   />
-                  <span
+                  <!-- <span
                     v-if="errors && errors.employeeName"
                     class="text-error"
                     >{{ errors && errors.employeeName }}</span
-                  >
+                  > -->
                 </div>
               </div>
             </div>
@@ -187,24 +187,32 @@
           </div>
 
           <div class="col-6 pr-2">
-            <!-- <ComboboxAutoComplete
-              :important="true"
-              :errorMsg="errors.employeeDepartment"
-              @updateEmployeeDepartmentName="updateEmployeeDepartmentName"
-              label="Đơn vị"
-              v-model="DepartmentName"
-              :option="optionDepartment.slice(1)"
-              @blur="onValidDepartment"
-            /> -->
-            <Combobox
-              label="Đơn vị"
-              :important="true"
-              :option="optionDepartment"
-              :errorMsg="errors.employeeDepartment"
-              v-model="employee.employeeDepartmentId"
-              @change="onValidDepartment"
-              style="padding-right: 8px"
-            />
+            <div class="con-input">
+              <label class="label-input"
+                >Đơn vị <span style="color: #f20">*</span></label
+              >
+              <ComboboxAutoComplete
+                :value="employee && employee.employeeDepartmentId"
+                :inputAttributes="{
+                  class: {
+                    'has-error': errors && errors.employeeDepartmentId,
+                  },
+                }"
+                :suggestions="optionDepartment"
+                @update:value="
+                  $emit('update:employee', {
+                    ...employee,
+                    employeeDepartmentId: $event,
+                  })
+                "
+                @blur="onValidDepartment"
+              />
+              <!-- <span
+                v-if="errors && errors.employeeDepartmentId"
+                class="text-error"
+                >{{ errors && errors.employeeDepartmentId }}</span
+              > -->
+            </div>
           </div>
           <div class="col-6">
             <div class="row">
@@ -425,8 +433,7 @@ import "vue-date-pick/dist/vueDatePick.css";
 import Input from "../../components/common/Input";
 
 import IconButton from "../../components/common/IconButton";
-// import ComboboxAutoComplete from "../../components/ComboboxAutoComplete";
-import Combobox from "../../components/Combobox";
+import ComboboxAutoComplete from "../../components/common/ComboboxAutoComplete";
 
 import Button from "../../components/common/Button";
 import Checkbox from "../../components/common/Checkbox";
@@ -437,8 +444,7 @@ export default {
   components: {
     DatePicker,
     Input,
-    // ComboboxAutoComplete,
-    Combobox,
+    ComboboxAutoComplete,
     Button,
     IconButton,
     Checkbox,
@@ -458,11 +464,6 @@ export default {
      * Option trong combobox Đơn vị.
      */
     optionDepartment: Array,
-
-    /**
-     * Option trong combobox vị trí.
-     */
-    optionPosition: Array,
   },
 
   data() {
@@ -473,7 +474,7 @@ export default {
       errors: {
         employeeCode: "",
         employeeName: "",
-        employeeDepartment: "",
+        employeeDepartmentId: "",
       },
 
       /**
@@ -498,6 +499,7 @@ export default {
       },
     };
   },
+
   methods: {
     validateBeforeSave() {
       let valid = true;
@@ -558,10 +560,10 @@ export default {
      * valid đơn vị của nhân viên .
      */
     onValidDepartment() {
-      if (this.employee && this.employee.employeeDepartmentName) {
-        this.errors.employeeDepartment = "";
+      if (this.employee && this.employee.employeeDepartmentId) {
+        this.errors.employeeDepartmentId = "";
       } else {
-        this.errors.employeeDepartment = "Đơn vị không được để trống.";
+        this.errors.employeeDepartmentId = "Đơn vị không được để trống.";
       }
     },
 
@@ -589,10 +591,6 @@ export default {
       return date > new Date();
     },
 
-    updateEmployeeDepartmentName(val) {
-      this.employee.employeeDepartmentName = val;
-    },
-
     /**
      * sự kiện nhấn phím
      */
@@ -614,19 +612,6 @@ export default {
         this.onClickSaveAndAdd();
         e.preventDefault();
       }
-    },
-  },
-  computed: {
-    /**
-     * Computed ngày sinh nhân viên.
-     */
-    DepartmentName: {
-      get() {
-        return this.employee.employeeDepartmentName;
-      },
-      set(val) {
-        this.$emit("input", val);
-      },
     },
   },
 

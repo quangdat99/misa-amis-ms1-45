@@ -714,8 +714,8 @@ a {
     padding-right: 28px;
   }
 
-  &.has-error:not(:focus) {
-    border-color: #f20;
+  &.has-error {
+    border-color: #f20 !important;
   }
 }
 
@@ -811,17 +811,27 @@ a {
     &.right {
       right: 0;
     }
+    .dropdown-item-empty {
+      background-color: #f7f7f7;
+      color: #575757;
+      height: 40px;
+      line-height: 40px;
+      padding-left: 12px;
+      padding-right: 12px;
+      text-align: center;
+      border: 1px solid rgb(197, 197, 197);
+    }
 
     .dropdown-item {
       height: 32px;
       line-height: 32px;
       padding-left: 12px;
       padding-right: 12px;
+      cursor: pointer;
 
-      &:hover {
+      &:hover:not(.active) {
         background-color: #f4f5f6;
         color: #2ca01c;
-        cursor: pointer;
       }
     }
   }
