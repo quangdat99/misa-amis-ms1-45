@@ -79,12 +79,26 @@
               />
             </tbody>
           </table>
-          <div v-if="!hasData">
+          <div
+            v-if="!hasData"
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              position: sticky;
+              left: 0;
+            "
+          >
+            <img
+              src="../../assets/bg_report_nodata.svg"
+              alt="Không có dữ liệu"
+              style="margin: 50px auto"
+            />
             <div
               class="has-text-center"
-              style="font-size: 15px; font-weight: bold; padding: 100px"
+              style="font-size: 15px; font-weight: bold; margin-bottom: 80px"
             >
-              Không có dữ liệu.
+              Không có dữ liệu
             </div>
           </div>
           <div class="footer" v-if="employees.length != 0">
