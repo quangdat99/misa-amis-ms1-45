@@ -121,7 +121,7 @@
                   @onChange="onChangePageSize"
                 />
               </div>
-              <Pagination :page="page" :totalPage="totalPage" />
+              <Pagination :page.sync="page" :totalPage="totalPage" />
             </div>
           </div>
         </div>
@@ -725,18 +725,8 @@ export default {
     },
   },
   watch: {
-    "$route.query": function (val) {
-      if (val) {
-        this.page = parseInt(val.page) || 1;
-      } else {
-        this.page = 1;
-      }
+    page: function () {
       this.getEmployees();
-    },
-    page: function (val) {
-      if (val == 1) {
-        this.$router.replace({ query: null });
-      }
     },
   },
 };

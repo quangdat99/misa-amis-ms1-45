@@ -1,49 +1,49 @@
 <template>
   <div class="pagination">
-    <router-link
-      :to="'/employee?page=' + (page - 1)"
+    <div
+      @click="$emit('update:page', page - 1)"
       v-if="page > 1"
       class="pagination-item"
     >
       <div class="prev-page">Trước</div>
-    </router-link>
+    </div>
 
     <div class="pagination_item disabled-prev" v-if="page == 1">Trước</div>
 
-    <router-link :to="'/employee?page=' + 1" class="pagination-item">
+    <div class="pagination-item" @click="$emit('update:page', 1)">
       <div class="page" :class="{ active: page == 1 }">1</div>
-    </router-link>
+    </div>
 
     <div class="three-dot" v-if="page > 4">...</div>
 
-    <router-link
+    <div
       v-for="n in rangePage"
       :key="n"
       class="pagination-item"
-      :to="'/employee?page=' + n"
+      @click="$emit('update:page', n)"
     >
       <div class="page" :class="{ active: n == page }">{{ n }}</div>
-    </router-link>
+    </div>
 
     <div class="three-dot" v-if="page < totalPage - 3">...</div>
 
-    <router-link
+    <div
       v-if="totalPage > 1"
-      :to="'/employee?page=' + totalPage"
       class="pagination-item"
+      @click="$emit('update:page', totalPage)"
     >
       <div class="page" :class="{ active: page == totalPage }">
         {{ totalPage }}
       </div>
-    </router-link>
+    </div>
 
-    <router-link
-      :to="'/employee?page=' + (page + 1)"
+    <div
+      @click="$emit('update:page', page + 1)"
       v-if="page < totalPage"
       class="pagination-item"
     >
       <div class="next-page">Sau</div>
-    </router-link>
+    </div>
     <div class="pagination_item disabled-next" v-if="page == totalPage">
       Sau
     </div>
