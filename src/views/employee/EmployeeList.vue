@@ -130,11 +130,12 @@
       @onClose="onCloseAlertDialog"
     />
 
-    <EmployeeTableOption
+    <OptionTableEmployee
       v-if="employeeTableOptionConfig.isShow"
       v-bind="{ ...employeeTableOptionConfig }"
       @onClose="closeEmployeeTableOption"
       @onClickBtnDel="onClickBtnDel"
+      @onClickDuplicate="onClickDuplicate"
     />
 
     <ConfirmDialog
@@ -179,7 +180,7 @@ import Combobox from "../../components/common/Combobox";
 import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
 import InformationDialog from "./InformationDialog.vue";
-import EmployeeTableOption from "./EmployeeTableOption.vue";
+import OptionTableEmployee from "./OptionTableEmployee.vue";
 
 export default {
   name: "EmployeeList",
@@ -194,7 +195,7 @@ export default {
     EmployeeItem,
     DialogEmployee,
     InformationDialog,
-    EmployeeTableOption,
+    OptionTableEmployee,
     Pagination,
     Combobox,
   },
@@ -344,7 +345,7 @@ export default {
             this.hasData = false;
           }
         })
-        .catch((err) => console.log(err));
+        .catch();
     },
 
     /**
@@ -489,14 +490,12 @@ export default {
               this.getEmployees();
             }
           })
-          .catch((err) => {
+          .catch(() => {
             // show dialog thông báo khi lưu thất bại.
             this.$toast.error("Lưu thất bại", { position: "top-right" });
-            console.log(err);
           });
       } else {
         // Nếu trùng thì show dialog thông báo.
-
         this.alertDialogConfig = {
           isShow: true,
           msg:
@@ -562,7 +561,7 @@ export default {
     },
 
     /**
-     * Sự kiện click button xóa nhân viên.
+     * click button xóa nhân viên.
      */
     onClickBtnDel() {
       this.employeeTableOptionConfig = {
@@ -575,6 +574,36 @@ export default {
           isShow: true,
           msg: `Bạn có chắc chắn muốn xóa nhân viên <${this.employeeModify.employeeCode}> không?`,
         };
+      }
+    },
+
+    /**
+     * click button nhân bản
+     */
+    onClickDuplicate() {
+      this.employeeTableOptionConfig = {
+        isShow: false,
+        top: 0,
+        left: 0,
+      };
+      if (this.employeeModify) {
+        getEmployee(this.employeeModify.employeeId)
+          .then((employee) => {
+            this.employeeDialogConfig.isInsert = true;
+            this.employeeDialogConfig.employee = employee;
+            return getNewEmployeeCode();
+          })
+          .then((newEmployeeCode) => {
+            this.employeeDialogConfig.employee = {
+              ...this.employeeDialogConfig.employee,
+              employeeCode: newEmployeeCode,
+            };
+            this.employeeDialogConfig.employeeOrigin = {
+              ...this.employeeDialogConfig.employee,
+            };
+            this.employeeDialogConfig.isShow = true;
+          })
+          .catch();
       }
     },
 
@@ -652,7 +681,6 @@ export default {
      * CreatedBy: dqdat 15/055/2021
      */
     toggleTableOption(data) {
-      console.log(data);
       let newLeft = data.left - 100;
       let newTop = data.top + 16;
       let employee = data.employee;

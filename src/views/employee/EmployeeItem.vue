@@ -1,6 +1,5 @@
 <template>
   <tr
-    :class="{ selected: selectedId == employee.employeeId }"
     @dblclick="$emit('dblclick', employee.employeeId)"
     @click="$emit('click', employee.employeeId)"
   >
@@ -21,13 +20,6 @@
     <td>{{ employee.bankBranchName }}</td>
     <td @dblclick.stop>
       <div class="border-left"></div>
-      <!-- <button class="btn-update" @click="onClickBtnEdit">Sửa</button> -->
-      <!-- <select class="btn-option fas fa-caret-down" v-model="selected">
-        <option selected style="display: none"></option>
-        <option value="0">Nhân bản</option>
-        <option value="1">Xóa</option>
-        <option value="2">Ngừng sử dụng</option>
-      </select> -->
       <div class="table-option">
         <Button :color="null" text="Sửa" @click="onClickBtnEdit" />
         <IconButton
@@ -52,25 +44,19 @@ export default {
     Checkbox,
     IconButton,
   },
-  data() {
-    return {
-      /**
-       * Đơn vị ứng với nhân viên.
-       */
-      employeeDepartment: {},
-      selected: "",
-    };
+  props: {
+    /**
+     * Thông tin nhân viên.
+     */
+    employee: { type: Object, default: null },
   },
-  created() {},
   methods: {
     /**
      * Hàm đóng mở dropdown
-     * CreatedBy: dqdat 30/05/2021
      */
     toggleDropdown(event, empl) {
       let left = event.clientX;
       let top = event.clientY;
-      console.log(left, top);
       this.$emit("toggleTableOption", { left, top, employee: empl });
     },
 
@@ -82,21 +68,7 @@ export default {
       return dateStr ? dayjs(dateStr).format("DD/MM/YYYY") : null;
     },
   },
-  name: "EmployeeItem",
-  props: {
-    /**
-     * Thông tin nhân viên.
-     */
-    employee: { type: Object, default: null },
 
-    /**
-     * Id của nhân viên đang được chọn.
-     */
-    selectedId: {
-      type: String,
-      default: null,
-    },
-  },
   computed: {
     /**
      * Computed binđ giới tính. Mặc định là Không xác định.
@@ -125,49 +97,6 @@ export default {
      */
     departmentName: function () {
       return this.employee.employeeDepartmentName || "Không rõ";
-    },
-  },
-  filters: {
-    /**
-     * Filter giúp chuyển date String về dạng DD-MM-YYYY. Mặc định là null.
-     */
-    formatDateOfBirth(dateOfBirth) {
-      if (dateOfBirth) {
-        let date = new Date(dateOfBirth);
-        let dateString =
-          date.getDate() < 10
-            ? "0" + date.getDate().toString()
-            : date.getDate().toString();
-        let monthString =
-          date.getMonth() < 9
-            ? "0" + (date.getMonth() + 1).toString()
-            : (date.getMonth() + 1).toString();
-        let yearString = date.getFullYear();
-        return `${dateString}/${monthString}/${yearString}`;
-      }
-      return "Không xác định";
-    },
-
-    /**
-     * Filter chuyển định dạng tiền tệ. xxx.xxx.xxx
-     */
-    formatSalary(salary) {
-      if (salary) {
-        return new Intl.NumberFormat("vi-VN").format(salary);
-      }
-      return "Không rõ";
-    },
-  },
-  watch: {
-    selected: function (val) {
-      if (val == "1") {
-        this.$emit(
-          "btnDelEmployee",
-          this.employee.employeeId,
-          this.employee.employeeCode
-        );
-        this.selected = "";
-      }
     },
   },
 };
