@@ -5,7 +5,7 @@
     :type="type"
     :placeholder="placeholder"
     :value="value"
-    @input="$emit('input', $event.target.value.trim())"
+    @input="$emit('input', $event.target.value)"
     @blur="$emit('blur')"
   />
 </template>

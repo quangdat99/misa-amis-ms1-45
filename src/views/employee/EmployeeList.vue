@@ -427,7 +427,6 @@ export default {
      * Hàm show dialog thông báo với msg.
      */
     showAlertDialog(alertDialogConfig) {
-      console.log(alertDialogConfig);
       this.alertDialogConfig = {
         isShow: true,
         msg: alertDialogConfig.msg,
@@ -449,10 +448,6 @@ export default {
         })
         .catch();
 
-      // var isInsert = true;
-      // if (this.employeeDialogConfig.employee.employeeId != null) {
-      //   isInsert = false;
-      // }
       if (checkDuplicate != 1) {
         await saveEmployee(
           this.employeeDialogConfig.employee,
@@ -514,7 +509,7 @@ export default {
         employee: {},
         employeeOrigin: {},
         errors: null,
-        isInsert: true,
+        isInsert: null,
       };
 
       //this.employeeModify = {};
