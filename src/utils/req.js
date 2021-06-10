@@ -8,7 +8,7 @@ import { BASE_URL } from './envConst.js';
 // */
 export default axios.create({
     baseURL: BASE_URL,
-    timeout: 5000,
+    timeout: 9000,
     headers: {
         'Content-Type': 'application/json'
     }

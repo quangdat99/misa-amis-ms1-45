@@ -521,6 +521,13 @@ export default {
       let valid = this.validateBeforeSave();
       if (valid) {
         this.$emit("onSave");
+      } else {
+        var values = Object.keys(this.errors).map((k) => this.errors[k]);
+        var alertDialogConfig = {
+          msg: values.find((val) => val != ""),
+          type: "error",
+        };
+        this.$emit("showAlertDialog", alertDialogConfig);
       }
     },
 
@@ -574,6 +581,7 @@ export default {
       this.errors = {
         employeeCode: "",
         employeeName: "",
+        employeeDepartmentId: "",
       };
       this.$emit("onClose");
     },

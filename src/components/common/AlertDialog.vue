@@ -21,7 +21,12 @@
         class="dialog-footer"
         style="justify-content: center"
       >
-        <Button :text="textBtn" color="primary" @click="closeDialog" />
+        <Button
+          :text="textBtn"
+          color="primary"
+          @click="closeDialog"
+          style="margin-left: 12px"
+        />
       </div>
     </div>
   </div>

@@ -114,12 +114,14 @@
       </div>
     </div>
     <DialogEmployee
+      ref="dialogEmployeeRef"
       v-if="employeeDialogConfig.isShow"
       :employee.sync="employeeDialogConfig.employee"
       :optionDepartment="optionDepartment"
       @onClose="onClickBtnCloseEmployeeDialog"
       @onSave="onClickBtnSave"
       @onSaveAndAdd="onClickBtnSaveAndAdd"
+      @showAlertDialog="showAlertDialog"
     />
     <AlertDialog
       v-if="alertDialogConfig.isShow"
@@ -414,16 +416,23 @@ export default {
      * Hàm đóng dialog thông báo.
      */
     onCloseAlertDialog() {
-      this.alertDialogConfig.isShow = false;
-      this.alertDialogConfig.msg = "";
+      this.alertDialogConfig = {
+        isShow: false,
+        msg: "",
+        type: "warning",
+      };
     },
 
     /**
      * Hàm show dialog thông báo với msg.
      */
-    showAlertDialogWithMsg(msg) {
-      this.alertDialogConfig.msg = msg;
-      this.alertDialogConfig.isShow = true;
+    showAlertDialog(alertDialogConfig) {
+      console.log(alertDialogConfig);
+      this.alertDialogConfig = {
+        isShow: true,
+        msg: alertDialogConfig.msg,
+        type: alertDialogConfig.type,
+      };
     },
 
     /**
@@ -472,11 +481,15 @@ export default {
           });
       } else {
         // Nếu trùng thì show dialog thông báo.
-        this.showAlertDialogWithMsg(
-          "Nhân viên <" +
+
+        this.alertDialogConfig = {
+          isShow: true,
+          msg:
+            "Nhân viên <" +
             this.employeeDialogConfig.employee.employeeCode +
-            "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại."
-        );
+            "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại.",
+          type: "warning",
+        };
       }
     },
 
@@ -616,8 +629,7 @@ export default {
      */
     onPositiveInfoDialog() {
       this.infoDialogConfig.isShow = false;
-      //this.$refs.employeeDialogRef.validateBeforeSave();
-      this.onClickBtnSave();
+      this.$refs.dialogEmployeeRef.onClickSave();
     },
   },
   watch: {
