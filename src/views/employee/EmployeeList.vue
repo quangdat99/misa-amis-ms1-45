@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="grid-contain">
-        <div class="grid bg-white">
+        <div class="grid bg-white data">
           <table class="table">
             <thead>
               <tr>
@@ -75,7 +75,7 @@
                 :employee="e"
                 @dblclick="onDblClickEmployeeItem"
                 @updateEmployee="onDblClickEmployeeItem"
-                @btnDelEmployee="btnDelEmployee"
+                @toggleTableOption="toggleTableOption"
               />
             </tbody>
           </table>
@@ -129,13 +129,21 @@
       :type="alertDialogConfig.type"
       @onClose="onCloseAlertDialog"
     />
+
+    <EmployeeTableOption
+      v-if="employeeTableOptionConfig.isShow"
+      v-bind="{ ...employeeTableOptionConfig }"
+      @onClose="closeEmployeeTableOption"
+      @onClickBtnDel="onClickBtnDel"
+    />
+
     <ConfirmDialog
       v-if="confirmDialogConfig.isShow"
       :msg="confirmDialogConfig.msg"
       @onClose="onCloseConfirmDialog"
       @onOk="delEmployee"
     />
-    <Loading :show="isShowLoading" />
+    <Loading v-if="isShowLoading" />
     <InformationDialog
       v-if="infoDialogConfig.isShow"
       @onClose="infoDialogConfig.isShow = false"
@@ -171,6 +179,7 @@ import Combobox from "../../components/common/Combobox";
 import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
 import InformationDialog from "./InformationDialog.vue";
+import EmployeeTableOption from "./EmployeeTableOption.vue";
 
 export default {
   name: "EmployeeList",
@@ -185,6 +194,7 @@ export default {
     EmployeeItem,
     DialogEmployee,
     InformationDialog,
+    EmployeeTableOption,
     Pagination,
     Combobox,
   },
@@ -258,6 +268,16 @@ export default {
        * Số bản ghi lọc theo filter.
        */
       countEmloyees: 0,
+
+      /**
+       * Config của dropdown chức năng table
+       * CreatedBy: dqdat 01/06/2021
+       */
+      employeeTableOptionConfig: {
+        isShow: false,
+        top: 0,
+        left: 0,
+      },
 
       /**
        * Thông tin nhân viên đang được chọn để thao tác
@@ -542,22 +562,20 @@ export default {
     },
 
     /**
-     * Hàm hiển thị dialog xác nhận với một câu thông báo msg.
-     */
-    showConfirmDialogWithMsg(msg) {
-      this.confirmDialogConfig.msg = msg;
-      this.confirmDialogConfig.isShow = true;
-    },
-
-    /**
      * Sự kiện click button xóa nhân viên.
      */
-    btnDelEmployee(employeeId, employeeCode) {
-      this.employeeModify.employeeId = employeeId;
-      this.showConfirmDialogWithMsg(
-        "Bạn có chắc chắn muốn xóa nhân viên <" + employeeCode + "> không ?",
-        employeeId
-      );
+    onClickBtnDel() {
+      this.employeeTableOptionConfig = {
+        isShow: false,
+        top: 0,
+        left: 0,
+      };
+      if (this.employeeModify) {
+        this.confirmDialogConfig = {
+          isShow: true,
+          msg: `Bạn có chắc chắn muốn xóa nhân viên <${this.employeeModify.employeeCode}> không?`,
+        };
+      }
     },
 
     /**
@@ -625,6 +643,45 @@ export default {
     onPositiveInfoDialog() {
       this.infoDialogConfig.isShow = false;
       this.$refs.dialogEmployeeRef.onClickSave();
+    },
+
+    /**
+     * Hàm click vào icon down.
+     * Gán employee đang được chọn và hiển thị dropdown ở phần chức năng
+     * @param {object} data Gồm các thông tin về left, top và thông tin nhân viên
+     * CreatedBy: dqdat 15/055/2021
+     */
+    toggleTableOption(data) {
+      console.log(data);
+      let newLeft = data.left - 100;
+      let newTop = data.top + 16;
+      let employee = data.employee;
+
+      let windowHeight = window.innerHeight;
+
+      if (newTop > windowHeight / 2) {
+        newTop -= 132;
+      }
+
+      this.employeeModify = employee;
+      this.employeeTableOptionConfig = {
+        isShow: true,
+        top: newTop,
+        left: newLeft,
+      };
+    },
+
+    /**
+     * Hàm đóng dropdown chức năng nhân viên
+     * CreatedBy: dqdat 01/06/2021
+     */
+    closeEmployeeTableOption() {
+      this.employeeModify = null;
+      this.employeeTableOptionConfig = {
+        isShow: false,
+        top: 0,
+        left: 0,
+      };
     },
   },
   watch: {

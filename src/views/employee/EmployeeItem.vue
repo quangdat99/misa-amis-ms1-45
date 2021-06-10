@@ -19,19 +19,22 @@
     <td>{{ employee.bankAccountNumber }}</td>
     <td>{{ employee.bankName }}</td>
     <td>{{ employee.bankBranchName }}</td>
-    <td class="center" @dblclick.stop>
+    <td @dblclick.stop>
       <div class="border-left"></div>
-      <button class="btn-update" @click="onClickBtnEdit">Sửa</button>
-      <select class="btn-option fas fa-caret-down" v-model="selected">
+      <!-- <button class="btn-update" @click="onClickBtnEdit">Sửa</button> -->
+      <!-- <select class="btn-option fas fa-caret-down" v-model="selected">
         <option selected style="display: none"></option>
         <option value="0">Nhân bản</option>
         <option value="1">Xóa</option>
         <option value="2">Ngừng sử dụng</option>
-      </select>
-      <!-- <IconButton
-        icon="icon icon-chevron-down-blue"
-        @click="toggleDropdown($event, employee)"
-      /> -->
+      </select> -->
+      <div class="table-option">
+        <Button :color="null" text="Sửa" @click="onClickBtnEdit" />
+        <IconButton
+          icon="icon icon-chevron-down-blue"
+          @click="toggleDropdown($event, employee)"
+        />
+      </div>
     </td>
   </tr>
 </template>
@@ -40,12 +43,14 @@
 import dayjs from "dayjs";
 
 import Checkbox from "../../components/common/Checkbox";
-//import IconButton from "../../components/common/IconButton";
+import IconButton from "../../components/common/IconButton";
+import Button from "../../components/common/Button";
 
 export default {
   components: {
+    Button,
     Checkbox,
-    //IconButton,
+    IconButton,
   },
   data() {
     return {
@@ -65,8 +70,10 @@ export default {
     toggleDropdown(event, empl) {
       let left = event.clientX;
       let top = event.clientY;
+      console.log(left, top);
       this.$emit("toggleTableOption", { left, top, employee: empl });
     },
+
     onClickBtnEdit() {
       this.$emit("updateEmployee", this.employee.employeeId);
     },

@@ -1,5 +1,6 @@
 <template>
-  <div class="dialog" :class="{ 'dialog-hide': !show }">
+  <div class="dialog">
+    <div class="dialog-background"></div>
     <div class="dialog-content"></div>
   </div>
 </template>
