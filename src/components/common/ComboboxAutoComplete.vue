@@ -92,6 +92,7 @@ export default {
     toggleSuggestion() {
       if (this.isShow) {
         this.isShow = false;
+        this.$el.querySelector("input").blur();
       } else {
         this.showSuggestion();
       }
@@ -112,11 +113,11 @@ export default {
       this.$emit("update:value", this.suggestionData[this.current].value);
       this.valueInput = this.suggestionData[this.current].text;
       this.isShow = false;
+      this.$el.querySelector("input").blur();
     },
 
     /**
      * Nhấn up
-     * CreatedBy: dqdat 02/06/2021
      */
     up() {
       if (this.current > 0) this.current--;
