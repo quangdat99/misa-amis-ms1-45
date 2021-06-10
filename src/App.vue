@@ -145,6 +145,71 @@ a {
 .icon {
   @include icon-default();
 
+  // icon navbar.
+  &.icon-navbar-dashboard {
+    @include icon-bind(-30px -1628px);
+  }
+
+  &.icon-navbar-employee {
+    @include icon-bind(-592px -1631px);
+  }
+
+  &.icon-navbar-cash {
+    @include icon-bind(-74px -1628px);
+  }
+
+  &.icon-navbar-bank {
+    @include icon-bind(-118px -1628px);
+  }
+
+  &.icon-navbar-pu {
+    @include icon-bind(-163px -1628px);
+  }
+
+  &.icon-navbar-sale {
+    @include icon-bind(-207px -1631px);
+  }
+
+  &.icon-navbar-invoice {
+    @include icon-bind(-251px -1632px);
+  }
+
+  &.icon-navbar-stock {
+    @include icon-bind(-294px -1632px);
+  }
+
+  &.icon-navbar-tools {
+    @include icon-bind(-339px -1633px);
+  }
+
+  &.icon-navbar-fixed-assets {
+    @include icon-bind(-382px -1632px);
+  }
+
+  &.icon-navbar-tax {
+    @include icon-bind(-427px -1634px);
+  }
+
+  &.icon-navbar-price {
+    @include icon-bind(-471px -1633px);
+  }
+
+  &.icon-navbar-general {
+    @include icon-bind(-514px -1632px);
+  }
+
+  &.icon-navbar-budget {
+    @include icon-bind(-514px -1632px);
+  }
+
+  &.icon-navbar-report {
+    @include icon-bind(-552px -1636px);
+  }
+
+  &.icon-navbar-finance {
+    @include icon-bind(-207px -1667px);
+  }
+
   // icon-header
   &.icon-three-stripes {
     @include icon-bind(-843px -30px);
@@ -224,14 +289,11 @@ a {
     height: 50px;
     display: flex;
     align-items: center;
-    padding-left: 16px;
+    padding-left: 30px;
     .toggle {
-      font-size: 24px;
-      flex-shrink: 1;
+      @include icon-default();
+      @include icon-bind(-424px -86px);
       cursor: pointer;
-      color: #fff;
-      margin-left: 10px;
-      margin-right: 10px;
     }
     .logo {
       margin-left: 10px;
@@ -892,9 +954,10 @@ a {
     justify-content: center;
 
     &:hover {
-      background-color: #f4f5f6;
+      background-color: #e9e9e9;
       border-left: none;
-      border-radius: 4px;
+      border-top-right-radius: 4px;
+      border-end-end-radius: 4px;
     }
   }
 
