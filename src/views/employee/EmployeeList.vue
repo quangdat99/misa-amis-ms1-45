@@ -701,10 +701,9 @@ export default {
 
       let windowHeight = window.innerHeight;
 
-      if (newTop > windowHeight / 2) {
+      if (newTop > windowHeight - 100) {
         newTop -= 132;
       }
-
       this.employeeModify = employee;
       this.employeeTableOptionConfig = {
         isShow: true,
@@ -718,7 +717,6 @@ export default {
      * CreatedBy: dqdat 01/06/2021
      */
     closeEmployeeTableOption() {
-      this.employeeModify = null;
       this.employeeTableOptionConfig = {
         isShow: false,
         top: 0,

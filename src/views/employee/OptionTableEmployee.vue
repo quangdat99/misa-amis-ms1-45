@@ -1,22 +1,14 @@
 <template>
-  <div class="dialog">
-    <div
-      class="dialog-background"
-      style="background-color: transparent"
-      @click.prevent="closeDialog"
-    ></div>
-    <div class="dialog-content">
-      <div
-        class="table-option-dropdown zoomIn"
-        :style="{ top: top + 'px', left: left + 'px' }"
-      >
-        <div class="dropdown-item" @click="$emit('onClickDuplicate')">
-          Nhân bản
-        </div>
-        <div class="dropdown-item" @click="$emit('onClickBtnDel')">Xóa</div>
-        <div class="dropdown-item">Ngừng sử dụng</div>
-      </div>
-    </div>
+  <div
+    ref="autofocus"
+    tabindex="0"
+    @focusout="closeDialog"
+    class="table-option-dropdown zoomIn"
+    :style="{ top: top + 'px', left: left + 'px' }"
+  >
+    <div class="dropdown-item" @click="$emit('onClickDuplicate')">Nhân bản</div>
+    <div class="dropdown-item" @click="$emit('onClickBtnDel')">Xóa</div>
+    <div class="dropdown-item">Ngừng sử dụng</div>
   </div>
 </template>
 
@@ -51,6 +43,10 @@ export default {
     closeDialog() {
       this.$emit("onClose");
     },
+  },
+
+  mounted() {
+    this.$refs.autofocus.focus();
   },
   //#endregion
 };
