@@ -84,11 +84,11 @@ a {
 }
 .zoomIn {
     animation-name: zoomIn;
-    animation-duration: 0.2s;
+    animation-duration: 0.4s;
 }
 @keyframes rotateIn {
     from {
-        transform: rotate3d(0, 0, 1, 200deg);
+        transform: rotate3d(0, 0, 1, 180deg);
         opacity: 0;
     }
     to {
@@ -457,6 +457,38 @@ a {
     }
 }
 
+// Pagination
+.pagination {
+    display: flex;
+    align-items: center;
+    .pagination-item {
+        display: inline-block;
+        height: 24px;
+        line-height: 24px;
+        cursor: pointer;
+        margin-left: 4px;
+        margin-right: 4px;
+        text-decoration: none;
+        color: #000;
+        .page {
+            width: 24px;
+            text-align: center;
+            &.active {
+                font-weight: bold;
+                border: 1px solid #bbb;
+            }
+        }
+    }
+    .disabled-prev {
+        margin-right: 15px;
+        color: rgb(163, 163, 163);
+    }
+    .disabled-next {
+        margin-left: 15px;
+        color: rgb(163, 163, 163);
+    }
+}
+
 // Table
 .table {
     width: 100%;
@@ -728,7 +760,7 @@ a {
 
     &:checked + label {
         animation-name: rotateIn;
-        animation-duration: 0.25s;
+        animation-duration: 0.3s;
         border: 1px solid #afafaf;
 
         &:active {
@@ -787,12 +819,12 @@ a {
         white-space: nowrap;
         display: inline-block;
         position: absolute;
-        top: 100%;
-        left: 0;
+        top: 70%;
+        left: 25%;
         background-color: #38393d;
         color: $color-white;
-        padding: 8px;
-        z-index: 10;
+        padding: 4px;
+        z-index: 21;
     }
 
     .icon-input {

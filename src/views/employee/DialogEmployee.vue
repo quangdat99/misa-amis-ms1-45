@@ -75,6 +75,7 @@
                   <label class="label-input"
                     >Tên <span style="color: #f20">*</span></label
                   >
+
                   <Input
                     :class="{ 'has-error': errors && errors.employeeName }"
                     :value="employee && employee.employeeName"
@@ -86,11 +87,12 @@
                     "
                     @blur="onValidFullName"
                   />
-                  <!-- <span
+
+                  <span
                     v-if="errors && errors.employeeName"
                     class="text-error"
                     >{{ errors && errors.employeeName }}</span
-                  > -->
+                  >
                 </div>
               </div>
             </div>
@@ -207,11 +209,11 @@
                 "
                 @blur="onValidDepartment"
               />
-              <!-- <span
+              <span
                 v-if="errors && errors.employeeDepartmentId"
                 class="text-error"
                 >{{ errors && errors.employeeDepartmentId }}</span
-              > -->
+              >
             </div>
           </div>
           <div class="col-6">
@@ -593,7 +595,7 @@ export default {
       if (this.employee && this.employee.employeeName) {
         this.errors.employeeName = "";
       } else {
-        this.errors.employeeName = "Tên nhân viên không được để trống.";
+        this.errors.employeeName = "Tên không được để trống.";
       }
     },
 

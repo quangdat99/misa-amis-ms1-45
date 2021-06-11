@@ -6,10 +6,10 @@ const PREFIX_URL = "api/v1/employees";
 /**
  * Lấy danh sách nhân viên có lọc
  * @param {object} param 
- * @returns List nhân viên
+ * @returns Danh sách nhân viên
  * CreatedBy: dqdat (11/6/2021)
  */
-export const getEmployees = ({ page = 1, pageSize = 10, employeeFilter = "" }) =>
+export const getEmployees = ({ page = 1, pageSize = 20, employeeFilter = "" }) =>
     req.get(`${PREFIX_URL}/EmployeeFilter?pageNumber=${page}&pageSize=${pageSize}&employeeFilter=${employeeFilter}`)
         .then(res => res.data)
         .then(data => {
@@ -22,7 +22,7 @@ export const getEmployees = ({ page = 1, pageSize = 10, employeeFilter = "" }) =
 /**
  * Lấy tổng số nhân viên có lọc
  * @param {string} employeeFilter 
- * @returns số nhân viên - int
+ * @returns số nhân viên
  * CreatedBy: dqdat (11/6/2021)
  */
 export const getCountEmployees = (employeeFilter) => req.get(`${PREFIX_URL}/CountEmployees?employeeFilter=${employeeFilter}`)

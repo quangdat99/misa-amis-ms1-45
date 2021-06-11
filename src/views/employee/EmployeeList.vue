@@ -383,7 +383,9 @@ export default {
             this.hasData = false;
           }
         })
-        .catch();
+        .catch(() => {
+          this.isShowLoading = false;
+        });
     },
 
     /**

@@ -7,15 +7,11 @@
     >
       <div class="prev-page">Trước</div>
     </div>
-
     <div class="pagination_item disabled-prev" v-if="page == 1">Trước</div>
-
     <div class="pagination-item" @click="$emit('update:page', 1)">
       <div class="page" :class="{ active: page == 1 }">1</div>
     </div>
-
     <div class="three-dot" v-if="page > 4">...</div>
-
     <div
       v-for="n in rangePage"
       :key="n"
@@ -24,9 +20,7 @@
     >
       <div class="page" :class="{ active: n == page }">{{ n }}</div>
     </div>
-
     <div class="three-dot" v-if="page < totalPage - 3">...</div>
-
     <div
       v-if="totalPage > 1"
       class="pagination-item"
@@ -36,7 +30,6 @@
         {{ totalPage }}
       </div>
     </div>
-
     <div
       @click="$emit('update:page', page + 1)"
       v-if="page < totalPage"
@@ -51,6 +44,7 @@
 </template>
 
 <script>
+//#region export
 export default {
   //#region props
   props: {
@@ -91,42 +85,5 @@ export default {
   },
   //#endregion
 };
+//#endregion
 </script>
-
-<style scoped>
-.pagination {
-  display: flex;
-  align-items: center;
-}
-
-.pagination .pagination-item {
-  display: inline-block;
-  height: 24px;
-  line-height: 24px;
-  cursor: pointer;
-  margin-left: 4px;
-  margin-right: 4px;
-  text-decoration: none;
-  color: #000;
-}
-
-.pagination .pagination-item .page {
-  width: 24px;
-
-  text-align: center;
-}
-
-.pagination .pagination-item .page.active {
-  font-weight: bold;
-  border: 1px solid #bbb;
-}
-
-.disabled-prev {
-  margin-right: 15px;
-  color: rgb(163, 163, 163);
-}
-.disabled-next {
-  margin-left: 15px;
-  color: rgb(163, 163, 163);
-}
-</style>

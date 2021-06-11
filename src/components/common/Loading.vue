@@ -12,6 +12,9 @@ export default {};
 </script>
 
 <style scoped>
+.dialog .dialog-background {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 .dialog .dialog-content {
   width: 42px;
   height: 42px;
