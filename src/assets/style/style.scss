@@ -819,14 +819,13 @@ a {
         white-space: nowrap;
         display: inline-block;
         position: absolute;
-        top: 70%;
+        top: 100%;
         left: 25%;
         background-color: #38393d;
         color: $color-white;
         padding: 4px;
-        z-index: 21;
+        z-index: 19;
     }
-
     .icon-input {
         position: absolute;
         right: 8px;
