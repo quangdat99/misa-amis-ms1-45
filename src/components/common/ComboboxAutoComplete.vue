@@ -6,7 +6,7 @@
         class="input has-icon"
         :value="valueInput"
         v-bind="inputAttributes"
-        @focus="showSuggestion"
+        @focus="showOption"
         @blur="onBlur"
         @keydown.up.prevent="up"
         @keydown.down.prevent="down"
@@ -15,41 +15,45 @@
       />
       <div
         class="icon-input icon-dropdown-box"
-        @mousedown.prevent="toggleSuggestion"
+        @mousedown.prevent="toggleOption"
       >
         <div class="icon icon-arrow-dropdown"></div>
       </div>
     </div>
     <div class="dropdown-content" :class="{ hide: !isShow }">
-      <div class="dropdown-item-empty" v-if="suggestionData.length == 0">
+      <div class="dropdown-item-empty" v-if="optionData.length == 0">
         Không có dữ liệu hiển thị
       </div>
       <div
-        v-for="(suggestion, i) in suggestionData"
+        v-for="(option, i) in optionData"
         :key="i"
         class="dropdown-item"
         :class="{ active: current == i }"
-        @click.prevent="clickSuggestion(suggestion, i)"
+        @click.prevent="clickoption(option, i)"
       >
-        {{ suggestion.text }}
+        {{ option.text }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+//#region export
 export default {
+  //#region props
   props: {
     /**
-     * Danh sách suggestion của autocomplete.
+     * Danh sách option của comboboxAutoComplete.
+     * CreatedBy: dqdat (11/6/2021)
      */
-    suggestions: {
+    options: {
       type: Array,
       required: true,
     },
 
     /**
      * Giá trị khởi tạo cho input
+     * CreatedBy: dqdat (11/6/2021)
      */
     value: {
       type: String,
@@ -58,95 +62,113 @@ export default {
 
     /**
      * Attribute thêm cho input
+     * CreatedBy: dqdat (11/6/2021)
      */
     inputAttributes: {
       type: Object,
       default: null,
     },
   },
+  //#endregion
+
+  //#region data
   data: () => ({
     /**
-     * Xác định trạng thái popup autocomplete
+     * Xác định trạng thái popup comboboxAutoComplete
+     * CreatedBy: dqdat (11/6/2021)
      */
     isShow: false,
 
     /**
      * vị trí hiện tại
+     * CreatedBy: dqdat (11/6/2021)
      */
     current: 0,
 
     /**
-     * Danh sách suggesstion của autocomplete có lọc
+     * Danh sách option của comboboxAutoComplete có lọc
+     * CreatedBy: dqdat (11/6/2021)
      */
-    suggestionData: [],
+    optionData: [],
 
     /**
      * Giá trị của input
+     * CreatedBy: dqdat (11/6/2021)
      */
     valueInput: "",
   }),
+  //#endregion
+
+  //#region  methods
   methods: {
     /**
-     * Đảo ngược trạng thái popup
+     * Thay đổi trạng thái popup
+     * CreatedBy: dqdat (11/6/2021)
      */
-    toggleSuggestion() {
+    toggleOption() {
       if (this.isShow) {
         this.isShow = false;
         this.$el.querySelector("input").blur();
       } else {
-        this.showSuggestion();
+        this.showOption();
       }
     },
 
     /**
      * Hiển thị popup
+     * CreatedBy: dqdat (11/6/2021)
      */
-    showSuggestion() {
+    showOption() {
       this.$el.querySelector("input").focus();
       this.isShow = true;
     },
 
     /**
      * Nhấn enter
+     * CreatedBy: dqdat (11/6/2021)
      */
     enter() {
-      this.$emit("update:value", this.suggestionData[this.current].value);
-      this.valueInput = this.suggestionData[this.current].text;
+      this.$emit("update:value", this.optionData[this.current].value);
+      this.valueInput = this.optionData[this.current].text;
       this.isShow = false;
       this.$el.querySelector("input").blur();
     },
 
     /**
      * Nhấn up
+     * CreatedBy: dqdat (11/6/2021)
      */
     up() {
       if (this.current > 0) this.current--;
-      this.valueInput = this.suggestionData[this.current].text;
+      this.valueInput = this.optionData[this.current].text;
     },
 
     /**
      * Nhấn down
+     * CreatedBy: dqdat (11/6/2021)
      */
     down() {
-      if (this.current < this.suggestions.length - 1) this.current++;
-      this.valueInput = this.suggestionData[this.current].text;
+      if (this.current < this.options.length - 1) this.current++;
+      this.valueInput = this.optionData[this.current].text;
     },
 
     /**
-     * Chọn một suggesstion
+     * Chọn một option
+     * CreatedBy: dqdat (11/6/2021)
      */
-    clickSuggestion(suggestion, index) {
+    clickoption(option, index) {
       this.current = index;
       this.isShow = false;
-      this.$emit("update:value", suggestion.value);
-      this.valueInput = suggestion.text;
+      this.$emit("update:value", option.value);
+      this.valueInput = option.text;
     },
 
     /**
      * Blur input
+     * CreatedBy: dqdat (11/6/2021)
      */
     onBlur() {
-      var res = this.suggestions.find((s) => s.text == this.valueInput);
+      var res = this.options.find((s) => s.text == this.valueInput);
       if (res) {
         this.$emit("update:value", res.value);
       } else {
@@ -161,30 +183,38 @@ export default {
 
     /**
      * Nhập vào input
+     * CreatedBy: dqdat (11/6/2021)
      */
     onInput(e) {
       let val = e.target.value;
       this.valueInput = val;
       this.current = 0;
-      if (this.suggestions) {
-        this.suggestionData = this.suggestions.filter((s) =>
+      if (this.options) {
+        this.optionData = this.options.filter((s) =>
           s.text.toLowerCase().includes(val.toLowerCase())
         );
         this.isShow = true;
       }
     },
   },
+  //#endregion
 
+  //#region mounted
   mounted() {
-    this.suggestionData = this.suggestions;
-    let index = this.suggestionData.findIndex((s) => s.value == this.value);
+    // Khởi tạo dữ liệu Options
+    this.optionData = this.options;
+
+    // Khởi tạo trạng thái active option ban đầu
+    let index = this.optionData.findIndex((s) => s.value == this.value);
     if (index >= 0) {
       this.current = index;
-      this.valueInput = this.suggestionData[this.current].text;
+      this.valueInput = this.optionData[this.current].text;
     } else {
       this.current = 0;
       this.valueInput = "";
     }
   },
+  //#endregion
 };
+//#endregion
 </script>

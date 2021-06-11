@@ -14,7 +14,6 @@
         <div class="dialog-footer-right">
           <Button :text="textBtn" color="primary" @click="closeDialog" />
         </div>
-        <!-- <Button text="Ok" @click="closeDialog" /> -->
       </div>
       <div
         v-if="type == 'error'"
@@ -42,6 +41,7 @@ export default {
   props: {
     /**
      * Lời nhắn
+     * CreatedBy: dqdat (11/6/2021)
      */
     msg: {
       type: String,
@@ -50,7 +50,7 @@ export default {
 
     /**
      * Text button
-     * CreatedBy: dqdat 01/06/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     textBtn: {
       type: String,
@@ -60,6 +60,7 @@ export default {
     /**
      * Loại dialog alert
      * warning, error
+     * CreatedBy: dqdat (11/6/2021)
      */
     type: {
       type: String,
@@ -76,6 +77,7 @@ export default {
   methods: {
     /**
      * Hàm thực hiện đóng dialog thông báo.
+     * CreatedBy: dqdat (11/6/2021)
      */
     closeDialog() {
       this.$emit("onClose");

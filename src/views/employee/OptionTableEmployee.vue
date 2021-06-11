@@ -19,6 +19,7 @@ export default {
   props: {
     /**
      * Vị trí của component so với top
+     * CreatedBy: dqdat (11/6/2021)
      */
     top: {
       type: Number,
@@ -27,6 +28,7 @@ export default {
 
     /**
      * Vị trí của component so với left
+     * CreatedBy: dqdat (11/6/2021)
      */
     left: {
       type: Number,
@@ -39,12 +41,15 @@ export default {
   methods: {
     /**
      * Phương thức đóng dialog.
+     * CreatedBy: dqdat (11/6/2021)
      */
     closeDialog() {
       this.$emit("onClose");
     },
   },
+  //#endregion
 
+  //#region mounted
   mounted() {
     this.$refs.autofocus.focus();
   },

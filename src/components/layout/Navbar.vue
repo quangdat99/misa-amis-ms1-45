@@ -116,7 +116,9 @@
 </template>
 
 <script>
+//#region export
 export default {
   name: "Navbar",
 };
+//#endregion
 </script>

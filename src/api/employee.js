@@ -1,7 +1,5 @@
 import req from '../utils/req.js';
 
-//import { BASE_URL } from '../utils/envConst.js';
-
 const PREFIX_URL = "api/v1/employees";
 
 //#region getEmployees
@@ -9,7 +7,7 @@ const PREFIX_URL = "api/v1/employees";
  * Lấy danh sách nhân viên có lọc
  * @param {object} param 
  * @returns List nhân viên
- * CreatedBy: dqdat 8/6/2021
+ * CreatedBy: dqdat (11/6/2021)
  */
 export const getEmployees = ({ page = 1, pageSize = 10, employeeFilter = "" }) =>
     req.get(`${PREFIX_URL}/EmployeeFilter?pageNumber=${page}&pageSize=${pageSize}&employeeFilter=${employeeFilter}`)
@@ -25,6 +23,7 @@ export const getEmployees = ({ page = 1, pageSize = 10, employeeFilter = "" }) =
  * Lấy tổng số nhân viên có lọc
  * @param {string} employeeFilter 
  * @returns số nhân viên - int
+ * CreatedBy: dqdat (11/6/2021)
  */
 export const getCountEmployees = (employeeFilter) => req.get(`${PREFIX_URL}/CountEmployees?employeeFilter=${employeeFilter}`)
     .then((res) => res.data)
@@ -36,6 +35,7 @@ export const getCountEmployees = (employeeFilter) => req.get(`${PREFIX_URL}/Coun
 /**
  * Lấy mã nhân viên mới
  * @returns mã khách hàng mới
+ * CreatedBy: dqdat (11/6/2021)
  */
 export const getNewEmployeeCode = () =>
     req.get(`${PREFIX_URL}/NewEmployeeCode`)
@@ -49,6 +49,7 @@ export const getNewEmployeeCode = () =>
  * Lấy thông tin một nhân viên
  * @param {string} employeeId 
  * @returns Thông tin nhân viên
+ * CreatedBy: dqdat (11/6/2021)
  */
 export const getEmployee = (employeeId) =>
     req.get(`${PREFIX_URL}/${employeeId}`)
@@ -62,6 +63,7 @@ export const getEmployee = (employeeId) =>
  * Xóa một nhân viên
  * @param {string} employeeId 
  * @returns 
+ * CreatedBy: dqdat (11/6/2021)
  */
 export const delEmployee = (employeeId) =>
     req.delete(`${PREFIX_URL}/${employeeId}`)
@@ -79,6 +81,7 @@ export const delEmployee = (employeeId) =>
  * Check mã nhân viên tồn tại trên hệ thống
  * @param {string} employeeCode 
  * @returns boolean
+ * CreatedBy: dqdat (11/6/2021)
  */
 export const checkEmployeeCodeExist = (employeeCode, employeeId) =>
     req.get(`${PREFIX_URL}/EmployeeCodeExist?employeeCode=${employeeCode}&employeeId=${employeeId}`)
@@ -92,6 +95,7 @@ export const checkEmployeeCodeExist = (employeeCode, employeeId) =>
 /**
  * Lưu thông tin nhân viên
  * @returns 
+ * CreatedBy: dqdat (11/6/2021)
  */
 export const saveEmployee = (data, isInsert = true) =>
     req({

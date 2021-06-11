@@ -20,7 +20,7 @@ export default {
   props: {
     /**
      * name của radio
-     * CreatedBy: dqdat 01/06/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     name: {
       type: String,
@@ -29,7 +29,7 @@ export default {
 
     /**
      * Giá trị của radio
-     * CreatedBy: dqdat 01/06/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     value: {
       type: String,
@@ -38,7 +38,7 @@ export default {
 
     /**
      * Xác định radio có được check hay không
-     * CreatedBy: dqdat 01/06/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     checked: {
       type: Boolean,
@@ -50,7 +50,7 @@ export default {
   //#region data
   data() {
     return {
-      id: Math.random().toString(36).substr(0, 5),
+      id: Math.random(),
     };
   },
   //#endregion

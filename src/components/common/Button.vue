@@ -15,7 +15,7 @@ export default {
     /**
      * Background color của button.
      * primary, secondary
-     * CreatedBy: dqdat 30/05/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     color: {
       type: String,
@@ -24,7 +24,7 @@ export default {
 
     /**
      * Text hiển thị của button.
-     * CreatedBy: dqdat 30/05/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     text: {
       type: String,

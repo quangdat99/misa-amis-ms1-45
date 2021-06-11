@@ -9,7 +9,6 @@
         </div>
       </div>
       <div class="divide"></div>
-
       <div class="dialog-footer">
         <Button
           text="Không"
@@ -25,21 +24,33 @@
 </template>
 
 <script>
+//#region import
 import Button from "./Button";
+//#endregion
+
+//#region export
 export default {
-  name: "AlertDialog",
+  //#region components
   components: {
     Button,
   },
+  //#endregion
+
+  //#region props
   props: {
     /**
      * Lời nhắn.
+     * CreatedBy: dqdat (11/6/2021)
      */
     msg: String,
   },
+  //#endregion
+
+  //#region methods
   methods: {
     /**
      * Hàm đóng dialog.
+     * CreatedBy: dqdat (11/6/2021)
      */
     closeDialog() {
       this.$emit("onClose");
@@ -47,11 +58,14 @@ export default {
 
     /**
      * Hàm khi click button Ok.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onConfirmed() {
       this.$emit("onClose");
       this.$emit("onOk");
     },
   },
+  //#endregion
 };
+//#endregion
 </script>

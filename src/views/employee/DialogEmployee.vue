@@ -198,7 +198,7 @@
                     'has-error': errors && errors.employeeDepartmentId,
                   },
                 }"
-                :suggestions="optionDepartment"
+                :options="optionDepartment"
                 @update:value="
                   $emit('update:employee', {
                     ...employee,
@@ -426,6 +426,7 @@
 </template>
 
 <script>
+//#region import
 import dayjs from "dayjs";
 import DatePicker from "vue-date-pick";
 import "vue-date-pick/dist/vueDatePick.css";
@@ -438,9 +439,15 @@ import ComboboxAutoComplete from "../../components/common/ComboboxAutoComplete";
 import Button from "../../components/common/Button";
 import Checkbox from "../../components/common/Checkbox";
 import Radio from "../../components/common/Radio";
+//#endregion
 
+//#region export
 export default {
+  //#region name
   name: "DialogEmployee",
+  //#endregion
+
+  //#region components
   components: {
     DatePicker,
     Input,
@@ -450,10 +457,14 @@ export default {
     Checkbox,
     Radio,
   },
+  //#endregion
+
+  //#region props
   props: {
     /**
-     * nhân viên đang được chỉnh sửa.
-     * Lưu ý: Khi thêm mới: nhân viên rỗng.
+     * Khởi tạo giá trị nhân viên.
+     * Khi thêm mới: nhân viên rỗng.
+     * CreatedBy: dqdat (11/6/2021)
      */
     employee: {
       type: Object,
@@ -462,14 +473,18 @@ export default {
 
     /**
      * Option trong combobox Đơn vị.
+     * CreatedBy: dqdat (11/6/2021)
      */
     optionDepartment: Array,
   },
+  //#endregion
 
+  //#region data
   data() {
     return {
       /**
        * Thông tin lỗi.
+       * CreatedBy: dqdat (11/6/2021)
        */
       errors: {
         employeeCode: "",
@@ -479,6 +494,7 @@ export default {
 
       /**
        * Locale datepicker
+       * CreatedBy: dqdat (11/6/2021)
        */
       localeDatePicker: {
         weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
@@ -499,8 +515,14 @@ export default {
       },
     };
   },
+  //#endregion
 
+  //#region methods
   methods: {
+    /**
+     * Kiểm tra lỗi trước khi bấm Save
+     * CreatedBy: dqdat (11/6/2021)
+     */
     validateBeforeSave() {
       let valid = true;
       this.onValidEmployeeCode();
@@ -514,8 +536,10 @@ export default {
       }
       return valid;
     },
+
     /**
      * Hàm gọi khi click vào button Cất.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickSave() {
       let valid = this.validateBeforeSave();
@@ -533,16 +557,25 @@ export default {
 
     /**
      * Hàm gọi khi click vào button Cất và thêm.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickSaveAndAdd() {
       let valid = this.validateBeforeSave();
       if (valid) {
         this.$emit("onSaveAndAdd");
+      } else {
+        var values = Object.keys(this.errors).map((k) => this.errors[k]);
+        var alertDialogConfig = {
+          msg: values.find((val) => val != ""),
+          type: "error",
+        };
+        this.$emit("showAlertDialog", alertDialogConfig);
       }
     },
 
     /**
      * valid mã nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onValidEmployeeCode() {
       if (this.employee && this.employee.employeeCode) {
@@ -554,6 +587,7 @@ export default {
 
     /**
      * valid họ tên nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onValidFullName() {
       if (this.employee && this.employee.employeeName) {
@@ -564,7 +598,8 @@ export default {
     },
 
     /**
-     * valid đơn vị của nhân viên .
+     * valid đơn vị của nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onValidDepartment() {
       if (this.employee && this.employee.employeeDepartmentId) {
@@ -576,6 +611,7 @@ export default {
 
     /**
      * Hàm đóng dialog.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickCloseDialog() {
       this.errors = {
@@ -588,12 +624,14 @@ export default {
 
     /**
      * Hàm format date về dạng YYYY-MM-DD
+     * CreatedBy: dqdat (11/6/2021)
      */
     formatYYYMMDD(dateStr) {
       return dateStr ? dayjs(dateStr).format("YYYY-MM-DD") : null;
     },
     /**
      * Hàm disabled ngày tháng năm lớn hơn hiện tại
+     * CreatedBy: dqdat (11/6/2021)
      */
     isDateDisabled(date) {
       return date > new Date();
@@ -601,34 +639,43 @@ export default {
 
     /**
      * sự kiện nhấn phím
+     * CreatedBy: dqdat (11/6/2021)
      */
-    onKeyDownListener(e) {
+    onKeyDown(e) {
       if (e.keyCode == 27) {
         // ESC
         this.onClickCloseDialog();
         e.preventDefault();
       }
 
-      if (e.key == "s" && (e.ctrlKey || e.metaKey)) {
+      if (e.key == "s" && e.ctrlKey) {
         // Ctrl + s
         this.onClickSave();
         e.preventDefault();
       }
 
-      if (e.key == "S" && (e.ctrlKey || e.metaKey)) {
+      if (e.key == "S" && e.ctrlKey) {
         // Ctrl + Shift + s
         this.onClickSaveAndAdd();
         e.preventDefault();
       }
     },
   },
+  //#endregion
 
+  //#region mounted
   mounted() {
+    // Khi khởi tạo thì auto focus vào input employeeCode
     this.$refs.employeeCode.$el.focus();
-    document.addEventListener("keydown", this.onKeyDownListener);
+    document.addEventListener("keydown", this.onKeyDown);
   },
+  //#endregion
+
+  //#region boforeDestroy
   beforeDestroy() {
-    document.removeEventListener("keydown", this.onKeyDownListener);
+    document.removeEventListener("keydown", this.onKeyDown);
   },
+  //#endregion
 };
+//#endregion
 </script>

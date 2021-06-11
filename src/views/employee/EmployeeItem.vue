@@ -1,8 +1,5 @@
 <template>
-  <tr
-    @dblclick="$emit('dblclick', employee.employeeId)"
-    @click="$emit('click', employee.employeeId)"
-  >
+  <tr @dblclick="$emit('dblclick', employee.employeeId)">
     <td @dblclick.stop>
       <Checkbox />
       <div class="border-right"></div>
@@ -32,27 +29,38 @@
 </template>
 
 <script>
+//#region import
 import dayjs from "dayjs";
-
 import Checkbox from "../../components/common/Checkbox";
 import IconButton from "../../components/common/IconButton";
 import Button from "../../components/common/Button";
+//#endregion
 
+//#region export
 export default {
+  //#region components
   components: {
     Button,
     Checkbox,
     IconButton,
   },
+  //#endregion
+
+  //#region props
   props: {
     /**
      * Thông tin nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     employee: { type: Object, default: null },
   },
+  //#endregion
+
+  //#region methods
   methods: {
     /**
-     * Hàm đóng mở dropdown
+     * Hàm mở dropdown option table
+     * CreatedBy: dqdat (11/6/2021)
      */
     toggleDropdown(event, empl) {
       let left = event.clientX;
@@ -60,18 +68,29 @@ export default {
       this.$emit("toggleTableOption", { left, top, employee: empl });
     },
 
+    /**
+     * Hàm click vào button Sửa
+     * CreatedBy: dqdat (11/6/2021)
+     */
     onClickBtnEdit() {
       this.$emit("updateEmployee", this.employee.employeeId);
     },
 
+    /**
+     * Hàm chuyển định dạng ngày/tháng/năm
+     * CreatedBy: dqdat (11/6/2021)
+     */
     dateOfBirth(dateStr) {
       return dateStr ? dayjs(dateStr).format("DD/MM/YYYY") : null;
     },
   },
+  //#endregion
 
+  //#region computed
   computed: {
     /**
      * Computed binđ giới tính. Mặc định là Không xác định.
+     * CreatedBy: dqdat (11/6/2021)
      */
     genderName: function () {
       if (this.employee.gender == 0) {
@@ -87,6 +106,7 @@ export default {
 
     /**
      * Computed bind email nhân viên. Mặc định là không rõ.
+     * CreatedBy: dqdat (11/6/2021)
      */
     email: function () {
       return this.employee.Email || "Không rõ";
@@ -94,11 +114,14 @@ export default {
 
     /**
      * Computed bind phòng ban của nhân viên. Mặc định là không rõ.
+     * CreatedBy: dqdat (11/6/2021)
      */
     departmentName: function () {
       return this.employee.employeeDepartmentName || "Không rõ";
     },
   },
+  //#endregion
 };
+//#endregion
 </script>
 

@@ -5,8 +5,8 @@
         type="text"
         class="input has-icon"
         readonly
-        :value="suggestions[current].text"
-        @focus="showSuggestion"
+        :value="options[current].text"
+        @focus="showOption"
         @blur="onBlur"
         @keydown.up.prevent="up"
         @keydown.down.prevent="down"
@@ -14,67 +14,95 @@
       />
       <div
         class="icon-input icon-dropdown-box"
-        @mousedown.prevent="toggleSuggestion"
+        @mousedown.prevent="toggleOption"
       >
         <div class="icon icon-arrow-dropdown"></div>
       </div>
     </div>
     <div class="dropdown-content reserve" :class="{ hide: !isShow }">
       <div
-        v-for="(suggestion, i) in suggestions"
+        v-for="(option, i) in options"
         :key="i"
         class="dropdown-item"
         :class="{ active: current == i }"
-        @click.prevent="clickSuggestion(suggestion, i)"
+        @click.prevent="clickOption(option, i)"
       >
-        {{ suggestion.text }}
+        {{ option.text }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+//#region  export
 export default {
+  //#region  props
   props: {
-    suggestions: {
+    /**
+     * Khởi tạo anh sách option
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    options: {
       type: Array,
       required: true,
     },
+    /**
+     * Giá trị khởi tạo
+     * CreatedBy: dqdat (11/6/2021)
+     */
     value: {
       type: Number,
       default: null,
     },
   },
+  //#endregion
+
+  //#region data
   data: () => ({
+    /**
+     * Hiển thị danh sách option
+     * CreatedBy: dqdat (11/6/2021)
+     */
     isShow: false,
+
+    /**
+     * Trang thái active của option
+     * CreatedBy: dqdat (11/6/2021)
+     */
     current: 0,
   }),
+  //#endregion
+
+  //#region methods
   methods: {
     /**
-     * Đảo ngược trạng thái popup
+     * Thay đổi trạng thái popup
+     * CreatedBy: dqdat (11/6/2021)
      */
-    toggleSuggestion() {
+    toggleOption() {
       if (this.isShow) {
         this.isShow = false;
         this.$el.querySelector("input").blur();
       } else {
-        this.showSuggestion();
+        this.showOption();
       }
     },
 
     /**
      * Hiển thị popup
+     * CreatedBy: dqdat (11/6/2021)
      */
-    showSuggestion() {
+    showOption() {
       this.$el.querySelector("input").focus();
       this.isShow = true;
     },
 
     /**
      * Chọn một suggesstion
+     * CreatedBy: dqdat (11/6/2021)
      */
-    clickSuggestion(suggestion, index) {
-      this.$emit("update:value", suggestion.value);
+    clickOption(option, index) {
+      this.$emit("update:value", option.value);
       this.$emit("onChange");
       this.current = index;
       this.isShow = false;
@@ -82,6 +110,7 @@ export default {
 
     /**
      * Blur input
+     * CreatedBy: dqdat (11/6/2021)
      */
     onBlur() {
       setTimeout(() => {
@@ -91,9 +120,10 @@ export default {
 
     /**
      * Nhấn enter
+     * CreatedBy: dqdat (11/6/2021)
      */
     enter() {
-      this.$emit("update:value", this.suggestions[this.current].value);
+      this.$emit("update:value", this.options[this.current].value);
       this.$emit("onChange");
       this.isShow = false;
       this.$el.querySelector("input").blur();
@@ -101,6 +131,7 @@ export default {
 
     /**
      * Nhấn up
+     * CreatedBy: dqdat (11/6/2021)
      */
     up() {
       if (this.current > 0) this.current--;
@@ -108,19 +139,28 @@ export default {
 
     /**
      * Nhấn down
+     * CreatedBy: dqdat (11/6/2021)
      */
     down() {
-      if (this.current < this.suggestions.length - 1) this.current++;
+      if (this.current < this.options.length - 1) this.current++;
     },
   },
+  //#endregion
 
+  //#region mounted
   mounted() {
-    let index = this.suggestions.findIndex((s) => s.value == this.value);
+    /**
+     * Khởi tạo trạng thái active option ban đầu
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    let index = this.options.findIndex((s) => s.value == this.value);
     if (index >= 0) {
       this.current = index;
     } else {
       this.current = 0;
     }
   },
+  //#endregion
 };
+//#endregion
 </script>

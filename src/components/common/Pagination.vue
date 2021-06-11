@@ -52,10 +52,11 @@
 
 <script>
 export default {
-  name: "Pagination",
+  //#region props
   props: {
     /**
      * Trang hiện tại.
+     * CreatedBy: dqdat (11/6/2021)
      */
     page: {
       type: Number,
@@ -64,14 +65,21 @@ export default {
 
     /**
      * Tổng số trang.
+     * CreatedBy: dqdat (11/6/2021)
      */
     totalPage: {
       type: Number,
       default: 1,
     },
   },
+  //#endregion
 
+  //#region computed
   computed: {
+    /**
+     *  Khởi tạo danh sách các các page có thể click
+     * CreatedBy: dqdat (11/6/2021)
+     * */
     rangePage: function () {
       let range = [];
       let start = this.page > 4 ? this.page - 2 : 2;
@@ -81,6 +89,7 @@ export default {
       return range;
     },
   },
+  //#endregion
 };
 </script>
 
@@ -112,20 +121,6 @@ export default {
   border: 1px solid #bbb;
 }
 
-.pagination .pagination-item .page:hover:not(.active) {
-}
-
-.pagination .first-page {
-}
-
-.pagination .prev-page {
-}
-
-.pagination .next-page {
-}
-
-.pagination .last-page {
-}
 .disabled-prev {
   margin-right: 15px;
   color: rgb(163, 163, 163);

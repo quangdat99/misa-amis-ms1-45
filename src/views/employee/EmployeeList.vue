@@ -90,7 +90,7 @@
             "
           >
             <img
-              src="../../assets/bg_report_nodata.svg"
+              src="../../assets/img/bg_report_nodata.svg"
               alt="Không có dữ liệu"
               style="margin: 50px auto"
             />
@@ -111,7 +111,7 @@
               <div class="combobox">
                 <Combobox
                   :value.sync="pageSize"
-                  :suggestions="[
+                  :options="[
                     { value: 10, text: '10 bản ghi trên trang' },
                     { value: 20, text: '20 bản ghi trên trang' },
                     { value: 30, text: '30 bản ghi trên trang' },
@@ -169,6 +169,7 @@
 </template>
 
 <script>
+//#region import
 import {
   getEmployees,
   getCountEmployees,
@@ -195,9 +196,11 @@ import DialogEmployee from "./DialogEmployee";
 import EmployeeItem from "./EmployeeItem";
 import InformationDialog from "./InformationDialog.vue";
 import OptionTableEmployee from "./OptionTableEmployee.vue";
+//#endregion
 
+//#region export
 export default {
-  name: "EmployeeList",
+  //#region components
   components: {
     Button,
     IconButton,
@@ -213,17 +216,22 @@ export default {
     Pagination,
     Combobox,
   },
+  //#endregion
 
+  //#region created
   created() {
     this.getCountEmployees();
     this.getEmployees();
     this.getEmployeeDepartments();
   },
+  //#endregion
+
+  //#region data
   data() {
     return {
       /**
        * Config của dialog info
-       * CreatedBy: dqdat 03/06/2021
+       * CreatedBy: dqdat (11/6/2021)
        */
       infoDialogConfig: {
         isShow: false,
@@ -231,7 +239,7 @@ export default {
 
       /**
        * Config của dialog nhân viên
-       * CreatedBy: dqdat 01/06/2021
+       * CreatedBy: dqdat (11/6/2021)
        */
       employeeDialogConfig: {
         isShow: false,
@@ -243,6 +251,7 @@ export default {
 
       /**
        * Config của dialog xác nhận
+       * CreatedBy: dqdat (11/6/2021)
        */
       confirmDialogConfig: {
         isShow: false,
@@ -250,6 +259,7 @@ export default {
       },
       /**
        * Config của dialog alert.
+       * CreatedBy: dqdat (11/6/2021)
        */
       alertDialogConfig: {
         isShow: false,
@@ -259,34 +269,31 @@ export default {
 
       /**
        * các option cho combobox đơn vị.
+       * CreatedBy: dqdat (11/6/2021)
        */
       optionDepartment: [],
 
       /**
-       * các option cho combobox phân trang.
-       */
-      optionPage: [
-        { value: 10, text: "10 bản ghi trên 1 trang" },
-        { value: 20, text: "20 bản ghi trên 1 trang" },
-        { value: 30, text: "30 bản ghi trên 1 trang" },
-        { value: 50, text: "50 bản ghi trên 1 trang" },
-        { value: 100, text: "100 bản ghi trên 1 trang" },
-      ],
-
-      /**
-       * Mảng nhân viên được fetch từ server (có filter).
+       * Mảng nhân viên được fetch từ server về và có lọc theo filter.
+       * CreatedBy: dqdat (11/6/2021)
        */
       employees: [],
+
+      /**
+       * số bản ghi employee > 0 thì bằng true, và ngược lại
+       * CreatedBy: dqdat (11/6/2021)
+       */
       hasData: true,
 
       /**
-       * Số bản ghi lọc theo filter.
+       * Số bản ghi được fetch từ server về và có lọc theo filter.
+       * CreatedBy: dqdat (11/6/2021)
        */
       countEmloyees: 0,
 
       /**
-       * Config của dropdown chức năng table
-       * CreatedBy: dqdat 01/06/2021
+       * Config của dropdown chức năng option table
+       * CreatedBy: dqdat (11/6/2021)
        */
       employeeTableOptionConfig: {
         isShow: false,
@@ -296,41 +303,56 @@ export default {
 
       /**
        * Thông tin nhân viên đang được chọn để thao tác
+       * CreatedBy: dqdat (11/6/2021)
        */
       employeeModify: {},
 
       /**
        * Từ khóa để lọc danh sách nhân viên
+       * CreatedBy: dqdat (11/6/2021)
        */
       employeeFilter: "",
+
+      /**
+       * set time out cho input tìm kiếm
+       * CreatedBy: dqdat (11/6/2021)
+       */
       timeOut: null,
 
       /**
        * Biến xác định trạng thái của Loading.
        * true: hiện
        * false: ẩn.
+       * CreatedBy: dqdat (11/6/2021)
        */
       isShowLoading: false,
 
       /**
-       * Số lượng nhân viên trên 1 trang. Mặc định là 10.
+       * Số lượng nhân viên trên 1 trang. Mặc định là 20
+       * CreatedBy: dqdat (11/6/2021).
        */
       pageSize: 20,
 
       /**
        * Trang hiện tại. Mặc định là 1.
+       * CreatedBy: dqdat (11/6/2021)
        */
       page: 1,
 
       /**
        * tổng số trang.
+       * CreatedBy: dqdat (11/6/2021)
        */
       totalPage: 0,
     };
   },
+  //#endregion
+
+  //#region methods
   methods: {
     /**
      * Hàm lấy số nhân viên lọc theo filter.
+     * CreatedBy: dqdat (11/6/2021)
      */
     getCountEmployees() {
       getCountEmployees(this.employeeFilter)
@@ -340,8 +362,10 @@ export default {
         })
         .catch();
     },
+
     /**
      * Hàm lấy danh sách có lọc nhân viên từ server.
+     * CreatedBy: dqdat (11/6/2021)
      */
     getEmployees() {
       this.isShowLoading = true;
@@ -364,6 +388,7 @@ export default {
 
     /**
      * Hàm lấy tất cả các phòng ban.
+     * CreatedBy: dqdat (11/6/2021)
      */
     getEmployeeDepartments() {
       getEmployeeDepartments()
@@ -378,6 +403,7 @@ export default {
 
     /**
      * Hàm reset bộ lọc về mặc định.
+     * CreatedBy: dqdat (11/6/2021)
      */
     resetFilter() {
       this.page = 1;
@@ -387,6 +413,7 @@ export default {
 
     /**
      * Sự kiện click button refresh.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickBtnRefresh() {
       this.resetFilter();
@@ -396,13 +423,12 @@ export default {
 
     /**
      * Hàm click button thêm nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickAddEmployee() {
       if (this.employeeDialogConfig.isShow == false) {
         getNewEmployeeCode()
           .then((data) => {
-            //this.employeeModify.employeeCode = data;
-            //this.showDialogEmployee();
             this.employeeDialogConfig = {
               isShow: true,
               employee: {
@@ -420,13 +446,12 @@ export default {
     },
 
     /**
-     * Hàm double click vào employeeItem.
+     * Hàm double click vào employeeItem trong bảng.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onDblClickEmployeeItem(employeeId) {
       getEmployee(employeeId)
         .then((data) => {
-          //this.employeeModify = data;
-          // this.showDialogEmployee();
           this.employeeDialogConfig = {
             isShow: true,
             employee: data,
@@ -442,6 +467,7 @@ export default {
 
     /**
      * Hàm hiển thị dialog thêm và sửa nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     showDialogEmployee() {
       this.employeeDialogConfig.isShow = true;
@@ -449,6 +475,7 @@ export default {
 
     /**
      * Hàm đóng dialog thông báo.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onCloseAlertDialog() {
       this.alertDialogConfig = {
@@ -459,7 +486,8 @@ export default {
     },
 
     /**
-     * Hàm show dialog thông báo với msg.
+     * Hàm show dialog thông báo.
+     * CreatedBy: dqdat (11/6/2021)
      */
     showAlertDialog(alertDialogConfig) {
       this.alertDialogConfig = {
@@ -471,8 +499,10 @@ export default {
 
     /**
      * Hàm Click button Lưu nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     async onClickBtnSave() {
+      // Check mã nhân viên có trùng với nhân viên khác trên hệ thống không.
       var checkDuplicate;
       await checkEmployeeCodeExist(
         this.employeeDialogConfig.employee.employeeCode,
@@ -483,6 +513,7 @@ export default {
         })
         .catch();
 
+      // Nếu không trùng
       if (checkDuplicate != 1) {
         await saveEmployee(
           this.employeeDialogConfig.employee,
@@ -492,12 +523,12 @@ export default {
             // thực hiện đóng dialog thêm và sửa nhân viên.
             this.closeEmployeeDialog();
 
-            // show dialog thông báo với lời thông báo Lưu thành công.
+            // show toast thông báo với lời thông báo Lưu thành công.
             this.$toast.success("Cập nhật bản ghi thành công", {
               position: "top-right",
             });
 
-            // Lấy lại dữ liệu từ api với bộ lọc mặc định.
+            // Reload lại dữ liệu với bộ lọc mặc định.
             if (this.employeeDialogConfig.isInsert == true) {
               this.onClickBtnRefresh();
             } else {
@@ -523,7 +554,7 @@ export default {
 
     /**
      * click button cất và thêm
-     * CreatedBy: dqdat 03/06/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickBtnSaveAndAdd() {
       this.onClickBtnSave()
@@ -534,7 +565,8 @@ export default {
     },
 
     /**
-     * Hàm đóng dialog nhân viên.
+     * Hàm đóng dialog thêm hoặc sửa nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     closeEmployeeDialog() {
       this.employeeDialogConfig = {
@@ -544,14 +576,11 @@ export default {
         errors: null,
         isInsert: null,
       };
-
-      //this.employeeModify = {};
-      this.checkEmployeeCodeExist = true;
     },
 
     /**
      * click button đóng dialog nhân viên
-     * CreatedBy: dqdat 03/06/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickBtnCloseEmployeeDialog() {
       for (let key in this.employeeDialogConfig.employee) {
@@ -568,6 +597,7 @@ export default {
 
     /**
      * Hàm đóng dialog xác nhận.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onCloseConfirmDialog() {
       this.confirmDialogConfig.isShow = false;
@@ -576,6 +606,7 @@ export default {
 
     /**
      * click button xóa nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickBtnDel() {
       this.employeeTableOptionConfig = {
@@ -593,6 +624,7 @@ export default {
 
     /**
      * click button nhân bản
+     * CreatedBy: dqdat (11/6/2021)
      */
     onClickDuplicate() {
       this.employeeTableOptionConfig = {
@@ -623,22 +655,23 @@ export default {
 
     /**
      * Hàm xóa nhân viên đang được chọn.
+     * CreatedBy: dqdat (11/6/2021)
      */
     delEmployee() {
       if (this.employeeModify.employeeId) {
         delEmployee(this.employeeModify.employeeId)
           .then(() => {
-            // hiển thị dialog thông báo với câu thông báo.
+            // hiển thị toast thông báo với câu thông báo.
             this.$toast.success("Xóa bản ghi thành công", {
               position: "top-right",
             });
 
-            // fetch lại dữ liệu.
+            // reload lại dữ liệu.
             this.getCountEmployees();
             this.getEmployees();
           })
           .catch(() => {
-            // hiển thị thông báo khi thất bại.
+            // hiển thị toast thông báo khi thất bại.
             this.$toast.error("Xóa thất bại", { position: "top-right" });
           });
       }
@@ -646,6 +679,7 @@ export default {
 
     /**
      * Hàm filter khi change value input search.
+     * CreatedBy: dqdat (11/6/2021)
      */
     onInputFilterEmployee(val) {
       this.employeeFilter = val;
@@ -659,9 +693,9 @@ export default {
 
     /**
      * Hàm filter khi change pageSize combobox
+     * CreatedBy: dqdat (11/6/2021)
      */
     onChangePageSize() {
-      //this.pageSize = pageSize;
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
         this.page = 1;
@@ -689,10 +723,10 @@ export default {
     },
 
     /**
-     * Hàm click vào icon down.
+     * Hàm click vào icon down blue.
      * Gán employee đang được chọn và hiển thị dropdown ở phần chức năng
      * @param {object} data Gồm các thông tin về left, top và thông tin nhân viên
-     * CreatedBy: dqdat 15/055/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     toggleTableOption(data) {
       let newLeft = data.left - 100;
@@ -714,7 +748,7 @@ export default {
 
     /**
      * Hàm đóng dropdown chức năng nhân viên
-     * CreatedBy: dqdat 01/06/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     closeEmployeeTableOption() {
       this.employeeTableOptionConfig = {
@@ -724,10 +758,15 @@ export default {
       };
     },
   },
+  //#endregion
+
+  //#region watch
   watch: {
     page: function () {
       this.getEmployees();
     },
   },
+  //#endregion
 };
+//#endregion
 </script>

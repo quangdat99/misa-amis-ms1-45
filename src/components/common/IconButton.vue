@@ -13,7 +13,7 @@ export default {
   props: {
     /**
      * Icon class
-     * CreatedBy: dqdat 30/05/2021
+     * CreatedBy: dqdat (11/6/2021)
      */
     icon: {
       type: String,

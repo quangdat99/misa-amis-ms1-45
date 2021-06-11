@@ -11,7 +11,7 @@ export default {
   //#region data
   data() {
     return {
-      id: Math.random().toString(36).substr(0, 5),
+      id: Math.random(),
     };
   },
   //#endregion

@@ -42,24 +42,11 @@ export default {
   },
   //#endregion
 
-  //#region props
-  props: {
-    /**
-     * Lời nhắn
-     * CreatedBy: dqdat 01/06/2021
-     */
-    // msg: {
-    //   type: String,
-    //   default: "",
-    // },
-  },
-  //#endregion
-
   //#region methods
   methods: {
     /**
      * Phương thức đóng dialog.
-     * CreatedBy: dqdat (24/05/2021)
+     * CreatedBy: dqdat (11/6/2021)
      */
     closeDialog() {
       this.$emit("onClose");

@@ -6,17 +6,9 @@
 </template>
 
 <script>
-export default {
-  name: "Loading",
-  props: {
-    /**
-     * Prop xác định trạng thái của dialog thông báo.
-     * true: hiện
-     * false: ẩn
-     */
-    show: Boolean,
-  },
-};
+//#region  export
+export default {};
+//#endregion
 </script>
 
 <style scoped>
@@ -24,7 +16,7 @@ export default {
   width: 42px;
   height: 42px;
   position: relative;
-  background: url("../../assets/loading.svg") no-repeat 0 0;
+  background: url("../../assets/img/loading.svg") no-repeat 0 0;
   -webkit-animation: spin 0.7s linear infinite;
   animation: spin 0.7s linear infinite;
 }
