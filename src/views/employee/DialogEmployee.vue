@@ -6,11 +6,11 @@
         <div class="row ml-2">
           <div class="dialog-title">Thông tin nhân viên</div>
           <div class="row">
-            <Checkbox class="pt-1" />
+            <Checkbox class="pt-1 pr-1" />
             <div class="line-height">Là khách hàng</div>
           </div>
           <div class="row">
-            <Checkbox class="pt-1" />
+            <Checkbox class="pt-1 pr-1" />
             <div class="line-height">Là nhà cung cấp</div>
           </div>
           <div class="dialog-header-right">

@@ -664,7 +664,7 @@ a {
             .line-height {
                 line-height: 33px;
                 padding-left: 4px;
-                margin-right: 8px;
+                margin-right: 16px;
                 font-size: 16px;
                 display: inline-block;
             }
@@ -761,7 +761,7 @@ a {
     &:checked + label {
         animation-name: rotateIn;
         animation-duration: 0.3s;
-        border: 1px solid #afafaf;
+        border: 1px solid #2ca01c;
 
         &:active {
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
