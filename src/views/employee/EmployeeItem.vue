@@ -6,12 +6,12 @@
     </td>
     <td>{{ employee.employeeCode }}</td>
     <td>{{ employee.employeeName }}</td>
-    <td>{{ genderName }}</td>
+    <td>{{ employee.genderName }}</td>
     <td>{{ dateOfBirth(employee.dateOfBirth) }}</td>
 
     <td>{{ employee.identityNumber }}</td>
     <td>{{ employee.employeePosition }}</td>
-    <td style="min-width: 200px">{{ departmentName }}</td>
+    <td style="min-width: 200px">{{ employee.employeeDepartmentName }}</td>
     <td>{{ employee.bankAccountNumber }}</td>
     <td>{{ employee.bankName }}</td>
     <td>{{ employee.bankBranchName }}</td>
@@ -82,42 +82,6 @@ export default {
      */
     dateOfBirth(dateStr) {
       return dateStr ? dayjs(dateStr).format("DD/MM/YYYY") : null;
-    },
-  },
-  //#endregion
-
-  //#region computed
-  computed: {
-    /**
-     * Computed binđ giới tính. Mặc định là Không xác định.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    genderName: function () {
-      if (this.employee.gender == 0) {
-        return "Nữ";
-      } else if (this.employee.gender == 1) {
-        return "Nam";
-      } else if (this.employee.gender == 2) {
-        return "Khác";
-      } else {
-        return "Không xác định";
-      }
-    },
-
-    /**
-     * Computed bind email nhân viên. Mặc định là không rõ.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    email: function () {
-      return this.employee.Email || "Không rõ";
-    },
-
-    /**
-     * Computed bind phòng ban của nhân viên. Mặc định là không rõ.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    departmentName: function () {
-      return this.employee.employeeDepartmentName || "Không rõ";
     },
   },
   //#endregion
