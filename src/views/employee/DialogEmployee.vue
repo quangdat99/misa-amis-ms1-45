@@ -234,7 +234,7 @@
               </div>
               <div class="col-5">
                 <div>
-                  <label class="label-input">Ngày sinh</label>
+                  <label class="label-input">Ngày cấp</label>
                   <DatePicker
                     ref="dateOfBirth"
                     displayFormat="DD/MM/YYYY"
@@ -247,14 +247,14 @@
                     :months="localeDatePicker.months"
                     :isDateDisabled="isDateDisabled"
                     :value="
-                      employee && employee.dateOfBirth
-                        ? formatYYYMMDD(employee.dateOfBirth)
+                      employee && employee.identityDate
+                        ? formatYYYMMDD(employee.identityDate)
                         : null
                     "
                     @input="
                       $emit('update:employee', {
                         ...employee,
-                        dateOfBirth: $event,
+                        identityDate: $event,
                       })
                     "
                   />
