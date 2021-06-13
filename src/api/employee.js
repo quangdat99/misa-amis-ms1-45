@@ -18,19 +18,6 @@ export const getEmployees = ({ page = 1, pageSize = 20, employeeFilter = "" }) =
         .catch(err => Promise.reject(err));
 //#endregion
 
-//#region getNewEmployeeCode
-/**
- * Lấy mã nhân viên mới
- * @returns mã khách hàng mới
- * CreatedBy: dqdat (11/6/2021)
- */
-export const getNewEmployeeCode = () =>
-    req.get(`${PREFIX_URL}/NewEmployeeCode`)
-        .then(res => res.data)
-        .then(data => Promise.resolve(data))
-        .catch(err => Promise.reject(err));
-//#endregion
-
 //#region getEmployee
 /**
  * Lấy thông tin một nhân viên
@@ -42,6 +29,26 @@ export const getEmployee = (employeeId) =>
     req.get(`${PREFIX_URL}/${employeeId}`)
         .then(res => res.data)
         .then(data => Promise.resolve(data))
+        .catch(err => Promise.reject(err));
+//#endregion
+
+
+//#region saveEmployee
+/**
+ * Lưu thông tin nhân viên
+ * @returns 
+ * CreatedBy: dqdat (11/6/2021)
+ */
+export const saveEmployee = (data, isInsert = true) =>
+    req({
+        url: isInsert ? `${PREFIX_URL}` : `${PREFIX_URL}/${data.employeeId}`,
+        data: data,
+        method: isInsert ? 'POST' : 'PUT'
+    })
+        .then(res => {
+            if (res.status == 200 || res.status == 201) return Promise.resolve();
+            return Promise.reject();
+        })
         .catch(err => Promise.reject(err));
 //#endregion
 
@@ -63,6 +70,19 @@ export const delEmployee = (employeeId) =>
         .catch(err => Promise.reject(err));
 //#endregion
 
+//#region getNewEmployeeCode
+/**
+ * Lấy mã nhân viên mới
+ * @returns mã khách hàng mới
+ * CreatedBy: dqdat (11/6/2021)
+ */
+export const getNewEmployeeCode = () =>
+    req.get(`${PREFIX_URL}/NewEmployeeCode`)
+        .then(res => res.data)
+        .then(data => Promise.resolve(data))
+        .catch(err => Promise.reject(err));
+//#endregion
+
 //#region checkEmployeeCodeExist
 /**
  * Check mã nhân viên tồn tại trên hệ thống
@@ -76,23 +96,4 @@ export const checkEmployeeCodeExist = (employeeCode, employeeId) =>
         .then(data => Promise.resolve(data))
         .catch(err => Promise.reject(err));
 
-//#endregion
-
-//#region saveEmployee
-/**
- * Lưu thông tin nhân viên
- * @returns 
- * CreatedBy: dqdat (11/6/2021)
- */
-export const saveEmployee = (data, isInsert = true) =>
-    req({
-        url: isInsert ? `${PREFIX_URL}` : `${PREFIX_URL}/${data.employeeId}`,
-        data: data,
-        method: isInsert ? 'POST' : 'PUT'
-    })
-        .then(res => {
-            if (res.status == 200 || res.status == 201) return Promise.resolve();
-            return Promise.reject();
-        })
-        .catch(err => Promise.reject(err));
 //#endregion
