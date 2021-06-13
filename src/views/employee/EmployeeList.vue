@@ -172,7 +172,6 @@
 //#region import
 import {
   getEmployees,
-  getCountEmployees,
   getNewEmployeeCode,
   getEmployee,
   delEmployee,
@@ -220,7 +219,6 @@ export default {
 
   //#region created
   created() {
-    this.getCountEmployees();
     this.getEmployees();
     this.getEmployeeDepartments();
   },
@@ -351,19 +349,6 @@ export default {
   //#region methods
   methods: {
     /**
-     * Hàm lấy số nhân viên lọc theo filter.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    getCountEmployees() {
-      getCountEmployees(this.employeeFilter)
-        .then((data) => {
-          this.countEmloyees = data;
-          this.totalPage = Math.ceil(this.countEmloyees / this.pageSize);
-        })
-        .catch();
-    },
-
-    /**
      * Hàm lấy danh sách có lọc nhân viên từ server.
      * CreatedBy: dqdat (11/6/2021)
      */
@@ -375,8 +360,12 @@ export default {
         employeeFilter: this.employeeFilter,
       })
         .then((data) => {
+          this.countEmloyees = data.countEmployees;
+          this.totalPage = Math.ceil(this.countEmloyees / this.pageSize);
+
           this.isShowLoading = false;
-          this.employees = data;
+
+          this.employees = data.employees;
           if (this.employees.length > 0) {
             this.hasData = true;
           } else {
@@ -419,7 +408,6 @@ export default {
      */
     onClickBtnRefresh() {
       this.resetFilter();
-      this.getCountEmployees();
       this.getEmployees();
     },
 
@@ -669,7 +657,6 @@ export default {
             });
 
             // reload lại dữ liệu.
-            this.getCountEmployees();
             this.getEmployees();
           })
           .catch(() => {
@@ -689,7 +676,6 @@ export default {
       this.timeOut = setTimeout(() => {
         this.page = 1;
         this.getEmployees();
-        this.getCountEmployees();
       }, 300);
     },
 
@@ -702,7 +688,6 @@ export default {
       this.timeOut = setTimeout(() => {
         this.page = 1;
         this.getEmployees();
-        this.getCountEmployees();
       }, 300);
     },
 

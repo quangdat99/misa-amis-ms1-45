@@ -18,19 +18,6 @@ export const getEmployees = ({ page = 1, pageSize = 20, employeeFilter = "" }) =
         .catch(err => Promise.reject(err));
 //#endregion
 
-//#region getCountEmployees
-/**
- * Lấy tổng số nhân viên có lọc
- * @param {string} employeeFilter 
- * @returns số nhân viên
- * CreatedBy: dqdat (11/6/2021)
- */
-export const getCountEmployees = (employeeFilter) => req.get(`${PREFIX_URL}/CountEmployees?employeeFilter=${employeeFilter}`)
-    .then((res) => res.data)
-    .then((data) => Promise.resolve(data))
-    .catch(err => Promise.reject(err));
-//#endregion
-
 //#region getNewEmployeeCode
 /**
  * Lấy mã nhân viên mới
@@ -84,7 +71,7 @@ export const delEmployee = (employeeId) =>
  * CreatedBy: dqdat (11/6/2021)
  */
 export const checkEmployeeCodeExist = (employeeCode, employeeId) =>
-    req.get(`${PREFIX_URL}/EmployeeCodeExist?employeeCode=${employeeCode}&employeeId=${employeeId}`)
+    req.get(`${PREFIX_URL}/CheckEmployeeCodeExist?employeeCode=${employeeCode}&employeeId=${employeeId}`)
         .then(res => res.data)
         .then(data => Promise.resolve(data))
         .catch(err => Promise.reject(err));
