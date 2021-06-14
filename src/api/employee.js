@@ -1,5 +1,5 @@
 import req from '../utils/req.js';
-
+import { BASE_URL } from '../utils/envConst.js';
 const PREFIX_URL = "api/v1/employees";
 
 //#region getEmployees
@@ -96,4 +96,14 @@ export const checkEmployeeCodeExist = (employeeCode, employeeId) =>
         .then(data => Promise.resolve(data))
         .catch(err => Promise.reject(err));
 
+//#endregion
+
+//#region exportExcel
+/**
+ * Export file excel danh sách nhân viên
+ * @param {object} param
+ */
+export const exportExcel = () => {
+    window.open(`${BASE_URL}${PREFIX_URL}/ExportExcel`);
+}
 //#endregion

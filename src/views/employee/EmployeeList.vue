@@ -39,6 +39,7 @@
             <IconButton
               icon="icon icon-excel"
               style="margin-left: 8px; padding: 0"
+              @click="onClickBtnExport"
             />
           </div>
         </div>
@@ -177,6 +178,7 @@ import {
   delEmployee,
   checkEmployeeCodeExist,
   saveEmployee,
+  exportExcel,
 } from "../../api/employee.js";
 
 import { getEmployeeDepartments } from "../../api/employeeDepartment.js";
@@ -743,6 +745,14 @@ export default {
         top: 0,
         left: 0,
       };
+    },
+
+    /**
+     * hàm click button export excel
+     * CreatedBy: dqdat 14/06/2021
+     */
+    onClickBtnExport() {
+      exportExcel();
     },
   },
   //#endregion
