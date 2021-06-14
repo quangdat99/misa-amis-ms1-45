@@ -91,7 +91,7 @@ export const getNewEmployeeCode = () =>
  * CreatedBy: dqdat (11/6/2021)
  */
 export const checkEmployeeCodeExist = (employeeCode, employeeId) =>
-    req.get(`${PREFIX_URL}/CheckEmployeeCodeExist?employeeCode=${employeeCode}&employeeId=${employeeId}`)
+    req.get(`${PREFIX_URL}/CheckEmployeeCodeExist?employeeCode=${employeeCode}${employeeId ? '&employeeId=' + employeeId : ''}`)
         .then(res => res.data)
         .then(data => Promise.resolve(data))
         .catch(err => Promise.reject(err));
