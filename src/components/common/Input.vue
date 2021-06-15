@@ -1,4 +1,5 @@
 <template>
+  <!-- #region input -->
   <input
     class="input"
     :class="{ 'has-icon': hasIcon }"
@@ -8,6 +9,7 @@
     @input="$emit('input', $event.target.value)"
     @blur="$emit('blur')"
   />
+  <!-- #endregion -->
 </template>
 
 <script>

@@ -1,7 +1,10 @@
 <template>
+  <!-- #region dialog -->
   <div class="dialog">
     <div class="dialog-background" @click="onClickCloseDialog"></div>
+    <!-- #region dialog-content -->
     <div class="dialog-content zoomIn">
+      <!-- #region dialog-header -->
       <div class="dialog-header">
         <div class="row ml-2">
           <div class="dialog-title">Thông tin nhân viên</div>
@@ -42,6 +45,8 @@
           </div>
         </div>
       </div>
+      <!-- #endregion -->
+      <!-- #region dialog-body -->
       <div class="dialog-body">
         <div class="row">
           <div class="col-6 pr-2">
@@ -397,6 +402,8 @@
           </div>
         </div>
       </div>
+      <!-- #endregion -->
+      <!-- #region dialog-footer -->
       <div class="divide"></div>
       <div class="dialog-footer">
         <div class="dialog-footer-left">
@@ -423,8 +430,11 @@
           />
         </div>
       </div>
+      <!-- #endregion -->
     </div>
+    <!-- #endregion -->
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>
@@ -445,10 +455,6 @@ import Radio from "../../components/common/Radio";
 
 //#region export
 export default {
-  //#region name
-  name: "DialogEmployee",
-  //#endregion
-
   //#region components
   components: {
     DatePicker,
@@ -521,24 +527,7 @@ export default {
 
   //#region methods
   methods: {
-    /**
-     * Kiểm tra lỗi trước khi bấm Save
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    validateBeforeSave() {
-      let valid = true;
-      this.onValidEmployeeCode();
-      this.onValidFullName();
-      this.onValidDepartment();
-      for (let err in this.errors) {
-        if (this.errors[err]) {
-          valid = false;
-          break;
-        }
-      }
-      return valid;
-    },
-
+    //#region onClick Save, SaveAndAdd, Close EmployeeDialog
     /**
      * Hàm gọi khi click vào button Cất.
      * CreatedBy: dqdat (11/6/2021)
@@ -576,6 +565,38 @@ export default {
     },
 
     /**
+     * Hàm đóng dialog.
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onClickCloseDialog() {
+      this.errors = {
+        employeeCode: "",
+        employeeName: "",
+        employeeDepartmentId: "",
+      };
+      this.$emit("onClose");
+    },
+    //#endregion
+
+    //#region Validate Input
+    /**
+     * Kiểm tra lỗi trước khi bấm Save
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    validateBeforeSave() {
+      let valid = true;
+      this.onValidEmployeeCode();
+      this.onValidFullName();
+      this.onValidDepartment();
+      for (let err in this.errors) {
+        if (this.errors[err]) {
+          valid = false;
+          break;
+        }
+      }
+      return valid;
+    },
+    /**
      * valid mã nhân viên.
      * CreatedBy: dqdat (11/6/2021)
      */
@@ -610,20 +631,9 @@ export default {
         this.errors.employeeDepartmentId = "Đơn vị không được để trống.";
       }
     },
+    //#endregion
 
-    /**
-     * Hàm đóng dialog.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    onClickCloseDialog() {
-      this.errors = {
-        employeeCode: "",
-        employeeName: "",
-        employeeDepartmentId: "",
-      };
-      this.$emit("onClose");
-    },
-
+    //#region format Date
     /**
      * Hàm format date về dạng YYYY-MM-DD
      * CreatedBy: dqdat (11/6/2021)
@@ -638,7 +648,9 @@ export default {
     isDateDisabled(date) {
       return date > new Date();
     },
+    //#endregion
 
+    //#region Key Down
     /**
      * sự kiện nhấn phím
      * CreatedBy: dqdat (11/6/2021)
@@ -662,6 +674,7 @@ export default {
         e.preventDefault();
       }
     },
+    //#endregion
   },
   //#endregion
 

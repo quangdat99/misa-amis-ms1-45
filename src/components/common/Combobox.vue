@@ -1,5 +1,7 @@
 <template>
+  <!-- #region combobox -->
   <div class="dropdown autocomplete">
+    <!-- #region dropdown button -->
     <div class="dropdown-btn con-input">
       <input
         type="text"
@@ -19,6 +21,8 @@
         <div class="icon icon-arrow-dropdown"></div>
       </div>
     </div>
+    <!-- #endregion -->
+    <!-- #region dropdown content -->
     <div class="dropdown-content reserve" :class="{ hide: !isShow }">
       <div
         v-for="(option, i) in options"
@@ -30,7 +34,9 @@
         {{ option.text }}
       </div>
     </div>
+    <!-- #endregion -->
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>

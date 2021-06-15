@@ -1,7 +1,9 @@
 <template>
+  <!-- #region dialog -->
   <div class="dialog">
     <div class="dialog-background" @click="closeDialog"></div>
     <div class="dialog-content zoomIn" style="width: 444px">
+      <!-- #region dialog-body -->
       <div class="dialog-body">
         <div class="flex-row-align-center" style="padding-top: 32px">
           <div class="icon icon-question"></div>
@@ -10,6 +12,8 @@
           </div>
         </div>
       </div>
+      <!-- #endregion -->
+      <!-- #region dialog-footer -->
       <div class="divide"></div>
       <div class="dialog-footer">
         <div class="dialog-footer-left">
@@ -25,8 +29,10 @@
           />
         </div>
       </div>
+      <!-- #endregion -->
     </div>
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>

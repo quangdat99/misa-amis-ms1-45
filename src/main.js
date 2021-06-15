@@ -2,11 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-// sử dụng thư viện vue-toast-notification
+//#region sử dụng thư viện vue-toast-notification
 import VueToast from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css';
+//#endregion
 
-// sử dụng thư viện vue-tippy
+//#region sử dụng thư viện vue-tippy
 import VueTippy, { TippyComponent } from "vue-tippy";
 Vue.use(VueTippy, {
   directive: "tippy",
@@ -24,7 +25,7 @@ Vue.use(VueTippy, {
 });
 Vue.component("tippy", TippyComponent);
 import "tippy.js/themes/google.css";
-
+//#endregion
 
 Vue.config.productionTip = false
 Vue.use(VueToast);

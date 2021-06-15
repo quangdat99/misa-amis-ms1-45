@@ -1,5 +1,7 @@
 <template>
+  <!-- #region panagition -->
   <div class="pagination">
+    <!-- #region Trước -->
     <div
       @click="$emit('update:page', page - 1)"
       v-if="page > 1"
@@ -8,9 +10,12 @@
       <div class="prev-page">Trước</div>
     </div>
     <div class="pagination_item disabled-prev" v-if="page == 1">Trước</div>
+    <!-- #endregion -->
+    <!-- #region page-item -->
     <div class="pagination-item" @click="$emit('update:page', 1)">
       <div class="page" :class="{ active: page == 1 }">1</div>
     </div>
+    <!-- ... -->
     <div class="three-dot" v-if="page > 4">...</div>
     <div
       v-for="n in rangePage"
@@ -20,6 +25,7 @@
     >
       <div class="page" :class="{ active: n == page }">{{ n }}</div>
     </div>
+    <!-- ... -->
     <div class="three-dot" v-if="page < totalPage - 3">...</div>
     <div
       v-if="totalPage > 1"
@@ -30,6 +36,8 @@
         {{ totalPage }}
       </div>
     </div>
+    <!-- #endregion -->
+    <!-- #region Sau -->
     <div
       @click="$emit('update:page', page + 1)"
       v-if="page < totalPage"
@@ -40,7 +48,9 @@
     <div class="pagination_item disabled-next" v-if="page == totalPage">
       Sau
     </div>
+    <!-- #endregion -->
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>

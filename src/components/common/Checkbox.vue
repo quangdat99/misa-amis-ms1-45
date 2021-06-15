@@ -1,8 +1,10 @@
 <template>
+  <!-- #region checkbox -->
   <div style="display: inline-block">
     <input type="checkbox" class="checkbox" :id="id" />
     <label :for="id"></label>
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>

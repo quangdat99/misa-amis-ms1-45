@@ -1,19 +1,9 @@
-//Style chung.
-@font-face {
-    font-family: NotoSans;
-    src: url("./assets/fonts/notosans-regular.woff2") format("woff2");
-}
-@font-face {
-    font-family: Google-Sans-Bold;
-    src: url("./assets/fonts/notosans-bold.woff2") format("woff2");
-}
-
-// Biến chung.
+/* #region Declare variable */
 $icon-size: 24px;
 $color-white: #fff;
+/* #endregion */
 
-// mixins
-
+/* #region mixins */
 @mixin icon-default {
     background-image: url("./assets/img/Sprites.svg");
     background-repeat: no-repeat;
@@ -29,6 +19,18 @@ $color-white: #fff;
     display: flex;
     flex-direction: row;
 }
+/* #endregion */
+
+/* #region General */
+@font-face {
+    font-family: NotoSans;
+    src: url("./assets/fonts/notosans-regular.woff2") format("woff2");
+}
+@font-face {
+    font-family: Google-Sans-Bold;
+    src: url("./assets/fonts/notosans-bold.woff2") format("woff2");
+}
+
 .flex-row-align-center {
     @include flex-row();
     align-items: center;
@@ -70,37 +72,13 @@ a {
 ::-webkit-scrollbar-thumb:hover {
     background: rgb(212, 212, 212);
 }
+/* #endregion */
 
-// animate css
-@keyframes zoomIn {
-    from {
-        opacity: 0;
-        transform: scale3d(0.8, 0.8, 0.8);
-    }
-    50% {
-        opacity: 1;
-    }
-}
-.zoomIn {
-    animation-name: zoomIn;
-    animation-duration: 0.4s;
-}
-@keyframes rotateIn {
-    from {
-        transform: rotate3d(0, 0, 1, 180deg);
-        opacity: 0;
-    }
-    to {
-        transform: translate3d(0, 0, 0);
-        opacity: 1;
-    }
-}
-
-// Icon
+/* #region icon */
 .icon {
     @include icon-default();
 
-    // icon navbar.
+    /* #region icon navbar */
     &.icon-navbar-dashboard {
         @include icon-bind(-30px -1628px);
     }
@@ -164,8 +142,9 @@ a {
     &.icon-navbar-finance {
         @include icon-bind(-207px -1667px);
     }
+    /* #endregion */
 
-    // icon-header
+    /* #region icon header */
     &.icon-three-stripes {
         @include icon-bind(-843px -30px);
         margin-left: 10px;
@@ -182,8 +161,9 @@ a {
         @include icon-bind(-788px -30px);
         margin-right: 8px;
     }
+    /* #endregion */
 
-    // icon-content
+    /* #region icon content */
     &.icon-search {
         @include icon-bind(-992px -360px, 16px);
     }
@@ -209,8 +189,9 @@ a {
     &.icon-arrow-dropdown {
         @include icon-bind(-560px -359px, 16px);
     }
+    /* #endregion */
 
-    // icon-dialog
+    /* #region icon dialog */
     &.icon-help {
         @include icon-bind(-89px -144px);
     }
@@ -230,9 +211,11 @@ a {
     &.icon-question {
         @include icon-bind(-826px -456px, 48px);
     }
+    /* #endregion */
 }
+/* #endregion */
 
-// Navbar
+/* #region Navbar */
 .navbar {
     background-color: #393a3d;
     color: #fff;
@@ -303,8 +286,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// Header
+/* #region Header */
 .header {
     position: absolute;
     left: 226px;
@@ -357,8 +341,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// Content
+/* #region Content */
 .content {
     position: absolute;
     left: 226px;
@@ -455,8 +440,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// Pagination
+/* #region Pagination */
 .pagination {
     display: flex;
     align-items: center;
@@ -487,8 +473,9 @@ a {
         color: rgb(163, 163, 163);
     }
 }
+/* #endregion */
 
-// Table
+/* #region Table */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -605,8 +592,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// other
+/* #region option table Dropdown */
 .table-option-dropdown {
     z-index: 100;
     white-space: nowrap;
@@ -627,8 +615,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// Dialog
+/* #region Dialog */
 .dialog {
     display: flex;
     justify-content: center;
@@ -702,8 +691,22 @@ a {
         }
     }
 }
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale3d(0.8, 0.8, 0.8);
+    }
+    50% {
+        opacity: 1;
+    }
+}
+.zoomIn {
+    animation-name: zoomIn;
+    animation-duration: 0.4s;
+}
+/* #endregion */
 
-// Radio
+/* #region Radio */
 .radio {
     display: none;
 
@@ -734,8 +737,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// checkbox
+/* #region checkbox */
 .checkbox {
     display: none;
 
@@ -764,8 +768,19 @@ a {
         }
     }
 }
+@keyframes rotateIn {
+    from {
+        transform: rotate3d(0, 0, 1, 180deg);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+/* #endregion */
 
-// input
+/* #region input */
 .input {
     height: 32px;
     border: 1px solid #ccc;
@@ -793,7 +808,6 @@ a {
         border-color: #f20 !important;
     }
 }
-
 .con-input {
     position: relative;
 
@@ -826,7 +840,9 @@ a {
     margin-top: 8px;
 }
 
-// button.
+/* #endregion */
+
+/* #region button */
 .btn {
     height: 40px;
     padding-left: 24px;
@@ -858,8 +874,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// dropdown
+/* #region dropdown */
 .dropdown {
     position: relative;
 
@@ -909,8 +926,9 @@ a {
         }
     }
 }
+/* #endregion */
 
-// autocomplete
+/* #region autocomplete */
 .autocomplete {
     .icon-dropdown-box {
         cursor: pointer;
@@ -933,7 +951,9 @@ a {
         background-color: #2ca01c;
     }
 }
+/* #endregion */
 
+/* #region option general */
 .pr-1 {
     padding-right: 8px;
 }
@@ -1052,3 +1072,4 @@ a {
 [class*="col-"] {
     flex: 0 0 auto;
 }
+/* #endregion */

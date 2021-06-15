@@ -1,9 +1,11 @@
 <template>
+  <!-- #region icon button -->
   <button
     class="btn"
     :class="icon ? icon : ''"
     @click.prevent="$emit('click', $event)"
   ></button>
+  <!-- #endregion -->
 </template>
 
 <script>

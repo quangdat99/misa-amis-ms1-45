@@ -32,7 +32,6 @@ export const getEmployee = (employeeId) =>
         .catch(err => Promise.reject(err));
 //#endregion
 
-
 //#region saveEmployee
 /**
  * Lưu thông tin nhân viên

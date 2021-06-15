@@ -1,4 +1,5 @@
 <template>
+  <!-- #region tr employee -->
   <tr @dblclick="$emit('dblclick', employee.employeeId)">
     <td @dblclick.stop>
       <Checkbox />
@@ -26,6 +27,7 @@
       </div>
     </td>
   </tr>
+  <!-- #endregion -->
 </template>
 
 <script>

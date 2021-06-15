@@ -1,5 +1,4 @@
 import req from '../utils/req.js';
-
 const PREFIX_URL = "api/v1/EmployeeDepartments";
 
 //#region getEmployeeDepartments

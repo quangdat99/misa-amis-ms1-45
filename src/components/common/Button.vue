@@ -1,10 +1,12 @@
 <template>
+  <!-- #region button -->
   <button
     :class="['btn', color ? 'btn-' + color : '']"
     @click.prevent="$emit('click')"
   >
     {{ text }}
   </button>
+  <!-- #endregion -->
 </template>
 
 <script>

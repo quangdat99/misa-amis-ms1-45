@@ -1,10 +1,13 @@
 <template>
   <div>
     <div class="content">
+      <!-- #region title-box -->
       <div class="title-box">
         <div class="title">Nhân viên</div>
         <Button text="Thêm mới nhân viên" @click="onClickAddEmployee" />
       </div>
+      <!-- #endregion -->
+      <!-- #region toolbar-box -->
       <div class="toolbar-box mt-1">
         <div class="toolbar-left"></div>
         <div class="toolbar-right">
@@ -44,8 +47,10 @@
           </div>
         </div>
       </div>
+      <!-- #endregion -->
       <div class="grid-contain">
         <div class="grid bg-white data">
+          <!-- #region table -->
           <table class="table">
             <thead>
               <tr>
@@ -80,6 +85,8 @@
               />
             </tbody>
           </table>
+          <!-- #endregion -->
+          <!-- #region has-data -->
           <div
             v-if="!hasData"
             style="
@@ -102,6 +109,8 @@
               Không có dữ liệu
             </div>
           </div>
+          <!-- #endregion -->
+          <!-- #region footer -->
           <div class="footer" v-if="employees.length != 0">
             <div class="footer-left">
               Tổng số:
@@ -125,9 +134,11 @@
               <Pagination :page.sync="page" :totalPage="totalPage" />
             </div>
           </div>
+          <!-- #endregion -->
         </div>
       </div>
     </div>
+    <!-- #region components, dialog, loading -->
     <DialogEmployee
       ref="dialogEmployeeRef"
       v-if="employeeDialogConfig.isShow"
@@ -159,13 +170,14 @@
       @onClose="onCloseConfirmDialog"
       @onOk="delEmployee"
     />
-    <Loading v-if="isShowLoading" />
     <InformationDialog
       v-if="infoDialogConfig.isShow"
       @onClose="infoDialogConfig.isShow = false"
       @onNegative="onNegativeInfoDialog"
       @onPositive="onPositiveInfoDialog"
     />
+    <Loading v-if="isShowLoading" />
+    <!-- #endregion -->
   </div>
 </template>
 
@@ -350,6 +362,7 @@ export default {
 
   //#region methods
   methods: {
+    //#region fetch data from database
     /**
      * Hàm lấy danh sách có lọc nhân viên từ server.
      * CreatedBy: dqdat (11/6/2021)
@@ -393,7 +406,9 @@ export default {
         })
         .catch();
     },
+    //#endregion
 
+    //#region filter, pageSize, reload, exportExcel
     /**
      * Hàm reset bộ lọc về mặc định.
      * CreatedBy: dqdat (11/6/2021)
@@ -413,6 +428,41 @@ export default {
       this.getEmployees();
     },
 
+    /**
+     * Hàm filter khi change value input search.
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onInputFilterEmployee(val) {
+      this.employeeFilter = val;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.page = 1;
+        this.getEmployees();
+      }, 300);
+    },
+
+    /**
+     * Hàm filter khi change pageSize combobox
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onChangePageSize() {
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.page = 1;
+        this.getEmployees();
+      }, 300);
+    },
+
+    /**
+     * hàm click button export excel
+     * CreatedBy: dqdat 14/06/2021
+     */
+    onClickBtnExport() {
+      exportExcel();
+    },
+    //#endregion
+
+    //#region Add, Modified, Delete employee
     /**
      * Hàm click button thêm nhân viên.
      * CreatedBy: dqdat (11/6/2021)
@@ -455,145 +505,6 @@ export default {
           };
         })
         .catch();
-    },
-
-    /**
-     * Hàm hiển thị dialog thêm và sửa nhân viên.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    showDialogEmployee() {
-      this.employeeDialogConfig.isShow = true;
-    },
-
-    /**
-     * Hàm đóng dialog thông báo.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    onCloseAlertDialog() {
-      this.alertDialogConfig = {
-        isShow: false,
-        msg: "",
-        type: "warning",
-      };
-    },
-
-    /**
-     * Hàm show dialog thông báo.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    showAlertDialog(alertDialogConfig) {
-      this.alertDialogConfig = {
-        isShow: true,
-        msg: alertDialogConfig.msg,
-        type: alertDialogConfig.type,
-      };
-    },
-
-    /**
-     * Hàm Click button Lưu nhân viên.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    async onClickBtnSave() {
-      // Check mã nhân viên có trùng với nhân viên khác trên hệ thống không.
-      var checkDuplicate;
-      await checkEmployeeCodeExist(
-        this.employeeDialogConfig.employee.employeeCode,
-        this.employeeDialogConfig.employee.employeeId
-      )
-        .then((data) => {
-          checkDuplicate = data;
-        })
-        .catch();
-
-      // Nếu không trùng
-      if (checkDuplicate != 1) {
-        await saveEmployee(
-          this.employeeDialogConfig.employee,
-          this.employeeDialogConfig.isInsert
-        )
-          .then(() => {
-            // thực hiện đóng dialog thêm và sửa nhân viên.
-            this.closeEmployeeDialog();
-
-            // show toast thông báo với lời thông báo Lưu thành công.
-            this.$toast.success("Cập nhật bản ghi thành công", {
-              position: "top-right",
-            });
-
-            // Reload lại dữ liệu với bộ lọc mặc định.
-            if (this.employeeDialogConfig.isInsert == true) {
-              this.onClickBtnRefresh();
-            } else {
-              this.getEmployees();
-            }
-          })
-          .catch(() => {
-            // show dialog thông báo khi lưu thất bại.
-            this.$toast.error("Lưu thất bại", { position: "top-right" });
-          });
-      } else {
-        // Nếu trùng thì show dialog thông báo.
-        this.alertDialogConfig = {
-          isShow: true,
-          msg:
-            "Nhân viên <" +
-            this.employeeDialogConfig.employee.employeeCode +
-            "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại.",
-          type: "warning",
-        };
-      }
-    },
-
-    /**
-     * click button cất và thêm
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    onClickBtnSaveAndAdd() {
-      this.onClickBtnSave()
-        .then(() => {
-          this.onClickAddEmployee();
-        })
-        .catch();
-    },
-
-    /**
-     * Hàm đóng dialog thêm hoặc sửa nhân viên.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    closeEmployeeDialog() {
-      this.employeeDialogConfig = {
-        isShow: false,
-        employee: {},
-        employeeOrigin: {},
-        errors: null,
-        isInsert: null,
-      };
-    },
-
-    /**
-     * click button đóng dialog nhân viên
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    onClickBtnCloseEmployeeDialog() {
-      for (let key in this.employeeDialogConfig.employee) {
-        if (
-          this.employeeDialogConfig.employeeOrigin[key] !=
-          this.employeeDialogConfig.employee[key]
-        ) {
-          this.infoDialogConfig.isShow = true;
-          return;
-        }
-      }
-      this.closeEmployeeDialog();
-    },
-
-    /**
-     * Hàm đóng dialog xác nhận.
-     * CreatedBy: dqdat (11/6/2021)
-     */
-    onCloseConfirmDialog() {
-      this.confirmDialogConfig.isShow = false;
-      this.confirmDialogConfig.msg = "";
     },
 
     /**
@@ -667,32 +578,148 @@ export default {
           });
       }
     },
+    //#endregion
 
+    //#region AlertDialog
     /**
-     * Hàm filter khi change value input search.
+     * Hàm đóng dialog thông báo.
      * CreatedBy: dqdat (11/6/2021)
      */
-    onInputFilterEmployee(val) {
-      this.employeeFilter = val;
-      clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        this.page = 1;
-        this.getEmployees();
-      }, 300);
+    onCloseAlertDialog() {
+      this.alertDialogConfig = {
+        isShow: false,
+        msg: "",
+        type: "warning",
+      };
     },
 
     /**
-     * Hàm filter khi change pageSize combobox
+     * Hàm show dialog thông báo.
      * CreatedBy: dqdat (11/6/2021)
      */
-    onChangePageSize() {
-      clearTimeout(this.timeOut);
-      this.timeOut = setTimeout(() => {
-        this.page = 1;
-        this.getEmployees();
-      }, 300);
+    showAlertDialog(alertDialogConfig) {
+      this.alertDialogConfig = {
+        isShow: true,
+        msg: alertDialogConfig.msg,
+        type: alertDialogConfig.type,
+      };
+    },
+    //#endregion
+
+    //#region onclick Save, SaveAndAdd
+    /**
+     * Hàm Click button Lưu nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    async onClickBtnSave() {
+      // Check mã nhân viên có trùng với nhân viên khác trên hệ thống không.
+      var checkDuplicate;
+      await checkEmployeeCodeExist(
+        this.employeeDialogConfig.employee.employeeCode,
+        this.employeeDialogConfig.employee.employeeId
+      )
+        .then((data) => {
+          checkDuplicate = data;
+        })
+        .catch();
+
+      // Nếu không trùng
+      if (checkDuplicate != 1) {
+        await saveEmployee(
+          this.employeeDialogConfig.employee,
+          this.employeeDialogConfig.isInsert
+        )
+          .then(() => {
+            // thực hiện đóng dialog thêm và sửa nhân viên.
+            this.closeEmployeeDialog();
+
+            // show toast thông báo với lời thông báo Lưu thành công.
+            this.$toast.success("Cập nhật bản ghi thành công", {
+              position: "top-right",
+            });
+
+            // Reload lại dữ liệu với bộ lọc mặc định.
+            if (this.employeeDialogConfig.isInsert == true) {
+              this.onClickBtnRefresh();
+            } else {
+              this.getEmployees();
+            }
+          })
+          .catch(() => {
+            // show dialog thông báo khi lưu thất bại.
+            this.$toast.error("Lưu thất bại", { position: "top-right" });
+          });
+      } else {
+        // Nếu trùng thì show dialog thông báo.
+        this.alertDialogConfig = {
+          isShow: true,
+          msg:
+            "Nhân viên <" +
+            this.employeeDialogConfig.employee.employeeCode +
+            "> đã tồn tại trong hệ thống, vui lòng kiểm tra lại.",
+          type: "warning",
+        };
+      }
     },
 
+    /**
+     * click button cất và thêm
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onClickBtnSaveAndAdd() {
+      this.onClickBtnSave()
+        .then(() => {
+          this.onClickAddEmployee();
+        })
+        .catch();
+    },
+    //#endregion
+
+    //#region EmployeeDialog
+    /**
+     * Hàm đóng dialog thêm hoặc sửa nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    closeEmployeeDialog() {
+      this.employeeDialogConfig = {
+        isShow: false,
+        employee: {},
+        employeeOrigin: {},
+        errors: null,
+        isInsert: null,
+      };
+    },
+
+    /**
+     * click button đóng dialog nhân viên
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onClickBtnCloseEmployeeDialog() {
+      for (let key in this.employeeDialogConfig.employee) {
+        if (
+          this.employeeDialogConfig.employeeOrigin[key] !=
+          this.employeeDialogConfig.employee[key]
+        ) {
+          this.infoDialogConfig.isShow = true;
+          return;
+        }
+      }
+      this.closeEmployeeDialog();
+    },
+    //#endregion
+
+    //#region ConfirmDialog
+    /**
+     * Hàm đóng dialog xác nhận.
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onCloseConfirmDialog() {
+      this.confirmDialogConfig.isShow = false;
+      this.confirmDialogConfig.msg = "";
+    },
+    //#endregion
+
+    //#region informationDialog
     /**
      * click button Không trong info dialog.
      * CreatedBy: dqdat 03/06/2021
@@ -710,7 +737,9 @@ export default {
       this.infoDialogConfig.isShow = false;
       this.$refs.dialogEmployeeRef.onClickSave();
     },
+    //#endregion
 
+    //#region option table dropdown
     /**
      * Hàm click vào icon down blue.
      * Gán employee đang được chọn và hiển thị dropdown ở phần chức năng
@@ -746,14 +775,7 @@ export default {
         left: 0,
       };
     },
-
-    /**
-     * hàm click button export excel
-     * CreatedBy: dqdat 14/06/2021
-     */
-    onClickBtnExport() {
-      exportExcel();
-    },
+    //#endregion
   },
   //#endregion
 

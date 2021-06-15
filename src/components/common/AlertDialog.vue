@@ -1,15 +1,18 @@
 <template>
+  <!-- #region dialog -->
   <div class="dialog">
     <div class="dialog-background" @click="closeDialog"></div>
     <div class="dialog-content zoomIn" style="width: 500px">
+      <!-- #region dialog-body -->
       <div class="flex-row-align-center" style="padding: 32px 24px 0 24px">
         <div class="icon" :class="classType"></div>
         <div style="margin-left: 16px">
           {{ msg }}
         </div>
       </div>
+      <!-- #endregion -->
+      <!-- #region dialog-footer -->
       <div class="divide"></div>
-
       <div class="dialog-footer" v-if="type == 'warning'">
         <div class="dialog-footer-right">
           <Button :text="textBtn" color="primary" @click="closeDialog" />
@@ -27,17 +30,25 @@
           style="margin-left: 12px"
         />
       </div>
+      <!-- #endregion -->
     </div>
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>
+//#region inport
 import Button from "./Button";
+//#endregion
+//#region export
 export default {
-  name: "AlertDialog",
+  //#region components
   components: {
     Button,
   },
+  //#endregion
+
+  //#region props
   props: {
     /**
      * Lời nhắn
@@ -67,6 +78,9 @@ export default {
       required: true,
     },
   },
+  //#endregion
+
+  //#region computed
   computed: {
     classType: function () {
       if (this.type == "warning") return "icon-warning-48";
@@ -74,6 +88,9 @@ export default {
       return "";
     },
   },
+  //#endregion
+
+  //#region methods
   methods: {
     /**
      * Hàm thực hiện đóng dialog thông báo.
@@ -83,5 +100,7 @@ export default {
       this.$emit("onClose");
     },
   },
+  //#endregion
 };
+//#endregion
 </script>

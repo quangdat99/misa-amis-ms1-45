@@ -1,4 +1,5 @@
 <template>
+  <!-- #region radio -->
   <div style="display: inline-block">
     <input
       type="radio"
@@ -11,6 +12,7 @@
     />
     <label :for="id"></label>
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>

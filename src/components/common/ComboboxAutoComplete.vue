@@ -1,5 +1,7 @@
 <template>
+  <!-- #region combobox auto complete -->
   <div class="dropdown autocomplete">
+    <!-- #region dropdown button, input -->
     <div class="dropdown-btn con-input">
       <input
         type="text"
@@ -20,6 +22,8 @@
         <div class="icon icon-arrow-dropdown"></div>
       </div>
     </div>
+    <!-- #endregion -->
+    <!-- #region dropdown content -->
     <div class="dropdown-content" :class="{ hide: !isShow }">
       <div class="dropdown-item-empty" v-if="optionData.length == 0">
         Không có dữ liệu hiển thị
@@ -34,7 +38,9 @@
         {{ option.text }}
       </div>
     </div>
+    <!-- #endregion -->
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>

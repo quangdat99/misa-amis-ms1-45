@@ -1,8 +1,10 @@
 <template>
+  <!-- #region dialog loading -->
   <div class="dialog">
     <div class="dialog-background"></div>
     <div class="dialog-content"></div>
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>
@@ -12,6 +14,7 @@ export default {};
 </script>
 
 <style scoped>
+/* #region css */
 .dialog .dialog-background {
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -42,4 +45,5 @@ export default {};
     transform: rotate(340deg);
   }
 }
+/* #endregion */
 </style>

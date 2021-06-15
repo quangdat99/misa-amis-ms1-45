@@ -1,4 +1,5 @@
 <template>
+  <!-- #region dropdown -->
   <div
     ref="autofocus"
     tabindex="0"
@@ -10,6 +11,7 @@
     <div class="dropdown-item" @click="$emit('onClickBtnDel')">Xóa</div>
     <div class="dropdown-item">Ngừng sử dụng</div>
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>
