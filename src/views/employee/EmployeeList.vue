@@ -473,6 +473,8 @@ export default {
       if (this.employeeDialogConfig.isShow == false) {
         getNewEmployeeCode()
           .then((data) => {
+            //debugger; // eslint-disable-line no-debugger
+
             this.employeeDialogConfig = {
               isShow: true,
               employee: {

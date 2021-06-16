@@ -178,7 +178,11 @@ export default {
       if (res) {
         this.$emit("update:value", res.value);
       } else {
-        this.$emit("update:value", null);
+        if (this.valueInput) {
+          this.$emit("update:value", "");
+        } else {
+          this.$emit("update:value", null);
+        }
       }
 
       setTimeout(() => {

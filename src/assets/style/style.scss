@@ -211,6 +211,10 @@ a {
     &.icon-question {
         @include icon-bind(-826px -456px, 48px);
     }
+
+    &.icon-option-date {
+        @include icon-bind(-120px -305px, 30px);
+    }
     /* #endregion */
 }
 /* #endregion */
@@ -830,9 +834,39 @@ a {
         position: absolute;
         right: 8px;
         top: 8px;
+        cursor: pointer;
     }
+    /* #region input date pick */
+    .icon-input-date {
+        position: absolute;
+        top: 31px;
+        right: 1px;
+        &:hover {
+            background-color: #e0e0e0;
+        }
+    }
+    .vdpCell {
+        &:hover .vdpCellContent {
+            background: #2ca01c !important;
+        }
+        &.selected .vdpCellContent {
+            background: #2ca01c;
+        }
+    }
+    .vdpArrowPrev:after {
+        border-right-color: #2ca01c;
+    }
+    .vdpArrowNext:after {
+        border-left-color: #2ca01c;
+    }
+    .vdpClearInput:before {
+        display: none;
+    }
+    .vdpClearInput {
+        pointer-events: none;
+    }
+    /* #endregion */
 }
-
 .label-input {
     display: inline-block;
     margin-bottom: 4px;

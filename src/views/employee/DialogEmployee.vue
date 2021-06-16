@@ -105,7 +105,7 @@
           <div class="col-6">
             <div class="row">
               <div class="col-5 pr-1">
-                <div>
+                <div class="con-input">
                   <label class="label-input">Ngày sinh</label>
                   <DatePicker
                     ref="dateOfBirth"
@@ -130,6 +130,7 @@
                       })
                     "
                   />
+                  <div class="icon-input-date icon icon-option-date"></div>
                 </div>
               </div>
               <div class="col-7">
@@ -238,10 +239,9 @@
                 </div>
               </div>
               <div class="col-5">
-                <div>
+                <div class="con-input">
                   <label class="label-input">Ngày cấp</label>
                   <DatePicker
-                    ref="dateOfBirth"
                     displayFormat="DD/MM/YYYY"
                     :inputAttributes="{
                       class: 'input',
@@ -263,6 +263,7 @@
                       })
                     "
                   />
+                  <div class="icon-input-date icon icon-option-date"></div>
                 </div>
               </div>
             </div>
@@ -629,6 +630,10 @@ export default {
         this.errors.employeeDepartmentId = "";
       } else {
         this.errors.employeeDepartmentId = "Đơn vị không được để trống.";
+        if (this.employee.employeeDepartmentId == "") {
+          this.errors.employeeDepartmentId =
+            "Dữ liệu <Đơn vị> không có trong danh mục.";
+        }
       }
     },
     //#endregion
