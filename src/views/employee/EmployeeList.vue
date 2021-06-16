@@ -1,4 +1,5 @@
 <template>
+  <!-- #region EmployeeList -->
   <div>
     <div class="content">
       <!-- #region title-box -->
@@ -179,6 +180,7 @@
     <Loading v-if="isShowLoading" />
     <!-- #endregion -->
   </div>
+  <!-- #endregion -->
 </template>
 
 <script>
