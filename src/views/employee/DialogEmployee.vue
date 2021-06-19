@@ -67,6 +67,7 @@
                       })
                     "
                     @blur="onValidEmployeeCode"
+                    tabindex="1"
                   />
                   <span
                     v-if="errors && errors.employeeCode"
@@ -91,6 +92,7 @@
                       })
                     "
                     @blur="onValidFullName"
+                    tabindex="2"
                   />
 
                   <span
@@ -114,6 +116,7 @@
                       class: 'input',
                       style: 'font-size: 13px',
                       placeholder: 'DD/MM/YYYY',
+                      tabindex: '2',
                     }"
                     :weekdays="localeDatePicker.weekdays"
                     :months="localeDatePicker.months"
@@ -202,6 +205,7 @@
               <ComboboxAutoComplete
                 :value="employee && employee.employeeDepartmentId"
                 :inputAttributes="{
+                  tabindex: '4',
                   class: {
                     'has-error': errors && errors.employeeDepartmentId,
                   },
@@ -235,6 +239,7 @@
                         identityNumber: $event,
                       })
                     "
+                    tabindex="5"
                   />
                 </div>
               </div>
@@ -247,6 +252,7 @@
                       class: 'input',
                       style: 'font-size: 13px',
                       placeholder: 'DD/MM/YYYY',
+                      tabindex: '6',
                     }"
                     :weekdays="localeDatePicker.weekdays"
                     :months="localeDatePicker.months"
@@ -280,6 +286,7 @@
                     employeePosition: $event,
                   })
                 "
+                tabindex="7"
               />
             </div>
           </div>
@@ -294,6 +301,7 @@
                     identityPlace: $event,
                   })
                 "
+                tabindex="8"
               />
             </div>
           </div>
@@ -308,6 +316,7 @@
                     employeeAddress: $event,
                   })
                 "
+                tabindex="9"
               />
             </div>
           </div>
@@ -324,6 +333,7 @@
                     phoneNumber: $event,
                   })
                 "
+                tabindex="10"
               />
             </div>
           </div>
@@ -338,6 +348,7 @@
                     teleNumber: $event,
                   })
                 "
+                tabindex="11"
               />
             </div>
           </div>
@@ -352,6 +363,7 @@
                     email: $event,
                   })
                 "
+                tabindex="12"
               />
             </div>
           </div>
@@ -368,6 +380,7 @@
                     bankAccountNumber: $event,
                   })
                 "
+                tabindex="13"
               />
             </div>
           </div>
@@ -384,6 +397,7 @@
                     bankName: $event,
                   })
                 "
+                tabindex="14"
               />
             </div>
           </div>
@@ -398,6 +412,13 @@
                     bankBranchName: $event,
                   })
                 "
+                tabindex="15"
+              />
+              <input
+                type="text"
+                style="height: 0px; width: 0px; border: none"
+                tabindex="16"
+                @focus="onFocusInputEmployeeCode"
               />
             </div>
           </div>
@@ -678,6 +699,14 @@ export default {
         this.onClickSaveAndAdd();
         e.preventDefault();
       }
+    },
+
+    /**
+     * focus vào ô nhận mã nhân viên
+     * CreatedBy: dqdat (19/06/2021)
+     */
+    onFocusInputEmployeeCode() {
+      this.$refs.employeeCode.$el.focus();
     },
     //#endregion
   },

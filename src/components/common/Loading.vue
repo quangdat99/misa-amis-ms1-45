@@ -16,7 +16,7 @@ export default {};
 <style scoped>
 /* #region css */
 .dialog .dialog-background {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0);
 }
 .dialog .dialog-content {
   width: 42px;
@@ -42,7 +42,7 @@ export default {};
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(340deg);
+    transform: rotate(360deg);
   }
 }
 /* #endregion */
