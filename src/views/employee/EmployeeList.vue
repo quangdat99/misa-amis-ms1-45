@@ -1,142 +1,139 @@
 <template>
-  <!-- #region EmployeeList -->
-  <div>
-    <div class="content">
-      <!-- #region title-box -->
-      <div class="title-box">
-        <div class="title">Nhân viên</div>
-        <Button text="Thêm mới nhân viên" @click="onClickAddEmployee" />
-      </div>
-      <!-- #endregion -->
-      <!-- #region toolbar-box -->
-      <div class="toolbar-box mt-1">
-        <div class="toolbar-left"></div>
-        <div class="toolbar-right">
-          <div class="con-input">
-            <Input
-              style="width: 280px"
-              placeholder="Tìm theo mã, tên hoặc số điện thoại"
-              :hasIcon="true"
-              :value="employeeFilter"
-              @input="onInputFilterEmployee"
-            />
-            <div class="icon-input icon icon-search"></div>
-          </div>
-          <div
-            content="Lấy lại dữ liệu"
-            v-tippy="{
-              placement: 'bottom',
-            }"
-          >
-            <IconButton
-              icon="icon icon-refresh"
-              style="margin-left: 8px; padding: 0"
-              @click="onClickBtnRefresh"
-            />
-          </div>
-          <div
-            content="Xuất ra Excel"
-            v-tippy="{
-              placement: 'bottom',
-            }"
-          >
-            <IconButton
-              icon="icon icon-excel"
-              style="margin-left: 8px; padding: 0"
-              @click="onClickBtnExport"
-            />
-          </div>
+  <div class="content">
+    <!-- #region title-box -->
+    <div class="title-box">
+      <div class="title">Nhân viên</div>
+      <Button text="Thêm mới nhân viên" @click="onClickAddEmployee" />
+    </div>
+    <!-- #endregion -->
+    <!-- #region toolbar-box -->
+    <div class="toolbar-box mt-1">
+      <div class="toolbar-left"></div>
+      <div class="toolbar-right">
+        <div class="con-input">
+          <Input
+            style="width: 280px"
+            placeholder="Tìm theo mã, tên hoặc số điện thoại"
+            :hasIcon="true"
+            :value="employeeFilter"
+            @input="onInputFilterEmployee"
+          />
+          <div class="icon-input icon icon-search"></div>
+        </div>
+        <div
+          content="Lấy lại dữ liệu"
+          v-tippy="{
+            placement: 'bottom',
+          }"
+        >
+          <IconButton
+            icon="icon icon-refresh"
+            style="margin-left: 8px; padding: 0"
+            @click="onClickBtnRefresh"
+          />
+        </div>
+        <div
+          content="Xuất ra Excel"
+          v-tippy="{
+            placement: 'bottom',
+          }"
+        >
+          <IconButton
+            icon="icon icon-excel"
+            style="margin-left: 8px; padding: 0"
+            @click="onClickBtnExport"
+          />
         </div>
       </div>
-      <!-- #endregion -->
-      <div class="grid-contain">
-        <div class="grid bg-white data">
-          <!-- #region table -->
-          <table class="table">
-            <thead>
-              <tr>
-                <th>
-                  <Checkbox />
-                  <div class="border-right"></div>
-                </th>
-                <th>MÃ NHÂN VIÊN</th>
-                <th>TÊN NHÂN VIÊN</th>
-                <th>GIỚI TÍNH</th>
-                <th>NGÀY SINH</th>
-                <th>SỐ CMND</th>
-                <th>CHỨC DANH</th>
-                <th>TÊN ĐƠN VỊ</th>
-                <th>SỐ TÀI KHOẢN</th>
-                <th>TÊN NGÂN HÀNG</th>
-                <th>CHI NHÁNH TK NGÂN HÀNG</th>
-                <th>
-                  <div class="border-left"></div>
-                  CHỨC NĂNG
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <EmployeeItem
-                v-for="e in employees"
-                :key="e.EmployeeId"
-                :employee="e"
-                @dblclick="onDblClickEmployeeItem"
-                @updateEmployee="onDblClickEmployeeItem"
-                @toggleTableOption="toggleTableOption"
-              />
-            </tbody>
-          </table>
-          <!-- #endregion -->
-          <!-- #region has-data -->
-          <div
-            v-if="!hasData"
-            style="
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              position: sticky;
-              left: 0;
-            "
-          >
-            <img
-              src="../../assets/img/bg_report_nodata.svg"
-              alt="Không có dữ liệu"
-              style="margin: 50px auto"
+    </div>
+    <!-- #endregion -->
+    <div class="grid-contain">
+      <div class="grid bg-white data">
+        <!-- #region table -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                <Checkbox />
+                <div class="border-right"></div>
+              </th>
+              <th>MÃ NHÂN VIÊN</th>
+              <th>TÊN NHÂN VIÊN</th>
+              <th>GIỚI TÍNH</th>
+              <th>NGÀY SINH</th>
+              <th>SỐ CMND</th>
+              <th>CHỨC DANH</th>
+              <th>TÊN ĐƠN VỊ</th>
+              <th>SỐ TÀI KHOẢN</th>
+              <th>TÊN NGÂN HÀNG</th>
+              <th>CHI NHÁNH TK NGÂN HÀNG</th>
+              <th>
+                <div class="border-left"></div>
+                CHỨC NĂNG
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <EmployeeItem
+              v-for="e in employees"
+              :key="e.EmployeeId"
+              :employee="e"
+              @dblclick="onDblClickEmployeeItem"
+              @updateEmployee="onDblClickEmployeeItem"
+              @toggleTableOption="toggleTableOption"
             />
-            <div
-              class="has-text-center"
-              style="font-size: 15px; font-weight: bold; margin-bottom: 80px"
-            >
-              Không có dữ liệu
-            </div>
+          </tbody>
+        </table>
+        <!-- #endregion -->
+        <!-- #region has-data -->
+        <div
+          v-if="!hasData"
+          style="
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: sticky;
+            left: 0;
+          "
+        >
+          <img
+            src="../../assets/img/bg_report_nodata.svg"
+            alt="Không có dữ liệu"
+            style="margin: 50px auto"
+          />
+          <div
+            class="has-text-center"
+            style="font-size: 15px; font-weight: bold; margin-bottom: 80px"
+          >
+            Không có dữ liệu
           </div>
-          <!-- #endregion -->
-          <!-- #region footer -->
-          <div class="footer" v-if="employees.length != 0">
-            <div class="footer-left">
-              Tổng số:
-              <span style="font-weight: bold">{{ countEmloyees }}</span> bản ghi
-            </div>
+        </div>
+        <!-- #endregion -->
+        <!-- #region footer -->
+        <div class="footer" v-if="employees.length != 0">
+          <div class="footer-left">
+            Tổng số:
+            <span style="font-weight: bold">{{ countEmloyees }}</span> bản ghi
+          </div>
 
-            <div class="footer-right">
-              <div class="combobox">
-                <Combobox
-                  :value.sync="pageSize"
-                  :options="[
-                    { value: 10, text: '10 bản ghi trên trang' },
-                    { value: 20, text: '20 bản ghi trên trang' },
-                    { value: 30, text: '30 bản ghi trên trang' },
-                    { value: 50, text: '50 bản ghi trên trang' },
-                    { value: 100, text: '100 bản ghi trên trang' },
-                  ]"
-                  @onChange="onChangePageSize"
-                />
-              </div>
-              <Pagination :page.sync="page" :totalPage="totalPage" />
+          <div class="footer-right">
+            <div class="combobox">
+              <Combobox
+                :value.sync="pageSize"
+                :options="[
+                  { value: 10, text: '10 bản ghi trên trang' },
+                  { value: 20, text: '20 bản ghi trên trang' },
+                  { value: 30, text: '30 bản ghi trên trang' },
+                  { value: 50, text: '50 bản ghi trên trang' },
+                  { value: 100, text: '100 bản ghi trên trang' },
+                ]"
+                @onChange="onChangePageSize"
+              />
             </div>
+            <Pagination :page.sync="page" :totalPage="totalPage" />
           </div>
-          <!-- #endregion -->
         </div>
+        <!-- #endregion -->
       </div>
     </div>
     <!-- #region components, dialog, loading -->
@@ -180,7 +177,6 @@
     <Loading v-if="isShowLoading" />
     <!-- #endregion -->
   </div>
-  <!-- #endregion -->
 </template>
 
 <script>
