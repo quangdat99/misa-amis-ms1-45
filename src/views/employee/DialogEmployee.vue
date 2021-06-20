@@ -113,7 +113,11 @@
                     ref="dateOfBirth"
                     displayFormat="DD/MM/YYYY"
                     :inputAttributes="{
-                      class: 'input',
+                      class: `${
+                        errors && errors.dateOfBirth
+                          ? 'input has-error'
+                          : 'input'
+                      }`,
                       style: 'font-size: 13px',
                       placeholder: 'DD/MM/YYYY',
                       tabindex: '2',
@@ -132,6 +136,7 @@
                         dateOfBirth: $event,
                       })
                     "
+                    @blur="onValidDateOfBirth"
                   />
                   <div class="icon-input-date icon icon-option-date"></div>
                 </div>
@@ -249,7 +254,11 @@
                   <DatePicker
                     displayFormat="DD/MM/YYYY"
                     :inputAttributes="{
-                      class: 'input',
+                      class: `${
+                        errors && errors.identityDate
+                          ? 'input has-error'
+                          : 'input'
+                      }`,
                       style: 'font-size: 13px',
                       placeholder: 'DD/MM/YYYY',
                       tabindex: '6',
@@ -268,6 +277,7 @@
                         identityDate: $event,
                       })
                     "
+                    @blur="onValidIdentityDate"
                   />
                   <div class="icon-input-date icon icon-option-date"></div>
                 </div>
@@ -520,6 +530,7 @@ export default {
         employeeCode: "",
         employeeName: "",
         employeeDepartmentId: "",
+        dateOfBirth: "",
       },
 
       /**
@@ -595,6 +606,8 @@ export default {
         employeeCode: "",
         employeeName: "",
         employeeDepartmentId: "",
+        dateOfBirth: "",
+        identityDate: "",
       };
       this.$emit("onClose");
     },
@@ -610,6 +623,8 @@ export default {
       this.onValidEmployeeCode();
       this.onValidFullName();
       this.onValidDepartment();
+      this.onValidDateOfBirth();
+      this.onValidIdentityDate();
       for (let err in this.errors) {
         if (this.errors[err]) {
           valid = false;
@@ -655,6 +670,38 @@ export default {
           this.errors.employeeDepartmentId =
             "Dữ liệu <Đơn vị> không có trong danh mục.";
         }
+      }
+    },
+
+    /**
+     * valid ngày sinh của nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onValidDateOfBirth() {
+      if (
+        this.employee &&
+        this.employee.dateOfBirth &&
+        dayjs(this.employee.dateOfBirth).format("YYYY-MM-DD") == "Invalid Date"
+      ) {
+        this.errors.dateOfBirth = "Ngày sinh không đúng định dạng";
+      } else {
+        this.errors.dateOfBirth = "";
+      }
+    },
+
+    /**
+     * valid ngày cấp của nhân viên.
+     * CreatedBy: dqdat (11/6/2021)
+     */
+    onValidIdentityDate() {
+      if (
+        this.employee &&
+        this.employee.identityDate &&
+        dayjs(this.employee.identityDate).format("YYYY-MM-DD") == "Invalid Date"
+      ) {
+        this.errors.identityDate = "Ngày cấp không đúng định dạng";
+      } else {
+        this.errors.identityDate = "";
       }
     },
     //#endregion

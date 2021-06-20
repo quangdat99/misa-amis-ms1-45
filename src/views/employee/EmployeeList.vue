@@ -628,9 +628,6 @@ export default {
           this.employeeDialogConfig.isInsert
         )
           .then(() => {
-            // thực hiện đóng dialog thêm và sửa nhân viên.
-            this.closeEmployeeDialog();
-
             // show toast thông báo với lời thông báo Lưu thành công.
             this.$toast.success("Cập nhật bản ghi thành công", {
               position: "top-right",
@@ -642,6 +639,9 @@ export default {
             } else {
               this.getEmployees();
             }
+
+            // thực hiện đóng dialog thêm và sửa nhân viên.
+            this.closeEmployeeDialog();
           })
           .catch(() => {
             // show dialog thông báo khi lưu thất bại.
