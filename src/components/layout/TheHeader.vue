@@ -5,7 +5,9 @@
         class="header-left-icon icon icon-three-stripes"
         @click.prevent="$emit('onNavbarToggle')"
       ></div>
-      <div class="header-left-text">CÔNG TY CỔ PHẦN MISA</div>
+      <div class="header-left-text">
+        CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC
+      </div>
       <div class="header-left-icon icon icon-chevron-down"></div>
     </div>
     <div class="header-right">

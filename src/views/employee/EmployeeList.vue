@@ -257,6 +257,7 @@ export default {
         employeeOrigin: {},
         isInsert: true,
         errors: null,
+        isReplication: false,
       },
 
       /**
@@ -476,6 +477,7 @@ export default {
               },
               isInsert: true,
               errors: null,
+              isReplication: false,
             };
             this.employeeDialogConfig.employeeOrigin = {
               ...this.employeeDialogConfig.employee,
@@ -497,6 +499,7 @@ export default {
             employee: data,
             isInsert: false,
             errors: null,
+            isReplication: false,
           };
           this.employeeDialogConfig.employeeOrigin = {
             ...this.employeeDialogConfig.employee,
@@ -537,6 +540,7 @@ export default {
         getEmployee(this.employeeModify.employeeId)
           .then((employee) => {
             this.employeeDialogConfig.isInsert = true;
+            this.employeeDialogConfig.isReplication = true;
             this.employeeDialogConfig.employee = employee;
             return getNewEmployeeCode();
           })
@@ -563,7 +567,7 @@ export default {
         delEmployee(this.employeeModify.employeeId)
           .then(() => {
             // hiển thị toast thông báo với câu thông báo.
-            this.$toast.success("Xóa bản ghi thành công", {
+            this.$toast.success("Xóa nhân viên thành công", {
               position: "top-right",
             });
 
@@ -572,7 +576,9 @@ export default {
           })
           .catch(() => {
             // hiển thị toast thông báo khi thất bại.
-            this.$toast.error("Xóa thất bại", { position: "top-right" });
+            this.$toast.error("Xóa nhân viên thất bại", {
+              position: "top-right",
+            });
           });
       }
     },
@@ -629,9 +635,21 @@ export default {
         )
           .then(() => {
             // show toast thông báo với lời thông báo Lưu thành công.
-            this.$toast.success("Cập nhật bản ghi thành công", {
-              position: "top-right",
-            });
+            if (this.employeeDialogConfig.isInsert == true) {
+              if (this.employeeDialogConfig.isReplication == true) {
+                this.$toast.success("Nhân bản nhân viên thành công", {
+                  position: "top-right",
+                });
+              } else {
+                this.$toast.success("Thêm nhân viên mới thành công", {
+                  position: "top-right",
+                });
+              }
+            } else {
+              this.$toast.success("Sửa thông tin nhân viên thành công", {
+                position: "top-right",
+              });
+            }
 
             // Reload lại dữ liệu với bộ lọc mặc định.
             if (this.employeeDialogConfig.isInsert == true) {
@@ -645,7 +663,9 @@ export default {
           })
           .catch(() => {
             // show dialog thông báo khi lưu thất bại.
-            this.$toast.error("Lưu thất bại", { position: "top-right" });
+            this.$toast.error("Lưu nhân viên thất bại", {
+              position: "top-right",
+            });
           });
       } else {
         // Nếu trùng thì show dialog thông báo.

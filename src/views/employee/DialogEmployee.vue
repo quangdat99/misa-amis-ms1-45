@@ -121,6 +121,7 @@
                       style: 'font-size: 13px',
                       placeholder: 'DD/MM/YYYY',
                       tabindex: '2',
+                      readonly: true,
                     }"
                     :weekdays="localeDatePicker.weekdays"
                     :months="localeDatePicker.months"
@@ -262,6 +263,7 @@
                       style: 'font-size: 13px',
                       placeholder: 'DD/MM/YYYY',
                       tabindex: '6',
+                      readonly: true,
                     }"
                     :weekdays="localeDatePicker.weekdays"
                     :months="localeDatePicker.months"
@@ -397,9 +399,7 @@
           <div class="col-3 pr-1">
             <div>
               <label class="label-input">Tên ngân hàng</label>
-              <input
-                type="text"
-                class="input"
+              <Input
                 :value="employee && employee.bankName"
                 @input="
                   $emit('update:employee', {

@@ -1,24 +1,24 @@
 <template>
   <div>
-    <NavbarComponent :isNavbarToggle.sync="isNavbarToggle" />
-    <HeaderComponent @onNavbarToggle="isNavbarToggle = true" />
-    <ContentComponent />
+    <TheNavbar :isNavbarToggle.sync="isNavbarToggle" />
+    <TheHeader @onNavbarToggle="isNavbarToggle = true" />
+    <TheContent />
   </div>
 </template>
 
 <script>
 //#region import
-import NavbarComponent from "./components/layout/Navbar";
-import HeaderComponent from "./components/layout/Header";
-import ContentComponent from "./components/layout/Content";
+import TheNavbar from "./components/layout/TheNavbar";
+import TheHeader from "./components/layout/TheHeader";
+import TheContent from "./components/layout/TheContent";
 //#endregion
 //#region export
 export default {
   name: "App",
   components: {
-    NavbarComponent,
-    HeaderComponent,
-    ContentComponent,
+    TheNavbar,
+    TheHeader,
+    TheContent,
   },
   data() {
     return {
