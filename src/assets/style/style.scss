@@ -1,7 +1,7 @@
 /* #region Declare variable */
 $icon-size: 24px;
 $color-white: #fff;
-$navbar-width: 226px;
+$navbar-width: 210px;
 $navbar-width-toggle: 52px;
 $header-height: 48px;
 /* #endregion */
@@ -95,11 +95,11 @@ a {
     }
 
     &.icon-navbar-bank {
-        @include icon-bind(-118px -1628px);
+        @include icon-bind(-118px -1630px);
     }
 
     &.icon-navbar-pu {
-        @include icon-bind(-163px -1628px);
+        @include icon-bind(-163px -1630px);
     }
 
     &.icon-navbar-sale {
@@ -123,27 +123,27 @@ a {
     }
 
     &.icon-navbar-tax {
-        @include icon-bind(-427px -1634px);
+        @include icon-bind(-427px -1632px);
     }
 
     &.icon-navbar-price {
-        @include icon-bind(-471px -1633px);
+        @include icon-bind(-471px -1632px);
     }
 
     &.icon-navbar-general {
-        @include icon-bind(-514px -1632px);
+        @include icon-bind(-514px -1630px);
     }
 
     &.icon-navbar-budget {
-        @include icon-bind(-514px -1632px);
+        @include icon-bind(-382px -1660px);
     }
 
     &.icon-navbar-report {
-        @include icon-bind(-552px -1636px);
+        @include icon-bind(-552px -1632px);
     }
 
     &.icon-navbar-finance {
-        @include icon-bind(-207px -1667px);
+        @include icon-bind(-207px -1662px);
     }
     /* #endregion */
 
@@ -287,7 +287,7 @@ a {
     .navbar-content {
         padding-top: 20px;
         .navbar-item {
-            height: 45px;
+            height: 42px;
             padding-left: 15px;
             display: flex;
             align-items: center;
@@ -303,17 +303,19 @@ a {
                 color: #fff;
             }
             .navbar-item-icon {
-                font-size: 16px;
-                line-height: 20px;
-                height: 20px;
-                width: 20px;
+                font-size: 24px;
+                line-height: 24px;
+                height: 24px;
+                width: 24px;
                 margin-right: 10px;
                 &.fas {
                     color: #b3b3b3;
                 }
             }
             .navbar-item-text {
-                font-size: 16px;
+                font-size: 14px;
+                height: 24px;
+                line-height: 24px;
                 color: #fff;
             }
         }
@@ -535,7 +537,7 @@ a {
                 z-index: 3;
                 border-right: none;
                 width: 20px;
-                padding-left: 10px;
+                padding-left: 14px;
                 padding-right: 10px;
                 position: sticky;
                 left: -1px;
@@ -583,7 +585,7 @@ a {
             border-bottom: 1px solid #c7c7c7;
             border-right: 1px dotted #c7c7c7;
             &:first-child {
-                padding-left: 10px;
+                padding-left: 14px;
                 position: sticky;
                 left: -1px;
                 background-color: #fff;
