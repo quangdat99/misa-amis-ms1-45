@@ -60,7 +60,7 @@
               <th>MÃ NHÂN VIÊN</th>
               <th>TÊN NHÂN VIÊN</th>
               <th>GIỚI TÍNH</th>
-              <th>NGÀY SINH</th>
+              <th style="padding-left: 25px; padding-right: 25px">NGÀY SINH</th>
               <th>SỐ CMND</th>
               <th>CHỨC DANH</th>
               <th>TÊN ĐƠN VỊ</th>
