@@ -2,6 +2,7 @@
   <!-- #region radio -->
   <div style="display: inline-block">
     <input
+      :tabindex="index"
       type="radio"
       :id="id"
       class="radio"
@@ -11,6 +12,7 @@
       @input="$emit('change', $event.target.value)"
     />
     <label :for="id"></label>
+    <label :for="id" style="margin-left: 8px">Nam</label>
   </div>
   <!-- #endregion -->
 </template>
@@ -20,6 +22,7 @@
 export default {
   //#region props
   props: {
+    index: String,
     /**
      * name của radio
      * CreatedBy: dqdat (11/6/2021)

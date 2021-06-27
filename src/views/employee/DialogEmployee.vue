@@ -151,6 +151,7 @@
                       style="margin-right: 16px"
                     >
                       <Radio
+                        :index="3"
                         name="gender"
                         value="1"
                         :checked="employee && employee.gender == 1"
@@ -161,13 +162,13 @@
                           })
                         "
                       />
-                      <label style="margin-left: 8px">Nam</label>
                     </div>
                     <div
                       class="flex-row-align-center"
                       style="margin-right: 16px"
                     >
                       <Radio
+                        :index="3"
                         name="gender"
                         value="0"
                         :checked="employee && employee.gender == 0"
@@ -178,13 +179,13 @@
                           })
                         "
                       />
-                      <label style="margin-left: 8px">Nữ</label>
                     </div>
                     <div
                       class="flex-row-align-center"
                       style="margin-right: 16px"
                     >
                       <Radio
+                        :index="3"
                         name="gender"
                         value="2"
                         :checked="employee && employee.gender == 2"
@@ -195,7 +196,6 @@
                           })
                         "
                       />
-                      <label style="margin-left: 8px">Khác</label>
                     </div>
                   </div>
                 </div>

@@ -748,13 +748,25 @@ a {
 
 /* #region Radio */
 .radio {
-    display: none;
+    // display: none;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    z-index: 20;
+    opacity: 0;
 
     & + label {
         width: 18px;
         border-radius: 50px;
         display: inline-block;
         position: relative;
+        top: 0px;
+        left: 0px;
         background-color: #fafafa;
         border: 1px solid #cacece;
         height: 18px;
@@ -764,7 +776,7 @@ a {
         & + label {
             border: 1px solid #2ca01c;
 
-            &:after {
+            &::before {
                 content: " ";
                 width: 10px;
                 top: 3px;
@@ -773,6 +785,21 @@ a {
                 height: 10px;
                 border-radius: 50px;
                 position: absolute;
+            }
+        }
+    }
+
+    &:focus {
+        & + label {
+            &::after {
+                content: " ";
+                width: 20px;
+                height: 20px;
+                border-radius: 50px;
+                border: 1px solid #97cefc;
+                position: absolute;
+                top: -3px;
+                left: -3px;
             }
         }
     }
